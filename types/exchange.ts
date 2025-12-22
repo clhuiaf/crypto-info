@@ -18,7 +18,11 @@ export type Exchange = {
   fundingRate?: number;  // optional, for perps
 };
 
-export type FilterType = 'All' | 'Licensed only' | 'Spot only' | 'Derivatives only';
+export type FilterType =
+  | 'Licensed only'
+  | 'Licensed + unlicensed'
+  | 'Spot only'
+  | 'Derivatives only';
 export type SortType = 'Fees (low to high)' | 'Fees (high to low)' | 'Tokens (high to low)' | 'Min deposit (low to high)';
 
 export type SidebarFilters = {

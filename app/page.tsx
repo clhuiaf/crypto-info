@@ -27,7 +27,7 @@ const initialSidebarFilters: SidebarFilters = {
 
 export default function Home() {
   const [country, setCountry] = useState<Country>('HK');
-  const [filter, setFilter] = useState<FilterType>('All');
+  const [filter, setFilter] = useState<FilterType>('Licensed only');
   const [sort, setSort] = useState<SortType>('Fees (low to high)');
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>(initialSidebarFilters);
   const [selectedExchangeIds, setSelectedExchangeIds] = useState<Set<string>>(new Set());
@@ -40,7 +40,7 @@ export default function Home() {
     // Apply country filter
     filtered = filtered.filter((ex) => ex.country === country);
 
-    // Apply main filter
+    // Apply main filter (top bar)
     if (filter === 'Licensed only') {
       filtered = filtered.filter((ex) => ex.licensed);
     } else if (filter === 'Spot only') {
@@ -48,6 +48,7 @@ export default function Home() {
     } else if (filter === 'Derivatives only') {
       filtered = filtered.filter((ex) => ex.products.includes('Derivatives'));
     }
+    // "Licensed + unlicensed" shows all by license; sidebar can further restrict
 
     // Apply sidebar filters
     const { legalStatus, products, minDeposit } = sidebarFilters;
@@ -127,7 +128,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="app-shell flex flex-col">
       <Navbar />
       <HeaderFilters
         country={country}

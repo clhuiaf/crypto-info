@@ -5,7 +5,7 @@ export const mockExchanges: Exchange[] = [
     id: '1',
     name: 'Binance',
     country: 'HK',
-    licensed: false,
+    licensed: true,
     products: ['Spot', 'Derivatives'],
     tokensTotal: 350,
     tokensMajors: 15,
