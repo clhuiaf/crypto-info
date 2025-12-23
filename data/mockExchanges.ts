@@ -1,4 +1,4 @@
-import { Exchange } from '@/types/exchange';
+import { Exchange } from '../types/exchange';
 
 export const mockExchanges: Exchange[] = [
   {

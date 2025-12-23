@@ -70,3 +70,4 @@ The application uses mock data from `data/mockExchanges.ts` with 10 sample excha
 - More detailed exchange information
 - Real-time price data
 
+
