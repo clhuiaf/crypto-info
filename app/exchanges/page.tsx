@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -26,7 +25,7 @@ const initialSidebarFilters: SidebarFilters = {
   },
 };
 
-export default function Home() {
+export default function ExchangesPage() {
   const [country, setCountry] = useState<Country>('HK');
   const [filter, setFilter] = useState<FilterType>('Licensed only');
   const [sort, setSort] = useState<SortType>('Fees (low to high)');
@@ -200,10 +199,3 @@ export default function Home() {
   );
 }
 
-=======
-import { redirect } from 'next/navigation';
-
-export default function Home() {
-  redirect('/exchanges');
-}
->>>>>>> fbf4b8b (feat: guides and assets)

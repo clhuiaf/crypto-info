@@ -11,7 +11,11 @@ export const hongKongNewsItems: NewsItem[] = [
       'The Hong Kong SFC reminds licensed and applicant virtual asset trading platforms to enhance onboarding, market surveillance, and custody controls. The circular highlights expectations on token admission and ongoing monitoring.',
     sourceUrl:
       'https://www.sfc.hk/en/News-and-announcements/Policy-and-regulatory-development',
+<<<<<<< HEAD
     relatedExchangesUrl: '/?country=HK',
+=======
+    relatedExchangesUrl: '/exchanges?country=HK',
+>>>>>>> fbf4b8b (feat: guides and assets)
   },
   {
     id: 'hk-2',
@@ -22,7 +26,11 @@ export const hongKongNewsItems: NewsItem[] = [
     summary:
       'HKEX announces the listing of additional spot virtual asset ETFs providing exposure to Bitcoin and Ether. The exchange notes growing institutional interest and reiterates its disclosure and risk management requirements.',
     sourceUrl: 'https://www.hkex.com.hk/News',
+<<<<<<< HEAD
     relatedExchangesUrl: '/?country=HK',
+=======
+    relatedExchangesUrl: '/exchanges?country=HK',
+>>>>>>> fbf4b8b (feat: guides and assets)
   },
   {
     id: 'hk-3',
@@ -34,7 +42,11 @@ export const hongKongNewsItems: NewsItem[] = [
       'The SFC publishes an update on processing timelines for virtual asset trading platform licences, including guidance on transitional arrangements. Applicants are urged to review suitability and product governance requirements.',
     sourceUrl:
       'https://www.sfc.hk/en/News-and-announcements/Policy-and-regulatory-development',
+<<<<<<< HEAD
     relatedExchangesUrl: '/?country=HK',
+=======
+    relatedExchangesUrl: '/exchanges?country=HK',
+>>>>>>> fbf4b8b (feat: guides and assets)
   },
 ];
 
