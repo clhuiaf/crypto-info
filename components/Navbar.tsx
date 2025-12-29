@@ -20,18 +20,18 @@ export default function Navbar() {
             >
               Exchanges
             </Link>
+            <Link href="/wallets" className="text-slate-500 hover:text-slate-900 transition-colors">
+              Wallets
+            </Link>
             <Link href="/news" className="text-slate-500 hover:text-slate-900 transition-colors">
               News
             </Link>
-<<<<<<< HEAD
-=======
             <Link href="/guides" className="text-slate-500 hover:text-slate-900 transition-colors">
               Guides
             </Link>
             <Link href="/assets" className="text-slate-500 hover:text-slate-900 transition-colors">
               Assets
             </Link>
->>>>>>> fbf4b8b (feat: guides and assets)
             <Link href="/blog" className="text-slate-500 hover:text-slate-900 transition-colors">
               Blog
             </Link>
@@ -44,4 +44,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
