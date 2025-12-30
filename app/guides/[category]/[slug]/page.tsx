@@ -162,3 +162,4 @@ export default function GuideDetailPage({ params }: GuideDetailPageProps) {
   );
 }
 
+

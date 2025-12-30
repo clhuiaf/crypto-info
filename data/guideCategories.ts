@@ -31,3 +31,4 @@ export function getCategoryBySlug(slug: string): GuideCategory | undefined {
   return guideCategories.find((category) => category.slug === slug);
 }
 
+

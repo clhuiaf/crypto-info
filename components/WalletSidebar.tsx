@@ -228,3 +228,4 @@ export default function WalletSidebar({
   return <aside className="hidden lg:block w-64 flex-shrink-0">{content}</aside>;
 }
 
+
