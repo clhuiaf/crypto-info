@@ -16,6 +16,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 10,
     hasPerps: true,
     fundingRate: 0.01,
+    logoUrl: '/logos/binance.png', // Place your logo at public/logos/binance.png
+    bannerUrl: '/banners/binance.jpg', // Place your banner image at public/banners/binance.jpg
+    websiteUrl: 'https://www.binance.com',
   },
   {
     id: '2',
@@ -31,6 +34,9 @@ export const mockExchanges: Exchange[] = [
     takerFee: 0.6,
     minDepositUsd: 1,
     hasPerps: false,
+    logoUrl: '/logos/coinbase.png',
+    bannerUrl: '/banners/coinbase.jpg',
+    websiteUrl: 'https://www.coinbase.com',
   },
   {
     id: '3',
@@ -47,6 +53,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 1,
     hasPerps: true,
     fundingRate: 0.015,
+    logoUrl: '/logos/kraken.png',
+    bannerUrl: '/banners/kraken.jpg',
+    websiteUrl: 'https://www.kraken.com',
   },
   {
     id: '4',
@@ -63,6 +72,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 50,
     hasPerps: true,
     fundingRate: 0.012,
+    logoUrl: '/logos/okx.png',
+    bannerUrl: '/banners/okx.jpg',
+    websiteUrl: 'https://www.okx.com',
   },
   {
     id: '5',
@@ -79,6 +91,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 20,
     hasPerps: true,
     fundingRate: 0.01,
+    logoUrl: '/logos/crypto-com.png',
+    bannerUrl: '/banners/crypto-com.jpg',
+    websiteUrl: 'https://crypto.com',
   },
   {
     id: '6',
@@ -95,6 +110,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 5,
     hasPerps: true,
     fundingRate: 0.01,
+    logoUrl: '/logos/bybit.png',
+    bannerUrl: '/banners/bybit.jpg',
+    websiteUrl: 'https://www.bybit.com',
   },
   {
     id: '7',
@@ -110,6 +128,9 @@ export const mockExchanges: Exchange[] = [
     takerFee: 0.35,
     minDepositUsd: 0,
     hasPerps: false,
+    logoUrl: '/logos/gemini.png',
+    bannerUrl: '/banners/gemini.jpg',
+    websiteUrl: 'https://www.gemini.com',
   },
   {
     id: '8',
@@ -126,6 +147,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 100,
     hasPerps: true,
     fundingRate: 0.02,
+    logoUrl: '/logos/bitfinex.png',
+    bannerUrl: '/banners/bitfinex.jpg',
+    websiteUrl: 'https://www.bitfinex.com',
   },
   {
     id: '9',
@@ -142,6 +166,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 100,
     hasPerps: true,
     fundingRate: 0.01,
+    logoUrl: '/logos/huobi.png',
+    bannerUrl: '/banners/huobi.jpg',
+    websiteUrl: 'https://www.huobi.com',
   },
   {
     id: '10',
@@ -158,6 +185,9 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 0,
     hasPerps: true,
     fundingRate: 0.01,
+    logoUrl: '/logos/ftx.png',
+    bannerUrl: '/banners/ftx.jpg',
+    websiteUrl: 'https://www.ftx.com',
   },
 ];
 

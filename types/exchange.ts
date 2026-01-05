@@ -16,6 +16,9 @@ export type Exchange = {
   minDepositUsd: number;
   hasPerps: boolean;
   fundingRate?: number;  // optional, for perps
+  logoUrl?: string;      // optional local logo image path (e.g., '/logos/binance.png')
+  bannerUrl?: string;    // optional local banner image path (e.g., '/banners/binance.jpg')
+  websiteUrl?: string;   // optional website URL for the exchange
 };
 
 export type FilterType =

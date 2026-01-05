@@ -6,6 +6,7 @@ import HeaderFilters from '@/components/HeaderFilters';
 import Sidebar from '@/components/Sidebar';
 import ExchangeCard from '@/components/ExchangeCard';
 import ComparisonBar from '@/components/ComparisonBar';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { mockExchanges } from '@/data/mockExchanges';
 import { Exchange, Country, FilterType, SortType, SidebarFilters } from '@/types/exchange';
 
@@ -32,6 +33,7 @@ export default function ExchangesPage() {
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>(initialSidebarFilters);
   const [selectedExchangeIds, setSelectedExchangeIds] = useState<Set<string>>(new Set());
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
 
   // Filter and sort exchanges
   const filteredAndSortedExchanges = useMemo(() => {
@@ -171,19 +173,21 @@ export default function ExchangesPage() {
           />
 
           {/* Exchange Cards Grid */}
-          <div className="space-y-4">
+          <div className="space-y-4" key={`exchanges-${country}-${filter}`}>
             {filteredAndSortedExchanges.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">No exchanges found matching your filters.</p>
+                <p className="text-gray-400 text-sm mt-2">Country: {country}, Filter: {filter}</p>
               </div>
             ) : (
               filteredAndSortedExchanges.map((exchange) => (
-                <ExchangeCard
-                  key={exchange.id}
-                  exchange={exchange}
-                  isSelected={selectedExchangeIds.has(exchange.id)}
-                  onToggleSelect={handleToggleSelect}
-                />
+                <ErrorBoundary key={`${exchange.id}-${country}-${filter}`}>
+                  <ExchangeCard
+                    exchange={exchange}
+                    isSelected={selectedExchangeIds.has(exchange.id)}
+                    onToggleSelect={handleToggleSelect}
+                  />
+                </ErrorBoundary>
               ))
             )}
           </div>
