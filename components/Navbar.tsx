@@ -10,6 +10,7 @@ export default function Navbar() {
   const navItems = [
     { href: '/exchanges', label: 'Exchanges' },
     { href: '/wallets', label: 'Wallets' },
+    { href: '/events', label: 'Events' },
     { href: '/news', label: 'News' },
     { href: '/guides', label: 'Guides' },
     { href: '/assets', label: 'Assets' },
