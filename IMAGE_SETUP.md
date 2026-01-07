@@ -33,16 +33,26 @@
 ## Image Specifications
 
 ### Logos
-- **Format**: PNG (with transparency) or JPG
-- **Size**: 128x128px to 256x256px (square recommended)
-- **Background**: Transparent PNG preferred
-- **Display size**: 48x48px in the UI
+- **Display Size**: 48px × 48px (shown in UI)
+- **Source Size**: **256px × 256px** (recommended for Retina displays)
+  - Minimum: 128px × 128px
+  - Maximum: 512px × 512px
+- **Format**: PNG with transparency (preferred) or SVG
+- **File Size**: 20-50 KB per logo
+- **Aspect Ratio**: 1:1 (square)
+- **Background**: Transparent (preferred)
 
 ### Banners
-- **Format**: JPG or PNG
-- **Size**: 728x90px (standard banner size)
-- **Aspect ratio**: ~8:1 (wide rectangle)
-- **Display size**: Full width, 90px height minimum
+- **Display Size**: Full width × 90px minimum height
+- **Source Size**: **1200px × 150px** (recommended, 8:1 ratio)
+  - Alternative: 728px × 90px (IAB standard)
+  - For high-DPI: 1600px × 200px
+- **Format**: JPG (quality 80-85%) or WebP
+- **File Size**: 50-150 KB per banner
+- **Aspect Ratio**: 8:1 to 10:1 (wide rectangle)
+- **Background**: Solid color or gradient
+
+📖 **For detailed specifications, see [IMAGE_SPECIFICATIONS.md](./IMAGE_SPECIFICATIONS.md)**
 
 ## How to Add Images
 

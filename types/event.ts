@@ -22,3 +22,4 @@ export type Event = {
   bannerUrl?: string; // Optional banner image for the event
 };
 
+

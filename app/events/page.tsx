@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
+import EventsHeaderFilters from '@/components/EventsHeaderFilters';
 import EventCard from '@/components/EventCard';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { mockEvents } from '@/data/mockEvents';
@@ -48,63 +49,19 @@ export default function EventsPage() {
   }, [selectedExchange, selectedEventType]);
 
   return (
-    <div className="app-shell">
+    <div className="app-shell flex flex-col">
       <Navbar />
-      
-      <main className="container mx-auto px-4 py-6 md:py-8 max-w-7xl">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
-            Exchange Events
-          </h1>
-          <p className="text-slate-600 text-base md:text-lg">
-            Ongoing promos and airdrops by exchange
-          </p>
-        </div>
+      <EventsHeaderFilters
+        selectedExchange={selectedExchange}
+        selectedEventType={selectedEventType}
+        exchangeNames={exchangeNames}
+        eventTypes={eventTypes}
+        onExchangeChange={setSelectedExchange}
+        onEventTypeChange={setSelectedEventType}
+      />
 
-        {/* Filters */}
-        <div className="mb-6 flex flex-wrap gap-3">
-          {/* Exchange Filter */}
-          <div className="flex flex-wrap gap-2">
-            <label className="text-sm font-medium text-slate-700 self-center">Exchange:</label>
-            <div className="flex flex-wrap gap-2">
-              {exchangeNames.map((name) => (
-                <button
-                  key={name}
-                  onClick={() => setSelectedExchange(name)}
-                  className={`pill-tab ${
-                    selectedExchange === name
-                      ? 'border-blue-500 bg-blue-50 text-blue-600'
-                      : ''
-                  }`}
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Event Type Filter */}
-          <div className="flex flex-wrap gap-2 ml-auto">
-            <label className="text-sm font-medium text-slate-700 self-center">Type:</label>
-            <div className="flex flex-wrap gap-2">
-              {eventTypes.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setSelectedEventType(type)}
-                  className={`pill-tab ${
-                    selectedEventType === type
-                      ? 'border-blue-500 bg-blue-50 text-blue-600'
-                      : ''
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
+      {/* Main Content */}
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Events List */}
         <div className="space-y-4">
           {filteredEvents.length === 0 ? (
