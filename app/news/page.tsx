@@ -1,13 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
 import NewsHero from '@/components/NewsHero';
 
 export default function NewsIndex() {
   return (
     <div className="app-shell flex flex-col">
-      <Navbar />
       <NewsHero
         eyebrow="CryptoCompare Hub · News"
         title="Country-specific regulatory and market structure news"

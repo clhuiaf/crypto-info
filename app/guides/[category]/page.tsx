@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import Navbar from '@/components/Navbar';
 import NewsHero from '@/components/NewsHero';
 import { getCategoryBySlug, guideCategories } from '@/data/guideCategories';
 import { getGuidesByCategory } from '@/data/guides';
@@ -44,7 +43,6 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <div className="app-shell flex flex-col">
-      <Navbar />
       <NewsHero
         eyebrow={`Guides · ${category.name}`}
         title={category.name}

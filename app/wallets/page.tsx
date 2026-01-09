@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Navbar from '@/components/Navbar';
 import WalletHeaderFilters from '@/components/WalletHeaderFilters';
 import WalletSidebar from '@/components/WalletSidebar';
 import WalletCard from '@/components/WalletCard';
@@ -124,7 +123,6 @@ export default function WalletsPage() {
 
   return (
     <div className="app-shell flex flex-col">
-      <Navbar />
       <WalletHeaderFilters
         filter={filter}
         sort={sort}

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Navbar from '@/components/Navbar';
 import EventsHeaderFilters from '@/components/EventsHeaderFilters';
 import EventCard from '@/components/EventCard';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -50,7 +49,6 @@ export default function EventsPage() {
 
   return (
     <div className="app-shell flex flex-col">
-      <Navbar />
       <EventsHeaderFilters
         selectedExchange={selectedExchange}
         selectedEventType={selectedEventType}

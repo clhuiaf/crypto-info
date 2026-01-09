@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
 import NewsHero from '@/components/NewsHero';
 import { hongKongNewsItems } from '@/data/newsHongKong';
 
@@ -31,8 +30,6 @@ export default function CountryNewsPage({ params }: NewsPageProps) {
 
   return (
     <div className="app-shell flex flex-col">
-      <Navbar />
-
       <NewsHero
         eyebrow={`Regulatory news · ${countryLabel}`}
         title={`${countryLabel} crypto & virtual asset news`}

@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
 import NewsHero from '@/components/NewsHero';
 import { guideCategories } from '@/data/guideCategories';
 import { getGuidesByCategory } from '@/data/guides';
@@ -9,7 +8,6 @@ import { getGuidesByCategory } from '@/data/guides';
 export default function GuidesIndex() {
   return (
     <div className="app-shell flex flex-col">
-      <Navbar />
       <NewsHero
         eyebrow="CryptoCompare Hub · Guides"
         title="Crypto trading guides for beginners in Hong Kong"

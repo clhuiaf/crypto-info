@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Navbar from '@/components/Navbar';
 import HeaderFilters from '@/components/HeaderFilters';
 import Sidebar from '@/components/Sidebar';
 import ExchangeCard from '@/components/ExchangeCard';
@@ -139,7 +138,6 @@ export default function ExchangesPage() {
 
   return (
     <div className="app-shell flex flex-col">
-      <Navbar />
       <HeaderFilters
         country={country}
         filter={filter}
