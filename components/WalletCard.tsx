@@ -9,7 +9,7 @@ interface WalletCardProps {
 
 export default function WalletCard({ wallet }: WalletCardProps) {
   return (
-    <div className="card-surface border-2 p-5 md:p-6 transition-all border-slate-200">
+    <div className="card-surface p-5 md:p-6">
       <div className="relative">
         {/* Top row: Name and Type badge */}
         <div className="flex justify-between items-start mb-4 gap-3">
@@ -99,13 +99,13 @@ export default function WalletCard({ wallet }: WalletCardProps) {
             href={wallet.websiteUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-medium text-sm text-center transition-colors"
+            className="flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-medium text-sm text-center transition-all shadow-sm hover:shadow-md"
           >
             Visit wallet
           </a>
           <Link
             href={`/wallets/${wallet.slug}`}
-            className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-slate-700 hover:bg-slate-50 font-medium text-sm text-center"
+            className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-slate-700 hover:bg-slate-50 font-medium text-sm text-center shadow-sm hover:shadow-md transition-all"
           >
             Learn more →
           </Link>

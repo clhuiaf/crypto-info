@@ -56,7 +56,7 @@ export default function ChartsPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setSelectedCoin('bitcoin')}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
               selectedCoin === 'bitcoin'
                 ? 'bg-blue-600 text-white'
                 : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
@@ -66,7 +66,7 @@ export default function ChartsPage() {
           </button>
           <button
             onClick={() => setSelectedCoin('ethereum')}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
               selectedCoin === 'ethereum'
                 ? 'bg-blue-600 text-white'
                 : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
@@ -82,7 +82,7 @@ export default function ChartsPage() {
             <button
               key={tf.value}
               onClick={() => setTimeframe(tf.value)}
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
                 timeframe === tf.value
                   ? 'bg-blue-600 text-white'
                   : 'bg-slate-200 text-slate-700 hover:bg-slate-300'

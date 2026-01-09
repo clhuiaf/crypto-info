@@ -6,7 +6,7 @@ import { formatCurrency, formatPercentage } from '@/lib/utils';
 export const revalidate = 300; // Revalidate every 5 minutes
 
 export const metadata: Metadata = {
-  title: 'Cryptocurrency Listing Info | CryptoCompare Hub',
+  title: 'Cryptocurrency Listing Info | Cryptopedia',
   description:
     'Recently listed and key cryptocurrencies with listing details. Explore major crypto assets available on Hong Kong exchanges.',
 };
@@ -82,8 +82,22 @@ export default async function AssetsIndex() {
                   </div>
                 </div>
                 <div className="pt-3 border-t border-slate-200">
-                  <span className="text-sm font-medium text-blue-600 hover:underline">
-                    View details →
+                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors">
+                    View details
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
                   </span>
                 </div>
               </Link>

@@ -131,7 +131,7 @@ export default function NewCoinsList({ coins }: NewCoinsListProps) {
                     {platforms.map((platform) => (
                       <span
                         key={platform}
-                        className="px-2 py-1 text-xs bg-slate-100 text-slate-700 rounded"
+                        className="pill-tab bg-slate-50 border-slate-200 text-[11px]"
                       >
                         {platform}
                       </span>

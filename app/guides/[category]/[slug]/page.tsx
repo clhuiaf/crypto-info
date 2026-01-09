@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: GuideDetailPageProps): Promis
 
   if (!guide) {
     return {
-      title: 'Guide Not Found | CryptoCompare Hub',
+      title: 'Guide Not Found | Cryptopedia',
     };
   }
 
@@ -136,19 +136,19 @@ export default function GuideDetailPage({ params }: GuideDetailPageProps) {
             <div className="flex flex-wrap gap-3">
               <Link
                 href={`/guides/${category.slug}`}
-                className="inline-flex items-center px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600 text-sm font-medium transition-colors"
+                className="inline-flex items-center px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600 text-sm font-medium transition-all shadow-sm hover:shadow-md"
               >
                 More {category.name} Guides
               </Link>
               <Link
                 href="/exchanges"
-                className="inline-flex items-center px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600 text-sm font-medium transition-colors"
+                className="inline-flex items-center px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600 text-sm font-medium transition-all shadow-sm hover:shadow-md"
               >
                 Compare Hong Kong Exchanges
               </Link>
               <Link
                 href="/news/hong-kong"
-                className="inline-flex items-center px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600 text-sm font-medium transition-colors"
+                className="inline-flex items-center px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600 text-sm font-medium transition-all shadow-sm hover:shadow-md"
               >
                 Hong Kong Crypto News
               </Link>

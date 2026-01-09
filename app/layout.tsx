@@ -3,8 +3,8 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
-  title: 'CryptoCompare HK - Compare Crypto Exchanges',
-  description: 'Compare crypto exchanges for new and retail traders',
+  title: 'Cryptopedia - Crypto Research Hub for Hong Kong Traders',
+  description: 'Compare crypto exchanges, wallets, track assets, read guides, and stay updated with regulatory news for Hong Kong traders.',
 }
 
 export default function RootLayout({
@@ -13,10 +13,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className="scroll-smooth">
+      <body className="bg-slate-50 text-slate-900 antialiased">
         <Navbar />
-        <main className="min-h-screen bg-slate-50">
+        <main className="min-h-screen">
           {children}
         </main>
       </body>

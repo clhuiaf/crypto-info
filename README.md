@@ -1,6 +1,6 @@
-# CryptoCompare Hub
+# Cryptopedia
 
-A comprehensive crypto comparison platform for Hong Kong traders, built with Next.js, React, TypeScript, and Tailwind CSS. Compare exchanges, wallets, read guides, track assets, and stay updated with regulatory news.
+Cryptopedia (Chinese name: Crypto通) is a crypto research hub for Hong Kong traders, built with Next.js, React, TypeScript, and Tailwind CSS. Compare exchanges, wallets, read guides, track assets, and stay updated with regulatory news.
 
 ## 🚀 Features
 
@@ -41,16 +41,37 @@ A comprehensive crypto comparison platform for Hong Kong traders, built with Nex
   - Common mistakes
 - Navigation: Landing → Category → Detail pages
 
-### 5. **Assets Section** (`/assets`)
-- Browse major cryptocurrencies (BTC, ETH, SOL, USDT, etc.)
-- Asset detail pages with:
+### 5. **Assets & Listing Info** (`/assets`)
+- Browse major cryptocurrencies with real-time price data
+- Unified asset detail pages combining:
   - Overview and key information
   - Category, base chain, launch year
   - Trading pairs and risk notes
-  - Links to Hong Kong exchanges
+  - Listing details (exchanges, trading pairs, listing dates)
+  - 7-day price charts
+  - Links to official websites and social media
 - SEO-optimized for coin-name searches
 
-### 6. **Navigation**
+### 6. **Prices** (`/prices`)
+- Real-time cryptocurrency prices from CoinGecko API
+- Top cryptocurrencies by market capitalization
+- Price tables with 24h change, market cap, and watchlist functionality
+
+### 7. **New Coins** (`/new-coins`)
+- Recently listed and trending cryptocurrencies
+- Listing dates and platform information
+- Quick access to new coin details
+
+### 8. **Watchlist** (`/watchlist`)
+- Save favorite cryptocurrencies for quick access
+- Local storage-based watchlist management
+- View tracked coins in one place
+
+### 9. **Charts** (`/charts`)
+- Price charts for tracked cryptocurrencies
+- Historical price data visualization
+
+### 10. **Navigation**
 - Active route highlighting using `usePathname()`
 - Blue underline indicates current page
 - Responsive top navigation bar
@@ -75,6 +96,14 @@ crypto-info/
 │   │   └── page.tsx        # News index
 │   ├── wallets/            # Wallet comparison
 │   │   └── page.tsx
+│   ├── prices/             # Cryptocurrency prices
+│   │   └── page.tsx
+│   ├── new-coins/          # New coins listing
+│   │   └── page.tsx
+│   ├── watchlist/          # User watchlist
+│   │   └── page.tsx
+│   ├── charts/             # Price charts
+│   │   └── page.tsx
 │   ├── globals.css         # Global styles
 │   ├── layout.tsx          # Root layout
 │   └── page.tsx            # Home (redirects to /exchanges)
@@ -88,7 +117,11 @@ crypto-info/
 │   ├── ExchangeCard.tsx      # Exchange card component
 │   ├── WalletCard.tsx        # Wallet card component
 │   ├── ComparisonBar.tsx     # Exchange comparison bar
-│   └── NewsHero.tsx          # Reusable hero component
+│   ├── NewsHero.tsx          # Reusable hero component
+│   ├── AssetDetailClient.tsx # Asset detail page client component
+│   ├── PriceChart.tsx        # Price chart component
+│   ├── PriceTable.tsx        # Price table component
+│   └── NewCoinsList.tsx      # New coins list component
 │
 ├── data/
 │   ├── mockExchanges.ts      # Exchange mock data (10+ exchanges)
@@ -97,6 +130,11 @@ crypto-info/
 │   ├── guides.ts             # Guide content (6 guides)
 │   ├── guideCategories.ts   # Guide categories (4 categories)
 │   └── newsHongKong.ts       # Hong Kong news items
+│
+├── lib/
+│   ├── api.ts                # CoinGecko API integration
+│   ├── utils.ts              # Utility functions
+│   └── watchlist.ts          # Watchlist management
 │
 ├── types/
 │   ├── exchange.ts           # Exchange types
@@ -123,8 +161,12 @@ crypto-info/
 | `/guides` | Guides landing (categories) |
 | `/guides/[category]` | Category page (e.g., `/guides/technical-indicators`) |
 | `/guides/[category]/[slug]` | Individual guide (e.g., `/guides/technical-indicators/rsi-indicator`) |
-| `/assets` | Assets index page |
+| `/assets` | Assets index page with real-time price data |
 | `/assets/[symbol]` | Asset detail (e.g., `/assets/BTC`) |
+| `/prices` | Cryptocurrency prices table |
+| `/new-coins` | New and trending coins |
+| `/watchlist` | User's cryptocurrency watchlist |
+| `/charts` | Price charts for tracked coins |
 
 ## 🚀 Getting Started
 
@@ -159,6 +201,8 @@ npm start
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Utility-first CSS framework
 - **React Hooks** - State management (`useState`, `useMemo`, `usePathname`)
+- **CoinGecko API** - Real-time cryptocurrency data
+- **Recharts** - Chart visualization library
 
 ## 📊 Data Structure
 
@@ -173,6 +217,7 @@ npm start
 ### Assets
 - 15 major cryptocurrencies (BTC, ETH, SOL, USDT, USDC, BNB, XRP, ADA, DOGE, MATIC, AVAX, LINK, UNI, ATOM, DOT)
 - Fields: category, base chain, launch year, trading pairs, risk notes
+- Real-time price data from CoinGecko API
 
 ### Guides
 - 4 categories with 6 guides total
@@ -196,24 +241,29 @@ npm start
 ✅ Wallet comparison with category filters  
 ✅ News aggregation for Hong Kong  
 ✅ Category-based guides system  
-✅ Asset browsing and detail pages  
+✅ Asset browsing with real-time price data  
+✅ Unified asset detail pages (assets + listing info)  
+✅ Price tables and charts  
+✅ New coins tracking  
+✅ Watchlist functionality  
 ✅ Active route highlighting in navigation  
 ✅ Mobile-responsive design throughout  
 ✅ SEO-optimized meta tags  
 ✅ TypeScript type safety  
-✅ Mock data structure ready for API integration  
+✅ CoinGecko API integration for live data  
 
 ## 🔄 Future Enhancements
 
-- Real API integration for exchanges, wallets, and assets
+- Real API integration for exchanges and wallets (currently using mock data)
 - RSS feed parsing for news (currently using mock data)
 - User authentication and favorites
-- Real-time price data
 - More countries for news aggregation
 - Additional guide categories and content
 - Wallet detail pages (`/wallets/[slug]`)
 - Exchange detail pages
 - Comparison modal for wallets
+- Advanced charting features
+- Price alerts and notifications
 
 ## 📄 License
 

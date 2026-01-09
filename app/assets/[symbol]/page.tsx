@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: AssetPageProps): Promise<Meta
 
   if (!asset) {
     return {
-      title: 'Asset Not Found | CryptoCompare Hub',
+      title: 'Asset Not Found | Cryptopedia',
     };
   }
 
   return {
-    title: `${asset.name} (${asset.symbol}) – overview and where to trade in Hong Kong | CryptoCompare Hub`,
+    title: `${asset.name} (${asset.symbol}) – overview and where to trade in Hong Kong | Cryptopedia`,
     description: `Learn about ${asset.name} (${asset.symbol}), a ${asset.category.toLowerCase()} crypto asset. Find where to trade ${asset.symbol} on licensed and unlicensed exchanges in Hong Kong.`,
   };
 }

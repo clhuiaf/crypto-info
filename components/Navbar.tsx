@@ -37,10 +37,10 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm font-bold shadow-sm">
-              CH
+              CP
             </div>
             <Link href="/" className="text-xl font-semibold text-slate-900 tracking-tight">
-              CryptoCompare Hub
+              Cryptopedia
             </Link>
           </div>
           <div className="hidden lg:flex items-center space-x-6 text-sm">

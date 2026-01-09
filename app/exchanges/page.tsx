@@ -162,7 +162,7 @@ export default function ExchangesPage() {
           <div className="lg:hidden mb-4">
             <button
               onClick={() => setIsMobileFiltersOpen(true)}
-              className="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50 font-medium"
+              className="px-4 py-2.5 border border-slate-200 rounded-xl bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all shadow-sm hover:shadow-md"
             >
               Filters
             </button>

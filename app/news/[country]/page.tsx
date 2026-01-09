@@ -77,14 +77,28 @@ export default function CountryNewsPage({ params }: NewsPageProps) {
                   </h2>
                   <p className="mt-2 text-sm text-slate-600">{item.summary}</p>
 
-                  <div className="mt-3 flex items-center gap-4 text-xs">
+                  <div className="mt-3 flex items-center gap-4">
                     <a
                       href={item.sourceUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-blue-600 hover:text-blue-700 underline-offset-2 hover:underline"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
                     >
                       View source
+                      <svg
+                        className="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
                     </a>
                   </div>
                 </div>

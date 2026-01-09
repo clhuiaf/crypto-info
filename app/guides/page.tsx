@@ -9,7 +9,7 @@ export default function GuidesIndex() {
   return (
     <div className="app-shell flex flex-col">
       <NewsHero
-        eyebrow="CryptoCompare Hub · Guides"
+        eyebrow="Cryptopedia · Guides"
         title="Crypto trading guides for beginners in Hong Kong"
         subtitle="Learn essential trading concepts, technical analysis, and market patterns to make informed decisions when choosing and using crypto exchanges."
       />
@@ -22,7 +22,7 @@ export default function GuidesIndex() {
               <Link
                 key={category.id}
                 href={`/guides/${category.slug}`}
-                className="card-surface p-5 md:p-6 hover:border-blue-500 hover:shadow-md transition-all block"
+                className="card-surface p-5 md:p-6 hover:border-blue-500 block"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">

@@ -22,12 +22,12 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   if (!category) {
     return {
-      title: 'Category Not Found | CryptoCompare Hub',
+      title: 'Category Not Found | Cryptopedia',
     };
   }
 
   return {
-    title: `${category.name} Guides for Crypto Traders in Hong Kong | CryptoCompare Hub`,
+    title: `${category.name} Guides for Crypto Traders in Hong Kong | Cryptopedia`,
     description: category.description,
   };
 }
@@ -64,7 +64,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             <Link
               key={guide.id}
               href={`/guides/${guide.categorySlug}/${guide.slug}`}
-              className="card-surface p-5 md:p-6 hover:border-blue-500 hover:shadow-md transition-all block"
+              className="card-surface p-5 md:p-6 hover:border-blue-500 block"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
