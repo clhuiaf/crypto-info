@@ -1,5 +1,3 @@
-'use client';
-
 interface NewsHeroProps {
   eyebrow: string;
   title: string;

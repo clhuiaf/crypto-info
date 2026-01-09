@@ -1,12 +1,22 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { Asset } from '@/types/asset';
 import { CoinDetails } from '@/lib/api';
 import { formatCurrency, formatPercentage, formatMarketCap, formatDate } from '@/lib/utils';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '@/lib/watchlist';
-import PriceChart from '@/components/PriceChart';
+
+// Dynamically import the chart component to reduce bundle size
+const PriceChart = dynamic(() => import('@/components/PriceChart'), {
+  loading: () => (
+    <div className="bg-white rounded-lg shadow p-12 text-center">
+      <p className="text-slate-500">Loading chart...</p>
+    </div>
+  ),
+  ssr: false
+});
 
 interface AssetDetailClientProps {
   asset: Asset;
@@ -236,7 +246,13 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
 
           {/* 7-Day Price Chart */}
           {chartData.length > 0 && (
-            <PriceChart data={chartData} coinName={asset.name} />
+            <Suspense fallback={
+              <div className="bg-white rounded-lg shadow p-12 text-center">
+                <p className="text-slate-500">Loading chart...</p>
+              </div>
+            }>
+              <PriceChart data={chartData} coinName={asset.name} />
+            </Suspense>
           )}
         </div>
 

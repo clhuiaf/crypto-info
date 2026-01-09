@@ -1,8 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { fetchHistoricalData } from '@/lib/api'
-import PriceChart from '@/components/PriceChart'
+import dynamic from 'next/dynamic'
+
+// Dynamically import the chart component to reduce initial bundle size
+const PriceChart = dynamic(() => import('@/components/PriceChart'), {
+  loading: () => (
+    <div className="bg-white rounded-lg shadow p-12 text-center">
+      <p className="text-slate-500">Loading chart...</p>
+    </div>
+  ),
+  ssr: false // Disable SSR for chart component to avoid hydration issues
+})
 
 type Timeframe = '1' | '7' | '30' | '90' | '365'
 
@@ -104,7 +114,13 @@ export default function ChartsPage() {
           <p className="text-slate-500">Loading chart data...</p>
         </div>
       ) : (
-        <PriceChart data={chartData} coinName={selectedCoin === 'bitcoin' ? 'Bitcoin' : 'Ethereum'} />
+        <Suspense fallback={
+          <div className="bg-white rounded-lg shadow p-12 text-center">
+            <p className="text-slate-500">Loading chart...</p>
+          </div>
+        }>
+          <PriceChart data={chartData} coinName={selectedCoin === 'bitcoin' ? 'Bitcoin' : 'Ethereum'} />
+        </Suspense>
       )}
     </div>
   )

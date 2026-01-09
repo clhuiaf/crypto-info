@@ -9,6 +9,8 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { mockExchanges } from '@/data/mockExchanges';
 import { Exchange, Country, FilterType, SortType, SidebarFilters } from '@/types/exchange';
 
+const DEFAULT_FILTER: FilterType = 'Licensed only';
+
 const initialSidebarFilters: SidebarFilters = {
   legalStatus: {
     licensed: false,
@@ -27,15 +29,12 @@ const initialSidebarFilters: SidebarFilters = {
 
 export default function ExchangesPage() {
   const [country, setCountry] = useState<Country>('HK');
-  const [filter, setFilter] = useState<FilterType>('Licensed only');
+  const [filter, setFilter] = useState<FilterType>(DEFAULT_FILTER);
   const [sort, setSort] = useState<SortType>('Fees (low to high)');
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>(initialSidebarFilters);
   const [selectedExchangeIds, setSelectedExchangeIds] = useState<Set<string>>(new Set());
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  // HK-specific SFC-licensed platforms (by id) so we can treat "Licensed only"
-  // differently for the Hong Kong view without hard-coding in JSX.
-  const hkLicensedExchangeIds: string[] = ['2', '3']; // HashKey Exchange, OSL
 
   // Filter and sort exchanges
   const filteredAndSortedExchanges = useMemo(() => {
@@ -46,12 +45,7 @@ export default function ExchangesPage() {
 
     // Apply main filter (top bar)
     if (filter === 'Licensed only') {
-      if (country === 'HK') {
-        // For HK, "Licensed only" means SFC-licensed platforms (HashKey, OSL).
-        filtered = filtered.filter((ex) => hkLicensedExchangeIds.includes(ex.id));
-      } else {
-        filtered = filtered.filter((ex) => ex.licensed);
-      }
+      filtered = filtered.filter((ex) => ex.licensed);
     } else if (filter === 'Spot only') {
       filtered = filtered.filter((ex) => ex.products.includes('Spot'));
     } else if (filter === 'Derivatives only') {
@@ -130,6 +124,7 @@ export default function ExchangesPage() {
 
   const handleClearFilters = () => {
     setSidebarFilters(initialSidebarFilters);
+    setFilter(DEFAULT_FILTER);
   };
 
   const handleClearSelection = () => {
