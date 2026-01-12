@@ -1,3 +1,4 @@
+// Category: Market & portfolio
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { fetchTopCryptos, type CryptoPrice } from '@/lib/api';
@@ -26,10 +27,10 @@ export default async function AssetsIndex() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Cryptocurrency Listing Info
+          Asset Listings & Details
         </h1>
         <p className="text-slate-600">
-          Recently listed and key cryptocurrencies with listing details.
+          Detailed information cards for major cryptocurrencies and their exchange listings.
         </p>
       </div>
 
@@ -71,13 +72,17 @@ export default async function AssetsIndex() {
                     <span className="text-sm text-slate-600">24h Change:</span>
                     <span
                       className={`text-sm font-medium ${
-                        crypto.price_change_percentage_24h >= 0
-                          ? 'text-green-600'
-                          : 'text-red-600'
+                        crypto.price_change_percentage_24h == null
+                          ? 'text-gray-400'
+                          : crypto.price_change_percentage_24h >= 0
+                            ? 'text-green-600'
+                            : 'text-red-600'
                       }`}
                     >
-                      {crypto.price_change_percentage_24h >= 0 ? '+' : ''}
-                      {crypto.price_change_percentage_24h.toFixed(2)}%
+                      {crypto.price_change_percentage_24h == null
+                        ? '—'
+                        : `${crypto.price_change_percentage_24h >= 0 ? '+' : ''}${crypto.price_change_percentage_24h.toFixed(2)}%`
+                      }
                     </span>
                   </div>
                 </div>

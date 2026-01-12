@@ -1,3 +1,4 @@
+// Category: Learning
 'use client';
 
 import Link from 'next/link';
@@ -10,8 +11,8 @@ export default function GuidesIndex() {
     <div className="app-shell flex flex-col">
       <NewsHero
         eyebrow="Cryptopedia · Guides"
-        title="Crypto trading guides for beginners in Hong Kong"
-        subtitle="Learn essential trading concepts, technical analysis, and market patterns to make informed decisions when choosing and using crypto exchanges."
+        title="Crypto Trading Education"
+        subtitle="Structured learning guides covering trading concepts, technical analysis, risk management, and market patterns."
       />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

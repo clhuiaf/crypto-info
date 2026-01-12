@@ -1,3 +1,4 @@
+// Category: Market & portfolio
 'use client'
 
 import { useEffect, useState } from 'react'

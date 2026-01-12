@@ -1,3 +1,4 @@
+// Category: Learning
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';

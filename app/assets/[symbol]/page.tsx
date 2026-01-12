@@ -1,3 +1,4 @@
+// Category: Market & portfolio
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { getAssetBySymbol, assets } from '@/data/assets';

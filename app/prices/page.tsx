@@ -1,3 +1,4 @@
+// Category: Market & portfolio
 import { fetchTopCryptos, type CryptoPrice } from '@/lib/api'
 import PriceTable from '@/components/PriceTable'
 
@@ -18,10 +19,10 @@ export default async function PricesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Cryptocurrency Prices
+          Live Market Overview
         </h1>
         <p className="text-slate-600">
-          Top cryptocurrencies by market capitalization
+          Real-time cryptocurrency prices and market data
         </p>
       </div>
 

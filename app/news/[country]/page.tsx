@@ -1,21 +1,37 @@
+// Category: News
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import NewsHero from '@/components/NewsHero';
 import { hongKongNewsItems } from '@/data/newsHongKong';
 
 const SUPPORTED_COUNTRIES = ['hong-kong'] as const;
-
 type SupportedCountrySlug = (typeof SUPPORTED_COUNTRIES)[number];
 
-interface NewsPageProps {
+type NewsPageProps = {
   params: {
     country: string;
   };
-}
+};
 
 const countryLabels: Record<SupportedCountrySlug, string> = {
   'hong-kong': 'Hong Kong',
 };
+
+export async function generateStaticParams() {
+  return SUPPORTED_COUNTRIES.map((country) => ({
+    country,
+  }));
+}
+
+export async function generateMetadata({ params }: NewsPageProps) {
+  const slug = params.country as SupportedCountrySlug;
+  const countryLabel = countryLabels[slug] || 'Unknown Country';
+
+  return {
+    title: `${countryLabel} Crypto News & Regulatory Updates | Cryptopedia`,
+    description: `Stay updated with the latest ${countryLabel} crypto news, regulatory developments, and market updates from official sources.`,
+  };
+}
 
 export default function CountryNewsPage({ params }: NewsPageProps) {
   const slug = params.country as SupportedCountrySlug;
@@ -25,15 +41,14 @@ export default function CountryNewsPage({ params }: NewsPageProps) {
   }
 
   const countryLabel = countryLabels[slug];
-
   const items = hongKongNewsItems;
 
   return (
     <div className="app-shell flex flex-col">
       <NewsHero
         eyebrow={`Regulatory news · ${countryLabel}`}
-        title={`${countryLabel} crypto & virtual asset news`}
-        subtitle="Official updates from the SFC and HKEX focused on virtual assets, exchanges, and ETFs that impact Hong Kong traders."
+        title={`${countryLabel} Regulatory Updates`}
+        subtitle="Official regulatory news and listing updates from SFC and HKEX for virtual assets, exchanges, and ETFs."
       />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

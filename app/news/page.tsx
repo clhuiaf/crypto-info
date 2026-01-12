@@ -1,3 +1,4 @@
+// Category: News
 'use client';
 
 import Link from 'next/link';
@@ -8,8 +9,8 @@ export default function NewsIndex() {
     <div className="app-shell flex flex-col">
       <NewsHero
         eyebrow="Cryptopedia · News"
-        title="Country-specific regulatory and market structure news"
-        subtitle="Start with Hong Kong below. We surface regulatory and listing updates that matter for retail traders choosing an exchange."
+        title="Regulatory & Market News"
+        subtitle="Stay updated with regulatory developments and listing news for Hong Kong crypto traders."
       />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

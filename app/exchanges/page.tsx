@@ -1,3 +1,4 @@
+// Category: Platforms & opportunities
 'use client';
 
 import { useState, useMemo } from 'react';
