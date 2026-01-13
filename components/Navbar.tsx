@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useRef } from 'react';
 import { navConfig } from '@/lib/navConfig';
+import AuthSheet from './AuthSheet';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [authOpen, setAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
@@ -108,12 +110,12 @@ export default function Navbar() {
 
           {/* Membership button */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/auth"
+            <button
+              onClick={() => setAuthOpen(true)}
               className="hidden sm:inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors shadow-sm hover:shadow-md"
             >
               Sign up / Log in
-            </Link>
+            </button>
 
             {/* Mobile menu button */}
             <button
@@ -173,6 +175,8 @@ export default function Navbar() {
             </div>
           </div>
         )}
+        {/* AuthSheet modal */}
+        <AuthSheet open={authOpen} onClose={() => setAuthOpen(false)} />
       </div>
     </nav>
   );
