@@ -46,7 +46,10 @@ export interface CryptoPrice {
   symbol: string
   name: string
   current_price: number
+  price_change_percentage_1h_in_currency: number | null
   price_change_percentage_24h: number
+  price_change_percentage_7d_in_currency: number | null
+  total_volume: number
   market_cap: number
   image: string
 }
@@ -76,7 +79,7 @@ export async function fetchTopCryptos(limit: number = 50, isServer: boolean = fa
       fetchOptions.next = { revalidate: 300 }
     }
     
-    const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`
+    const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false&price_change_percentage=1h,24h,7d`
     const response = await fetchWithRetry(url, Object.keys(fetchOptions).length > 0 ? fetchOptions : { cache: 'force-cache' })
     
     if (!response.ok) {

@@ -2,9 +2,10 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import WalletHeaderFilters from '@/components/WalletHeaderFilters';
 import WalletSidebar from '@/components/WalletSidebar';
 import WalletCard from '@/components/WalletCard';
+import PageShell from '@/components/PageShell';
+import PageToolbar from '@/components/PageToolbar';
 import { mockWallets } from '@/data/mockWallets';
 import { WalletFilterType, WalletSortType, WalletSidebarFilters } from '@/types/wallet';
 
@@ -122,60 +123,91 @@ export default function WalletsPage() {
     setSidebarFilters(initialSidebarFilters);
   };
 
-  return (
-    <div className="app-shell flex flex-col">
-      <WalletHeaderFilters
-        filter={filter}
-        sort={sort}
-        onFilterChange={setFilter}
-        onSortChange={setSort}
+  const toolbar = (
+    <PageToolbar
+      left={
+        <>
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value as WalletFilterType)}
+            className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="All">All</option>
+            <option value="Hardware only">Hardware only</option>
+            <option value="Non-custodial only">Non-custodial only</option>
+            <option value="Beginner friendly">Beginner friendly</option>
+          </select>
+
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as WalletSortType)}
+            className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="Name (A-Z)">Name (A-Z)</option>
+            <option value="Name (Z-A)">Name (Z-A)</option>
+            <option value="Type">Type</option>
+          </select>
+        </>
+      }
+      right={
+        <span className="text-xs text-slate-500">Compare features · Security ratings</span>
+      }
+    />
+  )
+
+  const mainContent = (
+    <div className="grid gap-6 lg:grid-cols-[260px,minmax(0,1.7fr)]">
+      {/* Filter Sidebar */}
+      <WalletSidebar
+        filters={sidebarFilters}
+        onFilterChange={setSidebarFilters}
+        onClearFilters={handleClearFilters}
+        isMobile={false}
       />
 
-      <div className="flex-1 flex">
-        {/* Desktop Sidebar */}
+      {/* Wallet Cards */}
+      <div className="space-y-4">
+        {/* Mobile Filters Button */}
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={() => setIsMobileFiltersOpen(true)}
+            className="px-4 py-2.5 border border-slate-200 rounded-xl bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all shadow-sm hover:shadow-md"
+          >
+            Filters
+          </button>
+        </div>
+
+        {/* Mobile Sidebar Modal */}
         <WalletSidebar
           filters={sidebarFilters}
           onFilterChange={setSidebarFilters}
           onClearFilters={handleClearFilters}
+          isMobile={true}
+          isOpen={isMobileFiltersOpen}
+          onClose={() => setIsMobileFiltersOpen(false)}
         />
 
-        {/* Main Content */}
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Mobile Filters Button */}
-          <div className="lg:hidden mb-4">
-            <button
-              onClick={() => setIsMobileFiltersOpen(true)}
-              className="px-4 py-2.5 border border-slate-200 rounded-xl bg-white text-slate-700 hover:bg-slate-50 font-medium text-sm transition-all shadow-sm hover:shadow-md"
-            >
-              Filters
-            </button>
+        {filteredAndSortedWallets.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No wallets found matching your filters.</p>
           </div>
-
-          {/* Mobile Sidebar Modal */}
-          <WalletSidebar
-            filters={sidebarFilters}
-            onFilterChange={setSidebarFilters}
-            onClearFilters={handleClearFilters}
-            isMobile={true}
-            isOpen={isMobileFiltersOpen}
-            onClose={() => setIsMobileFiltersOpen(false)}
-          />
-
-          {/* Wallet Cards Grid */}
-          <div className="space-y-4">
-            {filteredAndSortedWallets.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No wallets found matching your filters.</p>
-              </div>
-            ) : (
-              filteredAndSortedWallets.map((wallet) => (
-                <WalletCard key={wallet.id} wallet={wallet} />
-              ))
-            )}
-          </div>
-        </main>
+        ) : (
+          filteredAndSortedWallets.map((wallet) => (
+            <WalletCard key={wallet.id} wallet={wallet} />
+          ))
+        )}
       </div>
     </div>
+  )
+
+  return (
+    <PageShell
+      title="Crypto Wallets"
+      subtitle="Find the right wallet for your crypto storage and management needs. Compare security features, supported networks, and ease of use."
+      toolbar={toolbar}
+    >
+      {mainContent}
+    </PageShell>
   );
 }
 

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { getWatchlist, removeFromWatchlist, type WatchlistItem } from '@/lib/watchlist'
 import { fetchTopCryptos, fetchCoinById, type CryptoPrice } from '@/lib/api'
 import { formatCurrency, formatPercentage, formatMarketCap } from '@/lib/utils'
+import MarketTable from '@/components/MarketTable'
 
 export default function WatchlistPage() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([])
@@ -122,89 +123,14 @@ export default function WatchlistPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200">
-              <thead className="bg-slate-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Coin
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Price
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    24h Change
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Market Cap
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-slate-200">
-                {watchlist.map((item) => {
-                  const crypto = cryptoData.get(item.id)
-                  const changeColor =
-                    crypto && crypto.price_change_percentage_24h >= 0
-                      ? 'text-green-600'
-                      : 'text-red-600'
+        // Build assets array in the same order as the watchlist, omitting missing market data
+        (() => {
+          const assets = watchlist
+            .map((item) => cryptoData.get(item.id))
+            .filter((a): a is CryptoPrice => !!a)
 
-                  return (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-slate-50 transition-colors"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          {crypto?.image && (
-                            <img
-                              src={crypto.image}
-                              alt={item.name}
-                              className="h-8 w-8 rounded-full mr-3"
-                            />
-                          )}
-                          <div>
-                            <div className="text-sm font-medium text-slate-900">
-                              {item.name}
-                            </div>
-                            <div className="text-sm text-slate-500 uppercase">
-                              {item.symbol}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-slate-900">
-                        {crypto ? formatCurrency(crypto.current_price) : 'N/A'}
-                      </td>
-                      <td
-                        className={`px-6 py-4 whitespace-nowrap text-sm text-right font-medium ${changeColor}`}
-                      >
-                        {crypto
-                          ? formatPercentage(crypto.price_change_percentage_24h)
-                          : 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-500">
-                        {crypto ? formatMarketCap(crypto.market_cap) : 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center">
-                        <button
-                          onClick={() => handleRemove(item.id)}
-                          className="px-3 py-1 rounded-md text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors"
-                          aria-label="Remove from watchlist"
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+          return <MarketTable assets={assets} showActions onRemove={handleRemove} />
+        })()
       )}
     </div>
   )

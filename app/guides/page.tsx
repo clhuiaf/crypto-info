@@ -2,20 +2,28 @@
 'use client';
 
 import Link from 'next/link';
-import NewsHero from '@/components/NewsHero';
+import PageShell from '@/components/PageShell';
 import { guideCategories } from '@/data/guideCategories';
 import { getGuidesByCategory } from '@/data/guides';
 
 export default function GuidesIndex() {
   return (
-    <div className="app-shell flex flex-col">
-      <NewsHero
-        eyebrow="Cryptopedia · Guides"
-        title="Crypto Trading Education"
-        subtitle="Structured learning guides covering trading concepts, technical analysis, risk management, and market patterns."
-      />
-
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <PageShell
+      hero={
+        <div className="bg-white">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="py-6 space-y-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Cryptopedia · Guides</p>
+              <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">Crypto Trading Education</h1>
+              <p className="mt-2 text-slate-500 max-w-2xl">
+                Structured learning guides covering trading concepts, technical analysis, risk management, and market patterns.
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <div className="mt-6 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
           {guideCategories.map((category) => {
             const categoryGuides = getGuidesByCategory(category.slug);
@@ -23,7 +31,7 @@ export default function GuidesIndex() {
               <Link
                 key={category.id}
                 href={`/guides/${category.slug}`}
-                className="card-surface p-5 md:p-6 hover:border-blue-500 block"
+                className="rounded-2xl border border-slate-100 bg-white px-6 py-5 hover:shadow-sm block"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
@@ -56,7 +64,7 @@ export default function GuidesIndex() {
             );
           })}
         </div>
-      </main>
-    </div>
+      </div>
+    </PageShell>
   );
 }

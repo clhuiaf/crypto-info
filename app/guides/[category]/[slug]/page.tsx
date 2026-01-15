@@ -1,8 +1,9 @@
 // Category: Learning
+import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import NewsHero from '@/components/NewsHero';
+import PageShell from '@/components/PageShell';
 import { getGuideBySlug, guides } from '@/data/guides';
 import { getCategoryBySlug } from '@/data/guideCategories';
 
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: GuideDetailPageProps): Promis
   };
 }
 
-export default function GuideDetailPage({ params }: GuideDetailPageProps) {
+export default async function Page({ params }: GuideDetailPageProps) {
   const guide = getGuideBySlug(params.slug);
   const category = guide ? getCategoryBySlug(guide.categorySlug) : null;
 
@@ -43,25 +44,28 @@ export default function GuideDetailPage({ params }: GuideDetailPageProps) {
     notFound();
   }
 
-  return (
-    <div className="app-shell flex flex-col">
-      <NewsHero
-        eyebrow={`Guides · ${category.name}`}
-        title={guide.title}
-        subtitle={guide.description}
-      />
+  const hero = (
+    <div className="bg-white">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="py-6 space-y-2">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{'Guides · ' + category.name}</p>
+          <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">{guide.title}</h1>
+          <p className="mt-2 text-base text-slate-500 max-w-2xl">{guide.description}</p>
+        </div>
+      </div>
+    </div>
+  );
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6 flex justify-between items-center">
-          <Link
-            href={`/guides/${category.slug}`}
-            className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-blue-500 hover:text-blue-600"
-          >
+  return (
+    <PageShell hero={hero}>
+      <div className="mt-6">
+        <div className="mb-6">
+          <Link href={`/guides/${category.slug}`} className="inline-flex items-center text-sm text-slate-600 hover:text-slate-800">
             ← Back to {category.name}
           </Link>
         </div>
 
-        <article className="card-surface p-6 md:p-8">
+        <article className="rounded-2xl border border-slate-100 bg-white px-6 sm:px-8 py-8 sm:py-10">
           <div className="prose prose-slate max-w-none">
             {/* Definition Section */}
             <div className="mb-8">
@@ -156,8 +160,8 @@ export default function GuideDetailPage({ params }: GuideDetailPageProps) {
             </div>
           </div>
         </article>
-      </main>
-    </div>
+      </div>
+    </PageShell>
   );
 }
 

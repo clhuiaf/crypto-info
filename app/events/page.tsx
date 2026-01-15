@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import EventsHeaderFilters from '@/components/EventsHeaderFilters';
 import EventCard from '@/components/EventCard';
+import PageShell from '@/components/PageShell';
+import PageToolbar from '@/components/PageToolbar';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { mockEvents } from '@/data/mockEvents';
 import { Event, EventType } from '@/types/event';
@@ -47,42 +48,72 @@ export default function EventsPage() {
     return filtered;
   }, [selectedExchange, selectedEventType]);
 
-  return (
-    <div className="app-shell flex flex-col">
-      <EventsHeaderFilters
-        selectedExchange={selectedExchange}
-        selectedEventType={selectedEventType}
-        exchangeNames={exchangeNames}
-        eventTypes={eventTypes}
-        onExchangeChange={setSelectedExchange}
-        onEventTypeChange={setSelectedEventType}
-      />
+  const toolbar = (
+    <PageToolbar
+      left={
+        <>
+          <select
+            value={selectedExchange}
+            onChange={(e) => setSelectedExchange(e.target.value)}
+            className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            {exchangeNames.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Events List */}
-        <div className="space-y-4">
-          {filteredEvents.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No events found matching your filters.</p>
-            </div>
-          ) : (
-            filteredEvents.map((event) => (
-              <ErrorBoundary key={event.id}>
-                <EventCard event={event} />
-              </ErrorBoundary>
-            ))
-          )}
+          <select
+            value={selectedEventType}
+            onChange={(e) => setSelectedEventType(e.target.value as EventType | 'All')}
+            className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            {eventTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </>
+      }
+      right={
+        <span className="text-xs text-slate-500">Live events · Updated regularly</span>
+      }
+    />
+  )
+
+  const mainContent = (
+    <div className="w-full space-y-4">
+      {filteredEvents.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">No events found matching your filters.</p>
         </div>
+      ) : (
+        filteredEvents.map((event) => (
+          <ErrorBoundary key={event.id}>
+            <EventCard event={event} />
+          </ErrorBoundary>
+        ))
+      )}
 
-        {/* Results Count */}
-        {filteredEvents.length > 0 && (
-          <div className="mt-6 text-center text-sm text-slate-500">
-            Showing {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''}
-          </div>
-        )}
-      </main>
+      {/* Results Count */}
+      {filteredEvents.length > 0 && (
+        <div className="mt-6 text-center text-sm text-slate-500">
+          Showing {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''}
+        </div>
+      )}
     </div>
+  )
+
+  return (
+    <PageShell
+      title="Exchange Events"
+      subtitle="Ongoing promos and airdrops by exchange. Find the latest trading competitions, fee rebates, and special offers."
+      toolbar={toolbar}
+    >
+      {mainContent}
+    </PageShell>
   );
 }
 

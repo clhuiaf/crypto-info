@@ -23,7 +23,7 @@ const timeframes: { value: Timeframe; label: string }[] = [
   { value: '30', label: '30D' },
   { value: '90', label: '90D' },
   { value: '365', label: '1Y' },
-]
+];
 
 export default function ChartsPage() {
   const [selectedCoin, setSelectedCoin] = useState<'bitcoin' | 'ethereum'>('bitcoin')

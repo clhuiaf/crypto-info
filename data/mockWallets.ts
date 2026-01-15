@@ -75,6 +75,9 @@ export const mockWallets: Wallet[] = [
     cons: 'Mobile-only, less secure than hardware wallets',
     websiteUrl: 'https://trustwallet.com',
     slug: 'trust-wallet',
+    // Demo sponsored placement
+    sponsored: true,
+    bannerUrl: '/banners/crypto-com.jpg',
   },
   {
     id: '6',
@@ -120,6 +123,8 @@ export const mockWallets: Wallet[] = [
     cons: 'Custodial (not your keys), limited DeFi access, higher fees',
     websiteUrl: 'https://www.coinbase.com',
     slug: 'coinbase',
+    sponsored: true,
+    bannerUrl: '/banners/coinbase.jpg',
   },
 ];
 

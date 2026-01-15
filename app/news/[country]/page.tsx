@@ -1,7 +1,7 @@
 // Category: News
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import NewsHero from '@/components/NewsHero';
+import PageShell from '@/components/PageShell';
 import { hongKongNewsItems } from '@/data/newsHongKong';
 
 const SUPPORTED_COUNTRIES = ['hong-kong'] as const;
@@ -44,15 +44,23 @@ export default function CountryNewsPage({ params }: NewsPageProps) {
   const items = hongKongNewsItems;
 
   return (
-    <div className="app-shell flex flex-col">
-      <NewsHero
-        eyebrow={`Regulatory news · ${countryLabel}`}
-        title={`${countryLabel} Regulatory Updates`}
-        subtitle="Official regulatory news and listing updates from SFC and HKEX for virtual assets, exchanges, and ETFs."
-      />
-
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-4 flex justify-end">
+    <PageShell
+      hero={
+        <div className="bg-white">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="py-6 space-y-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{`Regulatory news · ${countryLabel}`}</p>
+              <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">{`${countryLabel} Regulatory Updates`}</h1>
+              <p className="mt-2 text-base text-slate-500 max-w-2xl">
+                Official regulatory news and listing updates from SFC and HKEX for virtual assets, exchanges, and ETFs.
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <div className="mt-6">
+        <div className="mb-4">
           <Link
             href="/news"
             className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-blue-500 hover:text-blue-600"
@@ -63,7 +71,7 @@ export default function CountryNewsPage({ params }: NewsPageProps) {
 
         <div className="space-y-4">
           {items.map((item) => (
-            <article key={item.id} className="card-surface p-5 md:p-6">
+            <article key={item.id} className="rounded-2xl border border-slate-100 bg-white px-6 py-5 hover:shadow-sm transition">
               <div className="flex flex-col md:flex-row md:items-stretch gap-4">
                 {/* Left: meta + text */}
                 <div className="flex-1">
@@ -133,8 +141,8 @@ export default function CountryNewsPage({ params }: NewsPageProps) {
             </article>
           ))}
         </div>
-      </main>
-    </div>
+      </div>
+    </PageShell>
   );
 }
 

@@ -16,9 +16,7 @@ export default function ExchangeCard({ exchange, isSelected, onToggleSelect }: E
 
   return (
     <div
-      className={`card-surface p-5 md:p-6 ${
-        isSelected ? 'border-blue-500 shadow-md shadow-blue-100' : ''
-      }`}
+      className={`rounded-2xl border border-slate-100 bg-white px-6 py-6 shadow-sm hover:shadow-md transition ${isSelected ? 'border-blue-500 shadow-md shadow-blue-100' : ''}`}
     >
       <div className="relative">
         {/* Top row: Logo, Name and License badge */}
@@ -28,7 +26,7 @@ export default function ExchangeCard({ exchange, isSelected, onToggleSelect }: E
               <img
                 src={exchange.logoUrl}
                 alt={`${exchange.name} logo`}
-                className="w-12 h-12 rounded-lg object-contain flex-shrink-0 border border-slate-200 bg-white p-1"
+                className="w-14 h-14 rounded-lg object-contain flex-shrink-0 border border-slate-200 bg-white p-1"
                 loading="lazy"
                 onError={(e) => {
                   try {
@@ -40,7 +38,7 @@ export default function ExchangeCard({ exchange, isSelected, onToggleSelect }: E
               />
             )}
             <div>
-              <h3 className="text-lg md:text-xl font-semibold text-slate-900 tracking-tight">
+              <h3 className="text-xl md:text-2xl font-semibold text-slate-900 tracking-tight">
                 {exchange.name}
               </h3>
               <p className="mt-1 text-xs text-slate-500">

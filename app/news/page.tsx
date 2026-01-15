@@ -1,61 +1,59 @@
 // Category: News
 'use client';
 
-import Link from 'next/link';
-import NewsHero from '@/components/NewsHero';
+import { useState } from 'react';
+import PageShell from '@/components/PageShell';
+import { newsDemo, type NewsItem } from '@/data/newsDemo';
+import NewsCard from '@/components/NewsCard';
+
+const SOURCES: Array<'All' | 'SFC' | 'HKEX' | 'ETFs'> = ['All', 'SFC', 'HKEX', 'ETFs'];
 
 export default function NewsIndex() {
-  return (
-    <div className="app-shell flex flex-col">
-      <NewsHero
-        eyebrow="Cryptopedia · News"
-        title="Regulatory & Market News"
-        subtitle="Stay updated with regulatory developments and listing news for Hong Kong crypto traders."
-      />
+  const [filter, setFilter] = useState<'All' | 'SFC' | 'HKEX' | 'ETFs'>('All');
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          <Link
-            href="/news/hong-kong"
-            className="card-surface p-5 md:p-6 hover:border-blue-500 flex flex-col justify-between"
-          >
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Hong Kong
+  const filtered = newsDemo.filter((n) => {
+    if (filter === 'All') return true;
+    return n.source === filter;
+  });
+
+  return (
+    <PageShell
+      hero={
+        <div className="bg-gradient-to-b from-slate-50 to-white">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="py-8">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Cryptopedia · News</p>
+              <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">Regulatory &amp; Market News</h1>
+              <p className="mt-2 text-slate-500 max-w-2xl">
+                Stay updated with regulatory developments and listing news for Hong Kong crypto traders.
               </p>
-              <p className="mt-2 text-sm font-medium text-slate-900">
-                SFC &amp; HKEX virtual asset and ETF updates
-              </p>
-              <p className="mt-2 text-xs text-slate-500">
-                View curated regulatory and listing news for Hong Kong crypto venues.
-              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {SOURCES.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setFilter(s)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      filter === s ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
             </div>
-            <p className="mt-4 flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors">
-                Tap to view latest
-                <svg
-                  className="w-3 h-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </span>
-              <span className="text-[11px] text-slate-400">
-                regulatory items from SFC and HKEX
-              </span>
-            </p>
-          </Link>
+          </div>
         </div>
-      </main>
-    </div>
+      }
+    >
+      <div className="mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {filtered.map((item: NewsItem) => (
+            <NewsCard key={item.id} item={item} />
+          ))}
+        </div>
+      </div>
+    </PageShell>
   );
 }
 

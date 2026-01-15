@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Wallet } from '@/types/wallet';
+import SponsoredPlacementNotice from '@/components/SponsoredPlacementNotice';
 
 interface WalletCardProps {
   wallet: Wallet;
@@ -92,6 +93,11 @@ export default function WalletCard({ wallet }: WalletCardProps) {
             <p className="text-xs text-rose-900">{wallet.cons}</p>
           </div>
         </div>
+
+        {/* Sponsored placement (if any) */}
+        {wallet.sponsored && (
+          <SponsoredPlacementNotice bannerUrl={wallet.bannerUrl} websiteUrl={wallet.websiteUrl} />
+        )}
 
         {/* Bottom row: Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 mt-5">
