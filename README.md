@@ -1,192 +1,80 @@
 # Cryptopedia
 
-Cryptopedia (Chinese name: Crypto通) is a crypto research hub for Hong Kong traders, built with Next.js, React, TypeScript, and Tailwind CSS. Compare exchanges, wallets, read guides, track assets, and stay updated with regulatory news.
+Cryptopedia (Chinese name: Crypto通) is a comprehensive Hong Kong-focused crypto research hub providing live prices, professional-grade charts, watchlist functionality, exchange and wallet comparisons, and regulatory news updates for cryptocurrency traders and investors.
 
-## 🚀 Features
+## Features
 
-### 1. **Exchanges Comparison** (`/exchanges`)
-- Compare licensed and unlicensed crypto exchanges
-- Filter by country (HK, UK, US, SG), legal status, products, and minimum deposit
-- Sort by fees, tokens, or minimum deposit
-- Side-by-side comparison of up to 3 exchanges
-- Real-time filtering with no account required
-- Mobile-responsive with sidebar filters modal
+### Market & Portfolio
+- **Live Market Overview** (`/prices`): Real-time cryptocurrency prices with comprehensive market data including price, 1-hour, 24-hour, and 7-day changes, volume, and market capitalization
+- **Watchlist** (`/watchlist`): Personalized tracking of favorite cryptocurrencies using the full market table interface with local storage persistence
 
-### 2. **Wallets Comparison** (`/wallets`)
-- Compare hardware, software, browser, and mobile wallets
-- Filter by wallet type, custody (custodial/non-custodial), supported networks, and use case
-- View platforms, features, supported assets, pros/cons for each wallet
-- Direct links to wallet websites
-- Future detail pages for each wallet
+### Charts
+- **Pro-level Chart Page** (`/charts`): Advanced charting with multiple timeframes, chart types (line, candlestick, OHLC), and overlays including SMA 20/50/200 and Bollinger Bands
+- **Technical Indicators**: RSI, MACD, and Volume indicators built-in
+- **Advanced Indicators Drawer**: Additional indicators including Stochastic RSI, VWAP, and ATR for professional analysis
 
-### 3. **News Section** (`/news`)
-- Country-specific regulatory news aggregation
-- Hong Kong news from SFC and HKEX
-- Filtered for crypto, virtual asset, exchange, and ETF keywords
-- Links to official sources and related exchanges
-- Mobile-responsive card layout
+### Platforms & Opportunities
+- **Exchange Events** (`/events`): Track upcoming exchange events and listings
+- **Exchange Finder** (`/exchanges`): Compare licensed and unlicensed crypto exchanges with filtering by country (HK, UK, US, SG), legal status, products, fees, and minimum deposits
+- **Wallets** (`/wallets`): Comprehensive wallet comparison with filtering by type, custody model, supported networks, and use cases
 
-### 4. **Guides Section** (`/guides`)
-- Category-based guide organization:
-  - **Technical Indicators** (RSI, MACD, etc.)
-  - **Candlestick Patterns** (Doji, etc.)
-  - **Risk Management** (Stop-loss orders, etc.)
-  - **Crypto Basics** (Bitcoin, wallets, etc.)
-- Each guide includes:
-  - Definition
-  - How it works
-  - How to read it on charts
-  - Simple examples
-  - Pros and cons
-  - Common mistakes
-- Navigation: Landing → Category → Detail pages
+### Learning
+- **Educational Guides** (`/guides`): Comprehensive guides covering technical indicators, candlestick patterns, risk management, and crypto fundamentals
+- **Structured Learning Path**: Categorized content from basic concepts to advanced trading strategies
 
-### 5. **Assets & Listing Info** (`/assets`)
-- Browse major cryptocurrencies with real-time price data
-- Unified asset detail pages combining:
-  - Overview and key information
-  - Category, base chain, launch year
-  - Trading pairs and risk notes
-  - Listing details (exchanges, trading pairs, listing dates)
-  - 7-day price charts
-  - Links to official websites and social media
-- SEO-optimized for coin-name searches
+### News
+- **Regulatory & Market News** (`/news`): Curated news feed with filter pills for All, SFC, HKEX, and ETF-related content
+- **Hong Kong Focus**: Specialized coverage of regulatory developments and market events relevant to Hong Kong traders
 
-### 6. **Prices** (`/prices`)
-- Real-time cryptocurrency prices from CoinGecko API
-- Top cryptocurrencies by market capitalization
-- Price tables with 24h change, market cap, and watchlist functionality
+## Screenshots
 
-### 7. **New Coins** (`/new-coins`)
-- Recently listed and trending cryptocurrencies
-- Listing dates and platform information
-- Quick access to new coin details
+- **Live Market Overview**: Full market table displaying real-time prices, changes, volume, and market cap for top cryptocurrencies
+- **Watchlist**: Personalized portfolio tracking with the same comprehensive data table interface
+- **Chart**: Professional-grade charting interface with multiple overlays, indicators, and timeframe options
+- **Exchange Finder**: Advanced filtering and comparison interface for crypto exchanges with regulatory status indicators
+- **New Coins Discovery**: Dedicated section for tracking recently listed and trending cryptocurrencies
+- **Regulatory & Market News**: Filtered news interface with source categorization and regulatory focus
 
-### 8. **Watchlist** (`/watchlist`)
-- Save favorite cryptocurrencies for quick access
-- Local storage-based watchlist management
-- View tracked coins in one place
-
-### 9. **Charts** (`/charts`)
-- Price charts for tracked cryptocurrencies
-- Historical price data visualization
-
-### 10. **Navigation**
-- Active route highlighting using `usePathname()`
-- Blue underline indicates current page
-- Responsive top navigation bar
-
-## 📁 Project Structure
-
-```
-crypto-info/
-├── app/
-│   ├── assets/              # Crypto assets pages
-│   │   ├── [symbol]/       # Individual asset detail pages
-│   │   └── page.tsx         # Assets index
-│   ├── exchanges/           # Exchanges comparison
-│   │   └── page.tsx
-│   ├── guides/             # Trading guides
-│   │   ├── [category]/     # Category pages
-│   │   │   ├── [slug]/     # Individual guide pages
-│   │   │   └── page.tsx
-│   │   └── page.tsx         # Guides landing
-│   ├── news/               # Regulatory news
-│   │   ├── [country]/      # Country-specific news
-│   │   └── page.tsx        # News index
-│   ├── wallets/            # Wallet comparison
-│   │   └── page.tsx
-│   ├── prices/             # Cryptocurrency prices
-│   │   └── page.tsx
-│   ├── new-coins/          # New coins listing
-│   │   └── page.tsx
-│   ├── watchlist/          # User watchlist
-│   │   └── page.tsx
-│   ├── charts/             # Price charts
-│   │   └── page.tsx
-│   ├── globals.css         # Global styles
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Home (redirects to /exchanges)
-│
-├── components/
-│   ├── Navbar.tsx          # Top navigation (active route highlighting)
-│   ├── HeaderFilters.tsx     # Exchange page header filters
-│   ├── WalletHeaderFilters.tsx # Wallet page header filters
-│   ├── Sidebar.tsx           # Exchange sidebar filters
-│   ├── WalletSidebar.tsx     # Wallet sidebar filters
-│   ├── ExchangeCard.tsx      # Exchange card component
-│   ├── WalletCard.tsx        # Wallet card component
-│   ├── ComparisonBar.tsx     # Exchange comparison bar
-│   ├── NewsHero.tsx          # Reusable hero component
-│   ├── AssetDetailClient.tsx # Asset detail page client component
-│   ├── PriceChart.tsx        # Price chart component
-│   ├── PriceTable.tsx        # Price table component
-│   └── NewCoinsList.tsx      # New coins list component
-│
-├── data/
-│   ├── mockExchanges.ts      # Exchange mock data (10+ exchanges)
-│   ├── mockWallets.ts        # Wallet mock data (8 wallets)
-│   ├── assets.ts             # Asset data (15 major cryptocurrencies)
-│   ├── guides.ts             # Guide content (6 guides)
-│   ├── guideCategories.ts   # Guide categories (4 categories)
-│   └── newsHongKong.ts       # Hong Kong news items
-│
-├── lib/
-│   ├── api.ts                # CoinGecko API integration
-│   ├── utils.ts              # Utility functions
-│   └── watchlist.ts          # Watchlist management
-│
-├── types/
-│   ├── exchange.ts           # Exchange types
-│   ├── wallet.ts             # Wallet types
-│   ├── asset.ts              # Asset types
-│   ├── guide.ts              # Guide types
-│   └── news.ts               # News types
-│
-├── package.json
-├── tsconfig.json
-├── tailwind.config.js
-└── postcss.config.mjs
-```
-
-## 🛣️ Routes
-
-| Route | Description |
-|-------|-------------|
-| `/` | Redirects to `/exchanges` |
-| `/exchanges` | Exchange comparison page |
-| `/wallets` | Wallet comparison page |
-| `/news` | News landing page |
-| `/news/hong-kong` | Hong Kong regulatory news |
-| `/guides` | Guides landing (categories) |
-| `/guides/[category]` | Category page (e.g., `/guides/technical-indicators`) |
-| `/guides/[category]/[slug]` | Individual guide (e.g., `/guides/technical-indicators/rsi-indicator`) |
-| `/assets` | Assets index page with real-time price data |
-| `/assets/[symbol]` | Asset detail (e.g., `/assets/BTC`) |
-| `/prices` | Cryptocurrency prices table |
-| `/new-coins` | New and trending coins |
-| `/watchlist` | User's cryptocurrency watchlist |
-| `/charts` | Price charts for tracked coins |
-
-## 🚀 Getting Started
+## Setup and Development
 
 ### Prerequisites
 
 - Node.js 18+ and npm
+- Package manager: npm
 
 ### Installation
 
-1. **Install dependencies:**
+1. **Clone the repository:**
+```bash
+git clone <repository-url>
+cd crypto-info
+```
+
+2. **Install dependencies:**
 ```bash
 npm install
 ```
 
-2. **Run the development server:**
+3. **Set up environment variables:**
+
+Create a `.env.local` file in the root directory with the following placeholders:
+```bash
+# CoinGecko API (free tier, no API key required)
+COINGECKO_API_BASE_URL=https://api.coingecko.com/api/v3
+
+# Optional: Database URL for user authentication (if implemented)
+# DATABASE_URL="your-database-connection-string"
+
+# Optional: JWT secret for authentication (if implemented)
+# JWT_SECRET="your-jwt-secret"
+```
+
+4. **Run the development server:**
 ```bash
 npm run dev
 ```
 
-3. **Open [http://localhost:3000](http://localhost:3000)** in your browser
+5. **Open [http://localhost:3000](http://localhost:3000)** in your browser
 
 ### Build for Production
 
@@ -195,80 +83,70 @@ npm run build
 npm start
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Next.js 14** - React framework with App Router
-- **TypeScript** - Type safety
+- **TypeScript** - Type safety and developer experience
 - **Tailwind CSS** - Utility-first CSS framework
-- **React Hooks** - State management (`useState`, `useMemo`, `usePathname`)
-- **CoinGecko API** - Real-time cryptocurrency data
-- **Recharts** - Chart visualization library
+- **Prisma** - Database ORM for user authentication and data management
+- **Lightweight Charts** - High-performance financial charting library
+- **Recharts** - Additional chart visualization components
+- **CoinGecko API** - Real-time cryptocurrency market data
 
-## 📊 Data Structure
+## Design and Code Conventions
 
-### Exchanges
-- 10+ mock exchanges across HK, UK, US, SG
-- Fields: name, country, licensed status, products, fees, tokens, min deposit
+The UI follows a clean, professional fintech design language with consistent use of real token icons and reusable table/card patterns. Key conventions include:
 
-### Wallets
-- 8 wallets (Ledger, MetaMask, Coinbase Wallet, Trezor, Trust Wallet, Phantom, Exodus, Coinbase)
-- Fields: type, custody, platforms, networks, features, pros/cons
+- **No emojis** in user-facing labels and interfaces
+- **TypeScript-first** development with strict type checking
+- **Component organization** following Next.js App Router patterns
+- **ESLint/Prettier** for consistent code formatting
+- **Responsive design** with mobile-first approach
+- **Consistent color palette** using slate grays, blue accents, and status-based color coding
 
-### Assets
-- 15 major cryptocurrencies (BTC, ETH, SOL, USDT, USDC, BNB, XRP, ADA, DOGE, MATIC, AVAX, LINK, UNI, ATOM, DOT)
-- Fields: category, base chain, launch year, trading pairs, risk notes
-- Real-time price data from CoinGecko API
+## Project Structure
 
-### Guides
-- 4 categories with 6 guides total
-- Each guide includes: definition, how it works, chart reading, examples, pros/cons, common mistakes
+```
+crypto-info/
+├── app/                    # Next.js App Router pages
+│   ├── assets/            # Asset detail and listing pages
+│   ├── auth/              # Authentication pages
+│   ├── charts/            # Chart pages with global view
+│   ├── events/            # Exchange events
+│   ├── exchanges/         # Exchange comparison
+│   ├── guides/            # Educational content
+│   ├── listing-info/      # Asset listing information
+│   ├── new-coins/         # New coin discovery
+│   ├── news/              # Regulatory news
+│   ├── prices/            # Market overview and prices
+│   ├── wallets/           # Wallet comparison
+│   └── watchlist/         # User watchlist
+├── components/            # Reusable React components
+├── config/                # Configuration files
+├── data/                  # Mock data and content
+├── lib/                   # Utility functions and API integration
+├── prisma/                # Database schema and migrations
+├── types/                 # TypeScript type definitions
+└── public/                # Static assets
+```
 
-### News
-- Hong Kong regulatory news from SFC and HKEX
-- Filtered for crypto-related content
+## Routes
 
-## 🎨 Design System
+| Route | Description |
+|-------|-------------|
+| `/` | Home page redirecting to exchanges |
+| `/prices` | Live market overview with price tables |
+| `/charts` | Professional charting interface |
+| `/watchlist` | Personal cryptocurrency watchlist |
+| `/exchanges` | Exchange comparison and finder |
+| `/wallets` | Wallet comparison tool |
+| `/news` | Regulatory and market news |
+| `/guides` | Educational content and guides |
+| `/new-coins` | New and trending cryptocurrencies |
+| `/events` | Exchange events and listings |
+| `/assets/[symbol]` | Individual asset detail pages |
+| `/auth` | User authentication (coming soon) |
 
-- **Colors**: Slate grays, blue accents, emerald/rose for status badges
-- **Typography**: Clean, readable fonts with clear hierarchy
-- **Components**: Reusable card surfaces, badges, pill tabs
-- **Responsive**: Mobile-first with desktop enhancements
-- **Consistent**: All pages share the same visual language
-
-## 📝 Key Features Implemented
-
-✅ Exchange comparison with filtering and sorting  
-✅ Wallet comparison with category filters  
-✅ News aggregation for Hong Kong  
-✅ Category-based guides system  
-✅ Asset browsing with real-time price data  
-✅ Unified asset detail pages (assets + listing info)  
-✅ Price tables and charts  
-✅ New coins tracking  
-✅ Watchlist functionality  
-✅ Active route highlighting in navigation  
-✅ Mobile-responsive design throughout  
-✅ SEO-optimized meta tags  
-✅ TypeScript type safety  
-✅ CoinGecko API integration for live data  
-
-## 🔄 Future Enhancements
-
-- Real API integration for exchanges and wallets (currently using mock data)
-- RSS feed parsing for news (currently using mock data)
-- User authentication and favorites
-- More countries for news aggregation
-- Additional guide categories and content
-- Wallet detail pages (`/wallets/[slug]`)
-- Exchange detail pages
-- Comparison modal for wallets
-- Advanced charting features
-- Price alerts and notifications
-
-## 📄 License
+## License
 
 Private project - All rights reserved
-
----
-
-**Built for Hong Kong crypto traders** 🇭🇰
