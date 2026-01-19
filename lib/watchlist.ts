@@ -64,7 +64,24 @@ export function isInWatchlist(coinId: string): boolean {
   if (typeof window === 'undefined') {
     return false
   }
-  
+
   const watchlist = getWatchlist()
   return watchlist.some((item) => item.id === coinId)
+}
+
+// Toggle coin in watchlist (add if not present, remove if present)
+export function toggleWatchlist(coin: WatchlistItem): boolean {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  const wasInWatchlist = isInWatchlist(coin.id)
+
+  if (wasInWatchlist) {
+    removeFromWatchlist(coin.id)
+  } else {
+    addToWatchlist(coin)
+  }
+
+  return !wasInWatchlist // Return true if added, false if removed
 }

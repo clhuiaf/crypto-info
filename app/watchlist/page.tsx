@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getWatchlist, removeFromWatchlist, type WatchlistItem } from '@/lib/watchlist'
+import { getWatchlist, type WatchlistItem } from '@/lib/watchlist'
 import { fetchCoinById, type CryptoPrice } from '@/lib/api'
 import { usePricesPolling } from '@/lib/usePricesPolling'
 import { formatCurrency, formatPercentage, formatMarketCap } from '@/lib/utils'
@@ -93,15 +93,8 @@ export default function WatchlistPage() {
     processPriceData()
   }, [allCryptos, pricesLoading, pricesError])
 
-  const handleRemove = (coinId: string) => {
-    removeFromWatchlist(coinId)
-    setWatchlist((prev) => prev.filter((item) => item.id !== coinId))
-    setCryptoData((prev) => {
-      const next = new Map(prev)
-      next.delete(coinId)
-      return next
-    })
-  }
+  // Removal is handled via the star button in each row (toggleWatchlist).
+  // No explicit remove button is needed here.
 
   if (loading) {
     return (
@@ -150,7 +143,7 @@ export default function WatchlistPage() {
             .map((item) => cryptoData.get(item.id))
             .filter((a): a is CryptoPrice => !!a)
 
-          return <MarketTable assets={assets} showActions onRemove={handleRemove} />
+          return <MarketTable assets={assets} />
         })()
       )}
     </div>
