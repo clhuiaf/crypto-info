@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import PriceUpdaterInitializer from '@/components/PriceUpdaterInitializer'
 
 export const metadata: Metadata = {
   title: 'Cryptopedia - Crypto Research Hub for Hong Kong Traders',
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="bg-slate-50 text-slate-900 antialiased">
+        <PriceUpdaterInitializer />
         <Navbar />
         <main className="min-h-screen">
           {children}

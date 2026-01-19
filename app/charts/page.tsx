@@ -10,8 +10,8 @@ import ChartControls from '@/components/ChartControls'
 import MoreIndicatorsDrawer from '@/components/MoreIndicatorsDrawer'
 import { OHLCVPoint, ChartType, Timeframe, OverlayType, IndicatorType } from '@/types/chart'
 import { getAssetBySymbol } from '@/data/assets'
-import { fetchTopCryptos } from '@/lib/api'
 import { CryptoPrice } from '@/lib/api'
+import { usePricesPolling } from '@/lib/usePricesPolling'
 import tokenIcons from '@/config/tokenIcons'
 
 // Dynamically import the ProChart component to reduce initial bundle size
@@ -36,27 +36,17 @@ export default function ChartsPage() {
   })
 
   const [chartData, setChartData] = useState<OHLCVPoint[]>([])
-  const [cryptoData, setCryptoData] = useState<CryptoPrice[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Use polling hook for crypto data (for asset selector)
+  const { prices: cryptoData } = usePricesPolling({
+    pollingInterval: 30000 // 30 seconds for charts page
+  })
 
   const selectedAsset = getAssetBySymbol(selectedSymbol)
   // Find real crypto data for icons
   const selectedCrypto = cryptoData.find(crypto => crypto.symbol.toUpperCase() === selectedSymbol.toUpperCase())
-
-  // Fetch crypto data for icons and prices
-  useEffect(() => {
-    const loadCryptoData = async () => {
-      try {
-        const data = await fetchTopCryptos(100, false) // Get top 100 cryptos
-        setCryptoData(data)
-      } catch (err) {
-        console.error('Error loading crypto data:', err)
-        // Don't set error state as this is secondary data
-      }
-    }
-    loadCryptoData()
-  }, [])
 
   useEffect(() => {
     const loadChartData = async () => {

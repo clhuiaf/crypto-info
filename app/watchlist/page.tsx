@@ -3,7 +3,8 @@
 
 import { useEffect, useState } from 'react'
 import { getWatchlist, removeFromWatchlist, type WatchlistItem } from '@/lib/watchlist'
-import { fetchTopCryptos, fetchCoinById, type CryptoPrice } from '@/lib/api'
+import { fetchCoinById, type CryptoPrice } from '@/lib/api'
+import { usePricesPolling } from '@/lib/usePricesPolling'
 import { formatCurrency, formatPercentage, formatMarketCap } from '@/lib/utils'
 import MarketTable from '@/components/MarketTable'
 
@@ -13,33 +14,52 @@ export default function WatchlistPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Load watchlist and fetch current prices
+  // Use polling hook for bulk price data
+  const { prices: allCryptos, loading: pricesLoading, error: pricesError } = usePricesPolling({
+    pollingInterval: 30000 // 30 seconds for watchlist (less critical than prices page)
+  })
+
+  // Load watchlist and process price data
   useEffect(() => {
-    const loadWatchlist = async () => {
+    const items = getWatchlist()
+    setWatchlist(items)
+
+    if (items.length === 0) {
+      setLoading(false)
+      return
+    }
+
+    // If prices are still loading, wait
+    if (pricesLoading) {
+      setLoading(true)
+      return
+    }
+
+    // If there was an error with prices, show it
+    if (pricesError) {
+      setError(`Failed to load price data: ${pricesError}`)
+      setLoading(false)
+      return
+    }
+
+    // Process the price data
+    const processPriceData = async () => {
       try {
-        const items = getWatchlist()
-        setWatchlist(items)
-
-        if (items.length === 0) {
-          setLoading(false)
-          return
-        }
-
-        // Fetch current prices for all watchlist items
-        // First try to get from top 250 list
-        const allCryptos = await fetchTopCryptos(250, false) // false = client component
         const dataMap = new Map<string, CryptoPrice>()
-        
+
+        // Get data from the cached prices
         allCryptos.forEach((crypto) => {
           if (items.some((item) => item.id === crypto.id)) {
             dataMap.set(crypto.id, crypto)
           }
         })
 
-        // For any items not found in top 250, fetch individually
+        // For any items not found in cached data, fetch individually
         // Add small delays to avoid rate limiting
         const missingItems = items.filter((item) => !dataMap.has(item.id))
         if (missingItems.length > 0) {
+          console.log(`Fetching ${missingItems.length} missing watchlist items individually`)
+
           // Fetch with delays to avoid rate limiting
           for (let i = 0; i < missingItems.length; i++) {
             const item = missingItems[i]
@@ -60,17 +80,18 @@ export default function WatchlistPage() {
         }
 
         setCryptoData(dataMap)
+        setError(null)
         setLoading(false)
       } catch (err) {
-        console.error('Error loading watchlist:', err)
+        console.error('Error processing watchlist data:', err)
         const errorMessage = err instanceof Error ? err.message : 'Unknown error'
         setError(`Failed to load watchlist: ${errorMessage}. Please try again later.`)
         setLoading(false)
       }
     }
 
-    loadWatchlist()
-  }, [])
+    processPriceData()
+  }, [allCryptos, pricesLoading, pricesError])
 
   const handleRemove = (coinId: string) => {
     removeFromWatchlist(coinId)
