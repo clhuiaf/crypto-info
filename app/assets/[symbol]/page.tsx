@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { getAssetBySymbol, assets } from '@/data/assets';
 import AssetDetailClient from '@/components/AssetDetailClient';
-import { fetchCoinDetails, fetchHistoricalData } from '@/lib/api';
 
 interface AssetPageProps {
   params: {
@@ -11,11 +10,9 @@ interface AssetPageProps {
   };
 }
 
-export async function generateStaticParams() {
-  return assets.map((asset) => ({
-    symbol: asset.symbol,
-  }));
-}
+// Remove generateStaticParams - make this page dynamic/ISR instead
+// This prevents build-time CoinGecko calls while still allowing good performance
+export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function generateMetadata({ params }: AssetPageProps): Promise<Metadata> {
   const asset = getAssetBySymbol(params.symbol);
@@ -32,26 +29,6 @@ export async function generateMetadata({ params }: AssetPageProps): Promise<Meta
   };
 }
 
-// Helper function to map symbol to CoinGecko ID
-// This is a simplified mapping - in production, you might want a more comprehensive mapping
-const symbolToCoinGeckoId: Record<string, string> = {
-  'BTC': 'bitcoin',
-  'ETH': 'ethereum',
-  'USDT': 'tether',
-  'USDC': 'usd-coin',
-  'SOL': 'solana',
-  'BNB': 'binancecoin',
-  'XRP': 'ripple',
-  'ADA': 'cardano',
-  'DOGE': 'dogecoin',
-  'MATIC': 'matic-network',
-  'AVAX': 'avalanche-2',
-  'LINK': 'chainlink',
-  'UNI': 'uniswap',
-  'ATOM': 'cosmos',
-  'DOT': 'polkadot',
-};
-
 export default async function AssetPage({ params }: AssetPageProps) {
   const asset = getAssetBySymbol(params.symbol);
 
@@ -59,24 +36,40 @@ export default async function AssetPage({ params }: AssetPageProps) {
     notFound();
   }
 
-  // Try to fetch CoinGecko data for enhanced details
-  const coinGeckoId = symbolToCoinGeckoId[asset.symbol.toUpperCase()];
+  // Fetch data from internal APIs that read only from cache
   let coinDetails = null;
   let chartData: { time: number; price: number }[] = [];
 
-  if (coinGeckoId) {
-    try {
-      coinDetails = await fetchCoinDetails(coinGeckoId, true);
-      if (coinDetails) {
-        try {
-          chartData = await fetchHistoricalData(coinGeckoId, 7, true);
-        } catch (err) {
-          console.warn('Failed to fetch chart data:', err);
-        }
-      }
-    } catch (err) {
-      console.warn('Failed to fetch coin details:', err);
+  try {
+    // Fetch asset data from internal API
+    const assetResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/assets/${params.symbol}`,
+      { next: { revalidate: 60 } }
+    );
+
+    if (assetResponse.ok) {
+      const assetData = await assetResponse.json();
+      coinDetails = assetData.coinDetails;
+    } else {
+      console.warn(`Failed to fetch asset data for ${params.symbol}:`, assetResponse.status);
     }
+
+    // Fetch chart data from internal API
+    const chartResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/charts/${params.symbol}?days=7`,
+      { next: { revalidate: 60 } }
+    );
+
+    if (chartResponse.ok) {
+      const chartApiData = await chartResponse.json();
+      if (chartApiData.chartData) {
+        chartData = chartApiData.chartData.prices;
+      }
+    } else {
+      console.warn(`Failed to fetch chart data for ${params.symbol}:`, chartResponse.status);
+    }
+  } catch (err) {
+    console.warn('Failed to fetch data from internal APIs:', err);
   }
 
   return (

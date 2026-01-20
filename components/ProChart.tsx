@@ -146,6 +146,10 @@ export default function ProChart({
     const result: Record<IndicatorType, Record<string, any[]>> = {
       rsi: { rsi: [] },
       macd: { macd: [], signal: [], histogram: [] },
+      volume: { volume: [] },
+      stochRsi: { stochRsi: [] },
+      vwap: { vwap: [] },
+      atr: { atr: [] },
     }
 
     // RSI calculation

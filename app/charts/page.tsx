@@ -8,7 +8,7 @@ import AssetSelector from '@/components/AssetSelector'
 import TimeframeSelector from '@/components/TimeframeSelector'
 import ChartControls from '@/components/ChartControls'
 import MoreIndicatorsDrawer from '@/components/MoreIndicatorsDrawer'
-import { OHLCVPoint, ChartType, Timeframe, OverlayType, IndicatorType } from '@/types/chart'
+import { OHLCVPoint, ChartType, Timeframe, OverlayType, IndicatorType, IndicatorKey } from '@/types/chart'
 import { getAssetBySymbol } from '@/data/assets'
 import { CryptoPrice } from '@/lib/api'
 import { usePricesPolling } from '@/lib/usePricesPolling'
@@ -29,10 +29,10 @@ export default function ChartsPage() {
   const [timeframe, setTimeframe] = useState<Timeframe>('1D')
   const [chartType, setChartType] = useState<ChartType>('candlestick')
   const [overlays, setOverlays] = useState<OverlayType[]>(() => {
-    try { return JSON.parse(localStorage.getItem('chart-overlays') || 'null') || ['sma20'] } catch { return ['sma20'] }
+    try { return JSON.parse(localStorage.getItem('chart-overlays') || 'null') || ['sma20' as OverlayType] } catch { return ['sma20' as OverlayType] }
   })
   const [indicators, setIndicators] = useState<IndicatorKey[]>(() => {
-    try { return JSON.parse(localStorage.getItem('chart-indicators') || 'null') || ['volume'] } catch { return ['volume'] }
+    try { return JSON.parse(localStorage.getItem('chart-indicators') || 'null') || ['volume' as IndicatorKey] } catch { return ['volume' as IndicatorKey] }
   })
 
   const [chartData, setChartData] = useState<OHLCVPoint[]>([])
@@ -138,19 +138,19 @@ export default function ChartsPage() {
                 <span className="text-sm font-medium text-gray-700">Overlays</span>
                 <div className="flex gap-1">
                   {/* reuse ChartControls overlay buttons by rendering a small subset inline */}
-                  <button onClick={() => { const next = overlays.includes('sma20') ? overlays.filter(x=>x!=='sma20') : [...overlays,'sma20']; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('sma20') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>SMA 20</button>
-                  <button onClick={() => { const next = overlays.includes('sma50') ? overlays.filter(x=>x!=='sma50') : [...overlays,'sma50']; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('sma50') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>SMA 50</button>
-                  <button onClick={() => { const next = overlays.includes('sma200') ? overlays.filter(x=>x!=='sma200') : [...overlays,'sma200']; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('sma200') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>SMA 200</button>
-                  <button onClick={() => { const next = overlays.includes('bbands') ? overlays.filter(x=>x!=='bbands') : [...overlays,'bbands']; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('bbands') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>BBands (20,2)</button>
+                  <button onClick={() => { const next = overlays.includes('sma20' as OverlayType) ? overlays.filter(x=>x!=='sma20') : [...overlays,'sma20' as OverlayType]; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('sma20') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>SMA 20</button>
+                  <button onClick={() => { const next = overlays.includes('sma50' as OverlayType) ? overlays.filter(x=>x!=='sma50') : [...overlays,'sma50' as OverlayType]; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('sma50') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>SMA 50</button>
+                  <button onClick={() => { const next = overlays.includes('sma200' as OverlayType) ? overlays.filter(x=>x!=='sma200') : [...overlays,'sma200' as OverlayType]; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('sma200') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>SMA 200</button>
+                  <button onClick={() => { const next = overlays.includes('bbands' as OverlayType) ? overlays.filter(x=>x!=='bbands') : [...overlays,'bbands' as OverlayType]; setOverlays(next); localStorage.setItem('chart-overlays', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${overlays.includes('bbands') ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 border'}`}>BBands (20,2)</button>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-gray-700">Indicators</span>
                 <div className="flex gap-1">
-                  <button onClick={() => { const next = indicators.includes('rsi') ? indicators.filter(x=>x!=='rsi') : [...indicators,'rsi']; setIndicators(next); localStorage.setItem('chart-indicators', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${indicators.includes('rsi') ? 'bg-purple-100 text-purple-800' : 'bg-white text-gray-600 border'}`}>RSI (14)</button>
-                  <button onClick={() => { const next = indicators.includes('macd') ? indicators.filter(x=>x!=='macd') : [...indicators,'macd']; setIndicators(next); localStorage.setItem('chart-indicators', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${indicators.includes('macd') ? 'bg-purple-100 text-purple-800' : 'bg-white text-gray-600 border'}`}>MACD</button>
-                  <button onClick={() => { const next = indicators.includes('volume') ? indicators.filter(x=>x!=='volume') : [...indicators,'volume']; setIndicators(next); localStorage.setItem('chart-indicators', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${indicators.includes('volume') ? 'bg-purple-100 text-purple-800' : 'bg-white text-gray-600 border'}`}>Volume</button>
+                  <button onClick={() => { const next = indicators.includes('rsi' as IndicatorKey) ? indicators.filter(x=>x!=='rsi') : [...indicators,'rsi' as IndicatorKey]; setIndicators(next); localStorage.setItem('chart-indicators', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${indicators.includes('rsi') ? 'bg-purple-100 text-purple-800' : 'bg-white text-gray-600 border'}`}>RSI (14)</button>
+                  <button onClick={() => { const next = indicators.includes('macd' as IndicatorKey) ? indicators.filter(x=>x!=='macd') : [...indicators,'macd' as IndicatorKey]; setIndicators(next); localStorage.setItem('chart-indicators', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${indicators.includes('macd') ? 'bg-purple-100 text-purple-800' : 'bg-white text-gray-600 border'}`}>MACD</button>
+                  <button onClick={() => { const next = indicators.includes('volume' as IndicatorKey) ? indicators.filter(x=>x!=='volume') : [...indicators,'volume' as IndicatorKey]; setIndicators(next); localStorage.setItem('chart-indicators', JSON.stringify(next)) }} className={`px-3 py-1 rounded-md text-xs font-medium ${indicators.includes('volume') ? 'bg-purple-100 text-purple-800' : 'bg-white text-gray-600 border'}`}>Volume</button>
                 </div>
               </div>
             </div>

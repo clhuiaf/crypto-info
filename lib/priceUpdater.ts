@@ -2,46 +2,35 @@
 // Polls CoinGecko API and updates the in-memory cache
 // Runs as a background process to keep data fresh
 
-import { setPrices, markStale, getLastUpdated } from './priceCache'
+import { coinGeckoClient } from './coingeckoClient'
+import {
+  setPrices,
+  markPricesStale,
+  getPricesLastUpdated,
+  setHistoricalData,
+  setOHLCVData,
+  setCoinDetails,
+  getCacheStats
+} from './priceCache'
 
-// Simple local retry helper for HTTP requests
-async function fetchJsonWithBasicRetry(
-  url: string,
-  init?: RequestInit,
-  retries = 2,
-  delayMs = 500
-): Promise<any> {
-  let lastError: Error
-
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const response = await fetch(url, init)
-
-      if (response.ok) {
-        return await response.json()
-      }
-
-      // Handle rate limiting (429) with delay
-      if (response.status === 429 && attempt < retries) {
-        const retryAfter = response.headers.get('Retry-After')
-        const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : delayMs * Math.pow(2, attempt)
-        await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 10000))) // Max 10s
-        continue
-      }
-
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error))
-
-      if (attempt < retries) {
-        // Wait before retrying
-        await new Promise(resolve => setTimeout(resolve, delayMs * Math.pow(2, attempt)))
-      }
-    }
-  }
-
-  throw lastError
-}
+// Coins that need detailed data (from assets.ts)
+const PRIORITY_COINS = [
+  { symbol: 'BTC', coinGeckoId: 'bitcoin' },
+  { symbol: 'ETH', coinGeckoId: 'ethereum' },
+  { symbol: 'USDT', coinGeckoId: 'tether' },
+  { symbol: 'USDC', coinGeckoId: 'usd-coin' },
+  { symbol: 'SOL', coinGeckoId: 'solana' },
+  { symbol: 'BNB', coinGeckoId: 'binancecoin' },
+  { symbol: 'XRP', coinGeckoId: 'ripple' },
+  { symbol: 'ADA', coinGeckoId: 'cardano' },
+  { symbol: 'DOGE', coinGeckoId: 'dogecoin' },
+  { symbol: 'MATIC', coinGeckoId: 'matic-network' },
+  { symbol: 'AVAX', coinGeckoId: 'avalanche-2' },
+  { symbol: 'LINK', coinGeckoId: 'chainlink' },
+  { symbol: 'UNI', coinGeckoId: 'uniswap' },
+  { symbol: 'ATOM', coinGeckoId: 'cosmos' },
+  { symbol: 'DOT', coinGeckoId: 'polkadot' }
+]
 
 interface UpdaterConfig {
   intervalMs: number
@@ -49,6 +38,11 @@ interface UpdaterConfig {
   backoffMultiplier: number
   maxBackoffMs: number
   limit: number
+  enableHistoricalData: boolean
+  enableOHLCVData: boolean
+  enableCoinDetails: boolean
+  historicalDays: number[]
+  ohlcvTimeframes: string[]
 }
 
 class PriceUpdater {
@@ -61,11 +55,16 @@ class PriceUpdater {
 
   constructor(config: Partial<UpdaterConfig> = {}) {
     this.config = {
-      intervalMs: 15 * 1000, // 15 seconds default
+      intervalMs: 30 * 1000, // 30 seconds default (longer to avoid rate limits)
       maxRetries: 3,
       backoffMultiplier: 2,
       maxBackoffMs: 300 * 1000, // 5 minutes max backoff
-      limit: 250, // Top 250 coins
+      limit: 250, // Top 250 coins for market data
+      enableHistoricalData: true,
+      enableOHLCVData: true,
+      enableCoinDetails: true,
+      historicalDays: [7, 30], // Days for historical charts
+      ohlcvTimeframes: ['1D'], // Timeframes for OHLCV data
       ...config
     }
   }
@@ -82,7 +81,7 @@ class PriceUpdater {
 
     console.log('Starting price updater with interval:', this.config.intervalMs, 'ms')
     this.isRunning = true
-    this.updatePrices() // Initial update
+    this.updateAllData() // Initial update
     this.scheduleNextUpdate()
   }
 
@@ -121,9 +120,9 @@ class PriceUpdater {
    * Update the polling interval (will take effect on next cycle)
    */
   setInterval(intervalMs: number): void {
-    if (intervalMs < 5000) {
-      console.warn('Interval too short, setting to minimum 5 seconds')
-      intervalMs = 5000
+    if (intervalMs < 10000) {
+      console.warn('Interval too short, setting to minimum 10 seconds')
+      intervalMs = 10000
     }
 
     this.config.intervalMs = intervalMs
@@ -144,7 +143,7 @@ class PriceUpdater {
       return
     }
 
-    await this.updatePrices()
+    await this.updateAllData()
   }
 
   private scheduleNextUpdate(): void {
@@ -159,11 +158,11 @@ class PriceUpdater {
     const backoffDelay = this.calculateBackoffDelay()
     const delay = backoffDelay > 0 ? backoffDelay : this.config.intervalMs
 
-    console.log(`Scheduling next price update in ${delay}ms${backoffDelay > 0 ? ' (backoff)' : ''}`)
+    console.log(`Scheduling next data update in ${delay}ms${backoffDelay > 0 ? ' (backoff)' : ''}`)
 
     this.intervalId = setTimeout(() => {
       if (this.isRunning) {
-        this.updatePrices()
+        this.updateAllData()
         this.scheduleNextUpdate()
       }
     }, delay)
@@ -181,43 +180,145 @@ class PriceUpdater {
     return backoffMs
   }
 
-  private async updatePrices(): Promise<void> {
+  private async updateAllData(): Promise<void> {
     if (!this.isRunning || this.isUpdating) return
 
     this.isUpdating = true
     this.lastUpdateAttempt = new Date()
 
     try {
-      console.log('Fetching prices from CoinGecko...')
+      console.log('Starting comprehensive data update from CoinGecko...')
 
-      const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${this.config.limit}&page=1&sparkline=false&price_change_percentage=1h,24h,7d`
+      // Update market prices (highest priority)
+      await this.updateMarketPrices()
 
-      const data = await fetchJsonWithBasicRetry(url, {}, this.config.maxRetries)
-
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('Invalid response format from CoinGecko')
+      // Update detailed data for priority coins (with delays to avoid rate limits)
+      if (this.config.enableCoinDetails) {
+        await this.updateCoinDetails()
       }
 
-      // Update cache
-      setPrices(data)
+      // Update historical data for charts
+      if (this.config.enableHistoricalData) {
+        await this.updateHistoricalData()
+      }
+
+      // Update OHLCV data for advanced charts
+      if (this.config.enableOHLCVData) {
+        await this.updateOHLCVData()
+      }
+
       this.consecutiveErrors = 0 // Reset error counter
 
-      const lastUpdated = getLastUpdated()
-      console.log(`Successfully updated ${data.length} prices. Last updated: ${lastUpdated?.toISOString()}`)
+      const cacheStats = getCacheStats()
+      console.log(`Data update completed. Cache stats:`, cacheStats)
 
     } catch (error) {
       this.consecutiveErrors++
-      markStale() // Mark cache as stale on error
+      markPricesStale() // Mark cache as stale on error
 
-      console.error(`Price update failed (${this.consecutiveErrors} consecutive errors):`, error)
+      console.error(`Data update failed (${this.consecutiveErrors} consecutive errors):`, error)
 
       // If too many consecutive errors, log a warning
       if (this.consecutiveErrors >= 5) {
-        console.warn('Multiple consecutive price update failures. Consider checking CoinGecko API status.')
+        console.warn('Multiple consecutive data update failures. Consider checking CoinGecko API status.')
       }
     } finally {
       this.isUpdating = false
     }
+  }
+
+  private async updateMarketPrices(): Promise<void> {
+    console.log('Fetching market prices...')
+
+    const data = await coinGeckoClient.fetchMarkets({
+      per_page: this.config.limit,
+      price_change_percentage: '1h,24h,7d'
+    })
+
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error('Invalid market data response from CoinGecko')
+    }
+
+    setPrices(data)
+    console.log(`Updated ${data.length} market prices`)
+  }
+
+  private async updateCoinDetails(): Promise<void> {
+    console.log('Fetching coin details for priority coins...')
+
+    // Process coins in batches with delays to avoid rate limits
+    const batchSize = 3
+    for (let i = 0; i < PRIORITY_COINS.length; i += batchSize) {
+      const batch = PRIORITY_COINS.slice(i, i + batchSize)
+
+      await Promise.all(
+        batch.map(async ({ coinGeckoId }) => {
+          try {
+            const details = await coinGeckoClient.fetchCoinDetails(coinGeckoId)
+            if (details) {
+              setCoinDetails(coinGeckoId, details)
+            }
+          } catch (error) {
+            console.warn(`Failed to fetch details for ${coinGeckoId}:`, error)
+          }
+        })
+      )
+
+      // Small delay between batches
+      if (i + batchSize < PRIORITY_COINS.length) {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+      }
+    }
+
+    console.log('Coin details update completed')
+  }
+
+  private async updateHistoricalData(): Promise<void> {
+    console.log('Fetching historical data for charts...')
+
+    for (const { coinGeckoId } of PRIORITY_COINS) {
+      for (const days of this.config.historicalDays) {
+        try {
+          const data = await coinGeckoClient.fetchCoinHistory(coinGeckoId, days)
+          setHistoricalData(coinGeckoId, days, data)
+        } catch (error) {
+          console.warn(`Failed to fetch ${days}-day history for ${coinGeckoId}:`, error)
+        }
+
+        // Small delay to avoid rate limits
+        await new Promise(resolve => setTimeout(resolve, 500))
+      }
+    }
+
+    console.log('Historical data update completed')
+  }
+
+  private async updateOHLCVData(): Promise<void> {
+    console.log('Fetching OHLCV data for advanced charts...')
+
+    for (const { coinGeckoId } of PRIORITY_COINS) {
+      for (const timeframe of this.config.ohlcvTimeframes) {
+        try {
+          // Map timeframe to days (simplified mapping)
+          const daysMap: Record<string, number> = {
+            '1D': 30, // Last 30 days for daily data
+            '1W': 90, // Last 90 days for weekly data
+            '1M': 365 // Last year for monthly data
+          }
+
+          const days = daysMap[timeframe] || 30
+          const data = await coinGeckoClient.fetchOHLCV(coinGeckoId, { days })
+          setOHLCVData(coinGeckoId, timeframe, data)
+        } catch (error) {
+          console.warn(`Failed to fetch OHLCV data for ${coinGeckoId} (${timeframe}):`, error)
+        }
+
+        // Small delay to avoid rate limits
+        await new Promise(resolve => setTimeout(resolve, 500))
+      }
+    }
+
+    console.log('OHLCV data update completed')
   }
 }
 

@@ -1,10 +1,12 @@
 // Category: Market & portfolio
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { fetchTopCryptos, type CryptoPrice } from '@/lib/api';
+import { type CryptoPrice } from '@/lib/api';
 import { formatCurrency, formatPercentage } from '@/lib/utils';
 
-export const revalidate = 300; // Revalidate every 5 minutes
+// Make this page dynamic with ISR - revalidate every 60 seconds
+// This allows it to show fresh data without hitting CoinGecko during build
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Cryptocurrency Listing Info | Cryptopedia',
@@ -17,10 +19,26 @@ export default async function AssetsIndex() {
   let error: string | null = null;
 
   try {
-    cryptos = await fetchTopCryptos(20, true); // Get top 20 coins
+    // Fetch from internal API that reads only from cache
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/prices`, {
+      next: { revalidate: 60 } // Match page revalidation
+    });
+
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.error) {
+      throw new Error(data.message || data.error);
+    }
+
+    // Take top 20 coins from cached data
+    cryptos = data.data.slice(0, 20);
   } catch (err) {
-    error = 'Failed to load cryptocurrencies. Please try again later.';
-    console.error(err);
+    error = 'Failed to load cryptocurrencies. The cache may not be warmed yet. Please try again in a few moments.';
+    console.error('Error fetching from /api/prices:', err);
   }
 
   return (

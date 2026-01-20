@@ -1,15 +1,15 @@
 'use client'
 
 import React from 'react'
-import { ChartType, OverlayType, IndicatorType } from '@/types/chart'
+import { ChartType, OverlayType, IndicatorKey } from '@/types/chart'
 
 interface ChartControlsProps {
   chartType: ChartType
   onChartTypeChange: (type: ChartType) => void
   overlays: OverlayType[]
   onOverlaysChange: (overlays: OverlayType[]) => void
-  indicators: IndicatorType[]
-  onIndicatorsChange: (indicators: IndicatorType[]) => void
+  indicators: IndicatorKey[]
+  onIndicatorsChange: (indicators: IndicatorKey[]) => void
   className?: string
 }
 
@@ -34,7 +34,7 @@ export default function ChartControls({
     { value: 'sma200', label: 'SMA 200', color: '#ef4444' },
   ]
 
-  const availableIndicators: { value: IndicatorType; label: string; color: string }[] = [
+  const availableIndicators: { value: IndicatorKey; label: string; color: string }[] = [
     { value: 'rsi', label: 'RSI', color: '#8b5cf6' },
     { value: 'macd', label: 'MACD', color: '#06b6d4' },
   ]
@@ -46,7 +46,7 @@ export default function ChartControls({
     onOverlaysChange(newOverlays)
   }
 
-  const toggleIndicator = (indicator: IndicatorType) => {
+  const toggleIndicator = (indicator: IndicatorKey) => {
     const newIndicators = indicators.includes(indicator)
       ? indicators.filter(i => i !== indicator)
       : [...indicators, indicator]

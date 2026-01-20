@@ -1,11 +1,10 @@
 // API endpoint for cryptocurrency prices
-// Serves data from the in-memory cache, ensuring fast response times
-// Falls back to fetching fresh data if cache is empty
+// Serves data from the in-memory cache only - NEVER calls CoinGecko directly
+// Returns stale data or error if cache is not warmed yet
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getPrices, getLastUpdated, isStale, getCacheStats, setPrices } from '@/lib/priceCache'
+import { getPrices, getPricesLastUpdated, arePricesStale, getCacheStats } from '@/lib/priceCache'
 import { startPriceUpdater, isPriceUpdaterActive } from '@/lib/priceUpdater'
-import { fetchTopCryptos } from '@/lib/priceFetcher'
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,29 +14,23 @@ export async function GET(request: NextRequest) {
       startPriceUpdater()
     }
 
-    let prices = getPrices()
-    const lastUpdated = getLastUpdated()
-    const stale = isStale()
+    const prices = getPrices()
+    const lastUpdated = getPricesLastUpdated()
+    const stale = arePricesStale()
 
-    // If no cached data, fetch fresh data from CoinGecko
+    // If no cached data, return an error instead of fetching from CoinGecko
     if (prices.length === 0) {
-      console.log('No cached prices found, fetching fresh data from CoinGecko...')
-      try {
-        prices = await fetchTopCryptos(250)
-        setPrices(prices)
-        console.log(`Fetched and cached ${prices.length} prices from CoinGecko`)
-      } catch (fetchError) {
-        console.error('Failed to fetch prices from CoinGecko:', fetchError)
-        return NextResponse.json(
-          {
-            error: 'Failed to fetch price data',
-            message: 'Unable to load cryptocurrency prices at this time. Please try again later.',
-            lastUpdated: null,
-            isStale: true
-          },
-          { status: 503 }
-        )
-      }
+      return NextResponse.json(
+        {
+          error: 'Cache not warmed yet',
+          message: 'Price data is not available yet. The background updater is warming the cache. Please try again in a few moments.',
+          data: [],
+          lastUpdated: null,
+          isStale: true,
+          cacheWarmed: false
+        },
+        { status: 503 }
+      )
     }
 
     // Optional: Add cache control headers for client-side caching
@@ -49,8 +42,9 @@ export async function GET(request: NextRequest) {
 
     const response = {
       data: prices,
-      lastUpdated: getLastUpdated()?.toISOString() || null,
-      isStale: isStale(),
+      lastUpdated: lastUpdated?.toISOString() || null,
+      isStale: stale,
+      cacheWarmed: true,
       ...(debug && {
         _debug: {
           cacheStats: getCacheStats(),
@@ -67,7 +61,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Internal server error',
-        message: 'Failed to retrieve price data. Please try again later.'
+        message: 'Failed to retrieve price data. Please try again later.',
+        data: [],
+        lastUpdated: null,
+        isStale: true,
+        cacheWarmed: false
       },
       { status: 500 }
     )
@@ -95,7 +93,7 @@ export async function POST(request: NextRequest) {
 
       // Return current data while refresh happens in background
       const prices = getPrices()
-      const lastUpdated = getLastUpdated()
+      const lastUpdated = getPricesLastUpdated()
 
       return NextResponse.json({
         message: 'Cache refresh initiated',

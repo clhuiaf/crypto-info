@@ -69,6 +69,7 @@ export const CHART_COLORS = {
     sma20: '#10b981', // emerald-500
     sma50: '#f59e0b', // amber-500
     sma200: '#ef4444', // red-500
+    bbands: '#6366f1', // indigo-500 (for Bollinger Bands, though handled specially)
   },
   indicator: {
     rsi: '#8b5cf6', // violet-500

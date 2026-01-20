@@ -10,7 +10,7 @@ async function fetchJsonWithBasicRetry(
   retries = 2,
   delayMs = 500
 ): Promise<any> {
-  let lastError: Error
+  let lastError: Error = new Error('Unknown error occurred')
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
