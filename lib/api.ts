@@ -226,10 +226,10 @@ export interface CoinDetails {
     small: string
   }
   market_data: {
-    current_price: { usd: number }
+    current_price: { usd: number; hkd: number }
     price_change_percentage_24h: number
-    market_cap: { usd: number }
-    fully_diluted_valuation: { usd: number }
+    market_cap: { usd: number; hkd: number }
+    fully_diluted_valuation: { usd: number; hkd: number }
   }
   genesis_date: string | null
   platforms: Record<string, string>

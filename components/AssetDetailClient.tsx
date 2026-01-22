@@ -49,10 +49,10 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
   };
 
   // Extract data from coinDetails if available
-  const price = coinDetails?.market_data?.current_price?.usd;
+  const price = coinDetails?.market_data?.current_price?.hkd;
   const change24h = coinDetails?.market_data?.price_change_percentage_24h;
-  const marketCap = coinDetails?.market_data?.market_cap?.usd;
-  const fdv = coinDetails?.market_data?.fully_diluted_valuation?.usd;
+  const marketCap = coinDetails?.market_data?.market_cap?.hkd;
+  const fdv = coinDetails?.market_data?.fully_diluted_valuation?.hkd;
   const genesisDate = coinDetails?.genesis_date;
 
   // Memoize expensive computations
@@ -113,8 +113,8 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {price !== undefined && (
               <div>
-                <p className="text-sm text-slate-600 mb-1">Price</p>
-                <p className="text-xl font-semibold text-slate-900">{formatCurrency(price)}</p>
+                <p className="text-sm text-slate-600 mb-1">Price (HKD)</p>
+                <p className="text-xl font-semibold text-slate-900">HKD {price.toFixed(2)}</p>
               </div>
             )}
             {change24h !== undefined && (

@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import Navbar from '@/components/Navbar'
-import PriceUpdaterInitializer from '@/components/PriceUpdaterInitializer'
+import BackgroundUpdaterInitializer from '@/components/BackgroundUpdaterInitializer'
 import { ToastProvider } from '@/lib/useToast'
 import { ToastWrapper } from '@/components/ToastWrapper'
 
@@ -13,7 +13,7 @@ interface ClientProvidersProps {
 export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
     <ToastProvider>
-      <PriceUpdaterInitializer />
+      <BackgroundUpdaterInitializer />
       <Navbar />
       <main className="min-h-screen">
         {children}

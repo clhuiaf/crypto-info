@@ -1,13 +1,9 @@
 // Category: Market & portfolio
 
-import { startPriceUpdater } from '@/lib/priceUpdater'
 import PricesClient from './PricesClient'
 
-// Server component that ensures updater is running and passes initial data
+// Server component that passes initial data
 export default async function PricesPage() {
-  // Ensure the background updater is running
-  startPriceUpdater()
-
   try {
     // Try to fetch initial data from internal API (cache)
     const response = await fetch(

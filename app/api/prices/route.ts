@@ -1,120 +1,62 @@
-// API endpoint for cryptocurrency prices
-// Serves data from the in-memory cache only - NEVER calls CoinGecko directly
-// Returns stale data or error if cache is not warmed yet
-
-import { NextRequest, NextResponse } from 'next/server'
-import { getPrices, getPricesLastUpdated, arePricesStale, getCacheStats } from '@/lib/priceCache'
-import { startPriceUpdater, isPriceUpdaterActive } from '@/lib/priceUpdater'
+import { NextRequest, NextResponse } from 'next/server';
+import { getCache, isExpired, setCache } from '@/lib/cache';
+import { fetchMarkets } from '@/lib/coingeckoClient';
 
 export async function GET(request: NextRequest) {
-  try {
-    // Ensure the background updater is running
-    if (!isPriceUpdaterActive()) {
-      console.log('Starting price updater from API request')
-      startPriceUpdater()
+  let entry = getCache('markets');
+  let fetchAttempted = false;
+
+  // If cache is empty or expired, try to fetch fresh data
+  if (!entry || entry.value === null || isExpired(entry)) {
+    let fetchSuccess = false;
+
+    // Try up to 2 times to get fresh data
+    for (let attempt = 1; attempt <= 2 && !fetchSuccess; attempt++) {
+      try {
+        console.log(`[API] Cache empty or stale, fetching fresh data (attempt ${attempt})`);
+        fetchAttempted = true;
+        const freshData = await fetchMarkets();
+
+        // Cache the fresh data
+        setCache('markets', freshData, 2 * 60 * 1000); // 2 minutes TTL
+        entry = getCache('markets');
+        fetchSuccess = true;
+        console.log('[API] Fresh data fetched successfully');
+      } catch (error) {
+        console.warn(`[API] Fresh fetch attempt ${attempt} failed:`, error);
+
+        if (attempt < 2) {
+          // Wait a bit before retrying
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
     }
 
-    const prices = getPrices()
-    const lastUpdated = getPricesLastUpdated()
-    const stale = arePricesStale()
-
-    // If no cached data, return an error instead of fetching from CoinGecko
-    if (prices.length === 0) {
-      return NextResponse.json(
-        {
-          error: 'Cache not warmed yet',
-          message: 'Price data is not available yet. The background updater is warming the cache. Please try again in a few moments.',
+    // If all fetch attempts failed, check if we have any existing data
+    if (!fetchSuccess) {
+      if (entry && entry.value) {
+        console.log('[API] Using existing cached data after fetch failures');
+      } else {
+        // No cached data at all - return empty array, let client show loading state
+        console.log('[API] No cached data available after retries, returning empty array for loading state');
+        return NextResponse.json({
           data: [],
-          lastUpdated: null,
-          isStale: true,
-          cacheWarmed: false
-        },
-        { status: 503 }
-      )
+          stale: true,
+          lastUpdated: Date.now(),
+          message: 'Loading market data...',
+          fetchAttempted: true,
+        });
+      }
     }
-
-    // Optional: Add cache control headers for client-side caching
-    const headers = new Headers()
-    headers.set('Cache-Control', 'public, max-age=30') // Cache for 30 seconds on client
-
-    // Optional: Add debug info in development
-    const debug = process.env.NODE_ENV === 'development'
-
-    const response = {
-      data: prices,
-      lastUpdated: lastUpdated?.toISOString() || null,
-      isStale: stale,
-      cacheWarmed: true,
-      ...(debug && {
-        _debug: {
-          cacheStats: getCacheStats(),
-          updaterActive: isPriceUpdaterActive()
-        }
-      })
-    }
-
-    return NextResponse.json(response, { headers })
-
-  } catch (error) {
-    console.error('Error in /api/prices:', error)
-
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'Failed to retrieve price data. Please try again later.',
-        data: [],
-        lastUpdated: null,
-        isStale: true,
-        cacheWarmed: false
-      },
-      { status: 500 }
-    )
-  }
-}
-
-// Optional: Support POST for manual cache refresh (development only)
-export async function POST(request: NextRequest) {
-  // Only allow in development
-  if (process.env.NODE_ENV !== 'development') {
-    return NextResponse.json(
-      { error: 'Method not allowed in production' },
-      { status: 405 }
-    )
   }
 
-  try {
-    const body = await request.json()
-    const { action } = body
+  const stale = entry ? isExpired(entry) : true;
 
-    if (action === 'refresh') {
-      // Force a cache refresh by restarting the updater
-      // This is mainly for development/testing
-      console.log('Manual cache refresh requested')
-
-      // Return current data while refresh happens in background
-      const prices = getPrices()
-      const lastUpdated = getPricesLastUpdated()
-
-      return NextResponse.json({
-        message: 'Cache refresh initiated',
-        currentData: {
-          count: prices.length,
-          lastUpdated: lastUpdated?.toISOString() || null
-        }
-      })
-    }
-
-    return NextResponse.json(
-      { error: 'Invalid action' },
-      { status: 400 }
-    )
-
-  } catch (error) {
-    console.error('Error in POST /api/prices:', error)
-
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
+  return NextResponse.json({
+    data: entry?.value || [],
+    stale,
+    lastUpdated: entry?.updatedAt || Date.now(),
+    message: stale ? 'Data may be up to 2 minutes old.' : 'Fresh data.',
+    fetchAttempted, // For debugging
+  });
 }
