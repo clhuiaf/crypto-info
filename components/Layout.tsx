@@ -1,6 +1,7 @@
 'use client'
 import { ReactNode } from 'react'
 import Navbar from '@/components/Navbar'
+import FooterDisclaimer from '@/components/FooterDisclaimer'
 
 interface LayoutProps {
   children: ReactNode
@@ -54,6 +55,13 @@ export default function Layout({ children }: LayoutProps) {
                 </div>
               </aside>
             </div>
+          </div>
+        </div>
+
+        {/* Separate white rounded frame for footer disclaimer */}
+        <div className="px-4 sm:px-6 lg:px-8 pb-8">
+          <div className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-white shadow-lg overflow-hidden p-6 sm:p-8">
+            <FooterDisclaimer />
           </div>
         </div>
       </div>
