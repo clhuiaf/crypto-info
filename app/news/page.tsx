@@ -19,28 +19,28 @@ export default function NewsIndex() {
   return (
     <PageShell
       hero={
-        <div className="bg-gradient-to-b from-slate-50 to-white">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="py-8">
+        <div className="bg-gradient-to-b from-slate-50 to-white py-8">
+          <div className="space-y-4">
+            <div>
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Cryptopedia · News</p>
               <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">Regulatory &amp; Market News</h1>
               <p className="mt-2 text-slate-500 max-w-2xl">
                 Stay updated with regulatory developments and listing news for Hong Kong crypto traders.
               </p>
+            </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                {SOURCES.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setFilter(s)}
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      filter === s ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-700'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
+            <div className="flex flex-wrap gap-2">
+              {SOURCES.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setFilter(s)}
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    filter === s ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-700'
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
             </div>
           </div>
         </div>

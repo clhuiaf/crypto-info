@@ -13,8 +13,8 @@ interface PageShellProps {
 }
 
 // Reusable page shell used across Prices, News and Guides.
-// Wraps content in a centered container matching the Prices page:
-// mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-16
+// Now simplified since layout constraints are handled at root level.
+// Content is now inside the white frame with proper internal spacing.
 export default function PageShell({ title, subtitle, toolbar, hero, children }: PageShellProps) {
   return (
     <>
@@ -22,19 +22,15 @@ export default function PageShell({ title, subtitle, toolbar, hero, children }: 
       {hero ? (
         <div>{hero}</div>
       ) : title ? (
-        <div className="bg-white">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-0">
-            <div className="pt-6 pb-2">
-              <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">
-                {title}
-              </h1>
-              {subtitle ? <p className="mt-2 text-slate-500 max-w-2xl">{subtitle}</p> : null}
-            </div>
-          </div>
+        <div className="px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+          <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">
+            {title}
+          </h1>
+          {subtitle ? <p className="mt-2 text-slate-500 max-w-2xl">{subtitle}</p> : null}
         </div>
       ) : null}
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-16">
+      <div className="pb-16">
         {/* toolbar sits below the hero/title */}
         {toolbar ? <div className="mt-6">{toolbar}</div> : null}
 

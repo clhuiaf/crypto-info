@@ -22,7 +22,7 @@ export default function PopularGuidesPage() {
         </p>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-12 text-center">
+      <div className="rounded-lg shadow p-12 text-center">
         <h2 className="text-xl font-semibold text-slate-900 mb-4">Coming Soon</h2>
         <p className="text-slate-600 mb-6">
           This page will show the most popular guides based on user views and engagement.

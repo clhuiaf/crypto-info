@@ -46,16 +46,12 @@ export default function CountryNewsPage({ params }: NewsPageProps) {
   return (
     <PageShell
       hero={
-        <div className="bg-white">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="py-6 space-y-2">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{`Regulatory news · ${countryLabel}`}</p>
-              <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">{`${countryLabel} Regulatory Updates`}</h1>
-              <p className="mt-2 text-base text-slate-500 max-w-2xl">
-                Official regulatory news and listing updates from SFC and HKEX for virtual assets, exchanges, and ETFs.
-              </p>
-            </div>
-          </div>
+        <div className="py-6 space-y-2">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{`Regulatory news · ${countryLabel}`}</p>
+          <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">{`${countryLabel} Regulatory Updates`}</h1>
+          <p className="mt-2 text-base text-slate-500 max-w-2xl">
+            Official regulatory news and listing updates from SFC and HKEX for virtual assets, exchanges, and ETFs.
+          </p>
         </div>
       }
     >
