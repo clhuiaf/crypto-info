@@ -17,8 +17,30 @@ export async function GET(request: NextRequest) {
         fetchAttempted = true;
         const freshData = await fetchMarkets();
 
-        // Cache the fresh data
-        setCache('markets', freshData, 2 * 60 * 1000); // 2 minutes TTL
+        // Normalize CoinGecko response to use flat percentage fields (no _in_currency)
+        const normalizedData = Array.isArray(freshData)
+          ? freshData.map((coin: any) => {
+              const normalized = {
+                ...coin,
+                // prefer flat fields if present, otherwise fall back to _in_currency variants
+                price_change_percentage_1h:
+                  coin.price_change_percentage_1h ?? coin.price_change_percentage_1h_in_currency ?? null,
+                price_change_percentage_24h:
+                  coin.price_change_percentage_24h ?? null,
+                price_change_percentage_7d:
+                  coin.price_change_percentage_7d ?? coin.price_change_percentage_7d_in_currency ?? null,
+              }
+
+              // Remove any _in_currency variants so we don't leak them to the client
+              delete (normalized as any).price_change_percentage_1h_in_currency
+              delete (normalized as any).price_change_percentage_7d_in_currency
+
+              return normalized
+            })
+          : []
+
+        // Cache the normalized data
+        setCache('markets', normalizedData, 2 * 60 * 1000); // 2 minutes TTL
         entry = getCache('markets');
         fetchSuccess = true;
         console.log('[API] Fresh data fetched successfully');

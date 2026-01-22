@@ -56,8 +56,24 @@ export async function fetchTopCryptos(limit: number = 250): Promise<CryptoPrice[
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error('Invalid response format from CoinGecko')
     }
+    // Normalize CoinGecko response to flat percentage fields so our types match
+    const normalized = data.map((coin: any) => {
+      const normalizedCoin = {
+        ...coin,
+        price_change_percentage_1h:
+          coin.price_change_percentage_1h ?? coin.price_change_percentage_1h_in_currency ?? null,
+        price_change_percentage_24h: coin.price_change_percentage_24h ?? null,
+        price_change_percentage_7d:
+          coin.price_change_percentage_7d ?? coin.price_change_percentage_7d_in_currency ?? null,
+      }
 
-    return data as CryptoPrice[]
+      delete (normalizedCoin as any).price_change_percentage_1h_in_currency
+      delete (normalizedCoin as any).price_change_percentage_7d_in_currency
+
+      return normalizedCoin as CryptoPrice
+    })
+
+    return normalized
   } catch (error) {
     console.error('Error fetching top cryptos:', error)
     throw error
