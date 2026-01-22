@@ -36,9 +36,11 @@ export default async function AssetPage({ params }: AssetPageProps) {
     notFound();
   }
 
-  // Fetch data from internal APIs that read only from cache
+  // Fetch data from internal API that reads only from cache
   let coinDetails = null;
   let chartData: { time: number; price: number }[] = [];
+  let lastUpdated: number | null = null;
+  let isStale = false;
 
   try {
     // Fetch asset data from internal API
@@ -49,7 +51,9 @@ export default async function AssetPage({ params }: AssetPageProps) {
 
     if (assetResponse.ok) {
       const assetData = await assetResponse.json();
-      coinDetails = assetData.coinDetails;
+      coinDetails = assetData.data;
+      lastUpdated = assetData.lastUpdated;
+      isStale = assetData.stale;
     } else {
       console.warn(`Failed to fetch asset data for ${params.symbol}:`, assetResponse.status);
     }
@@ -78,6 +82,16 @@ export default async function AssetPage({ params }: AssetPageProps) {
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
           Listing Information
         </h1>
+        {lastUpdated && (
+          <p className="text-sm text-slate-600" suppressHydrationWarning>
+            Last updated: {new Date(lastUpdated).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })}
+            {isStale && <span className="text-orange-600 ml-2">(Data ~10min old)</span>}
+          </p>
+        )}
       </div>
 
       <AssetDetailClient asset={asset} coinDetails={coinDetails} chartData={chartData} />

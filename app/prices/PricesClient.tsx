@@ -1,26 +1,73 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react';
 import { type CryptoPrice } from '@/lib/api'
-import { usePricesPolling } from '@/lib/usePricesPolling'
 import CryptoRow from '@/components/CryptoRow'
 import MarketHeaderRow from '@/components/MarketHeaderRow'
 import PageShell from '@/components/PageShell'
 import PageToolbar from '@/components/PageToolbar'
 import { useMemo } from 'react'
 
+interface MarketData {
+  data: CryptoPrice[];
+  stale: boolean;
+  lastUpdated: number;
+  message?: string;
+}
+
 interface PricesClientProps {
   initialPrices: CryptoPrice[]
 }
 
 export default function PricesClient({ initialPrices }: PricesClientProps) {
-  // Use the polling hook for near real-time price updates
-  const { prices: cryptos, loading, error, lastUpdated, isStale } = usePricesPolling({
-    pollingInterval: 15000 // 15 seconds
-  })
+  const [market, setMarket] = useState<MarketData | null>(initialPrices.length > 0 ? {
+    data: initialPrices,
+    stale: true, // Assume stale since this is from server cache
+    lastUpdated: Date.now(),
+    message: 'Data loaded from cache'
+  } : null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(initialPrices.length === 0);
 
-  // Use initial server data if client data isn't loaded yet
-  const displayPrices = cryptos.length > 0 ? cryptos : initialPrices
+  const fetchMarkets = async (showLoading = false) => {
+    try {
+      if (showLoading) {
+        setLoading(true);
+      }
+
+      const res = await fetch('/api/prices');
+
+      if (!res.ok) {
+        throw new Error(`Failed to load market data: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setMarket(data);
+      setError(null);
+      setLoading(false);
+
+      // Show appropriate messages based on data state
+      if (data.fetchAttempted && (!data.data || data.data.length === 0)) {
+        setError('Market data is loading. Please wait a moment.');
+      }
+    } catch (err) {
+      setError('Unable to load market data. The service may be temporarily unavailable.');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // If we have initial data, fetch updates in background without loading state
+    // If no initial data, show loading state while fetching
+    fetchMarkets(initialPrices.length === 0);
+
+    // Poll every 30 seconds for updates (background updates, no loading state)
+    const interval = setInterval(() => fetchMarkets(false), 30000);
+    return () => clearInterval(interval);
+  }, [initialPrices.length]);
+
+  // Use market data if available, otherwise fall back to initial server data
+  const displayPrices = market?.data?.length ? market.data : initialPrices;
 
   // Filters / view state
   const [assetFilter, setAssetFilter] = useState<'all' | 'highlights'>('all')
@@ -69,9 +116,13 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
         </div>
       }
       right={
-        <span className="text-xs text-slate-500">
-          {lastUpdated
-            ? `Updated ${lastUpdated.toLocaleTimeString()}${isStale ? ' (stale)' : ''}`
+        <span className="text-xs text-slate-500" suppressHydrationWarning>
+          {market && market.data.length > 0
+            ? `Last updated: ${new Date(market.lastUpdated).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+              })}${market.stale ? ' (Data ~2min old)' : ''}`
             : 'Loading data...'
           }
         </span>
@@ -120,15 +171,20 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
     }
   }, [displayPrices, assetFilter, view])
 
-  const mainContent = error ? (
-    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-      <p className="text-red-800">{error}</p>
-    </div>
-  ) : loading && displayPrices.length === 0 ? (
+  const mainContent = loading && !market ? (
     <div className="animate-pulse space-y-4">
       {[...Array(5)].map((_, i) => (
         <div key={i} className="h-16 bg-slate-200 rounded-lg"></div>
       ))}
+    </div>
+  ) : error && !market ? (
+    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+      <p className="text-yellow-800">{error}</p>
+    </div>
+  ) : !market?.data || market.data.length === 0 ? (
+    <div className="p-4 text-center">
+      <p className="text-slate-600">Loading market data...</p>
+      <p className="text-sm text-slate-500 mt-2">Data will appear shortly.</p>
     </div>
   ) : (
     <section className="mt-6">
