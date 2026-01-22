@@ -190,16 +190,16 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
         {formatCurrency(crypto.current_price)}
       </div>
 
-      <div className={`hidden lg:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_1h_in_currency)}`}>
-        {formatPercentage(crypto.price_change_percentage_1h_in_currency)}
+      <div className={`hidden lg:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_1h)}`}>
+        {formatPercentage(crypto.price_change_percentage_1h)}
       </div>
 
       <div className={`hidden lg:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_24h)}`}>
         {formatPercentage(crypto.price_change_percentage_24h)}
       </div>
 
-      <div className={`hidden lg:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_7d_in_currency)}`}>
-        {formatPercentage(crypto.price_change_percentage_7d_in_currency)}
+      <div className={`hidden lg:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_7d)}`}>
+        {formatPercentage(crypto.price_change_percentage_7d)}
       </div>
 
       <div className="hidden lg:block text-sm text-slate-500 text-right whitespace-nowrap">
