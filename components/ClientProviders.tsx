@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import Navbar from '@/components/Navbar'
+import Layout from '@/components/Layout'
 import BackgroundUpdaterInitializer from '@/components/BackgroundUpdaterInitializer'
 import { ToastProvider } from '@/lib/useToast'
 import { ToastWrapper } from '@/components/ToastWrapper'
@@ -14,10 +14,9 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
     <ToastProvider>
       <BackgroundUpdaterInitializer />
-      <Navbar />
-      <main className="min-h-screen">
+      <Layout>
         {children}
-      </main>
+      </Layout>
       <ToastWrapper />
     </ToastProvider>
   )
