@@ -16,3 +16,7 @@
   }
 }
 
+:root {
+  /* Brand panel color — change this to update all page panels */
+  --brand-color: #2563eb; /* same as Tailwind blue-600 */
+}

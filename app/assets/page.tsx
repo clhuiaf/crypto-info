@@ -42,92 +42,94 @@ export default async function AssetsIndex() {
   }
 
   return (
-    <>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Asset Listings & Details
-        </h1>
-        <p className="text-slate-600">
-          Detailed information cards for major cryptocurrencies and their exchange listings.
-        </p>
-      </div>
+    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
+      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+        <header>
+          <h1 className="text-3xl font-semibold text-white">Asset Listings & Details</h1>
+          <p className="mt-1 text-sm text-slate-100">
+            Detailed information cards for major cryptocurrencies and their exchange listings.
+          </p>
+        </header>
 
-      {error ? (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
-        </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {cryptos.map((crypto) => (
-            <Link
-              key={crypto.id}
-              href={`/assets/${crypto.symbol.toUpperCase()}`}
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
-            >
-                <div className="flex items-center mb-4">
-                  <img
-                    src={crypto.image}
-                    alt={crypto.name}
-                    className="h-12 w-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 hover:text-blue-600">
-                      {crypto.name}
-                    </h3>
-                    <p className="text-sm text-slate-500 uppercase">
-                      {crypto.symbol}
-                    </p>
-                  </div>
-                </div>
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-slate-600">Price:</span>
-                    <span className="text-sm font-medium text-slate-900">
-                      {formatCurrency(crypto.current_price)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-slate-600">24h Change:</span>
-                    <span
-                      className={`text-sm font-medium ${
-                        crypto.price_change_percentage_24h == null
-                          ? 'text-gray-400'
-                          : crypto.price_change_percentage_24h >= 0
-                            ? 'text-green-600'
-                            : 'text-red-600'
-                      }`}
-                    >
-                      {crypto.price_change_percentage_24h == null
-                        ? '—'
-                        : `${crypto.price_change_percentage_24h >= 0 ? '+' : ''}${crypto.price_change_percentage_24h.toFixed(2)}%`
-                      }
-                    </span>
-                  </div>
-                </div>
-                <div className="pt-3 border-t border-slate-200">
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors">
-                    View details
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
+        <div className="rounded-2xl bg-white shadow-sm p-4">
+          {error ? (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-red-800">{error}</p>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {cryptos.map((crypto) => (
+                <Link
+                  key={crypto.id}
+                  href={`/assets/${crypto.symbol.toUpperCase()}`}
+                  className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
+                >
+                    <div className="flex items-center mb-4">
+                      <img
+                        src={crypto.image}
+                        alt={crypto.name}
+                        className="h-12 w-12 rounded-full mr-4"
                       />
-                    </svg>
-                  </span>
-                </div>
-              </Link>
-            ))}
+                      <div>
+                        <h3 className="text-lg font-semibold text-slate-900 hover:text-blue-600">
+                          {crypto.name}
+                        </h3>
+                        <p className="text-sm text-slate-500 uppercase">
+                          {crypto.symbol}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between">
+                        <span className="text-sm text-slate-600">Price:</span>
+                        <span className="text-sm font-medium text-slate-900">
+                          {formatCurrency(crypto.current_price)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-slate-600">24h Change:</span>
+                        <span
+                          className={`text-sm font-medium ${
+                            crypto.price_change_percentage_24h == null
+                              ? 'text-gray-400'
+                              : crypto.price_change_percentage_24h >= 0
+                                ? 'text-green-600'
+                                : 'text-red-600'
+                          }`}
+                        >
+                          {crypto.price_change_percentage_24h == null
+                            ? '—'
+                            : `${crypto.price_change_percentage_24h >= 0 ? '+' : ''}${crypto.price_change_percentage_24h.toFixed(2)}%`
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <div className="pt-3 border-t border-slate-200">
+                      <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors">
+                        View details
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+          )}
         </div>
-      )}
-    </>
+      </section>
+    </div>
   );
 }
 

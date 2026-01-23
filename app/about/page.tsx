@@ -8,13 +8,16 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <section className="text-center space-y-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
-            About Cryptopedia
-          </h1>
+    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
+      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+        <header className="text-center">
+          <h1 className="text-4xl font-bold text-white tracking-tight">About Cryptopedia</h1>
+          <p className="mt-2 text-sm text-slate-100 max-w-2xl mx-auto">
+            Learn about Cryptopedia, your independent Hong Kong-focused crypto hub for comparing exchanges, wallets, and market opportunities.
+          </p>
+        </header>
 
+        <div className="rounded-2xl bg-white shadow-sm p-6">
           <div className="space-y-6 text-lg text-slate-700 leading-relaxed">
             <p>
               Cryptopedia is a Hong Kong–focused crypto hub that helps investors compare exchanges, wallets, and opportunities in one place.
@@ -34,6 +37,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

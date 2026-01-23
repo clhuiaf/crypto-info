@@ -171,7 +171,18 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
     }
   }, [displayPrices, assetFilter, view])
 
-  const mainContent = loading && !market ? (
+  const sidebarAd = (
+    <div className="h-72 w-full rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center overflow-hidden">
+      <img
+        src="/banners/square-ad-sq-mcm.jpg"
+        alt="Sidebar advertisement"
+        className="h-full w-full object-cover"
+        loading="lazy"
+      />
+    </div>
+  )
+
+  const tableSection = loading && !market ? (
     <div className="animate-pulse space-y-4">
       {[...Array(5)].map((_, i) => (
         <div key={i} className="h-16 bg-slate-200 rounded-lg"></div>
@@ -187,30 +198,53 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
       <p className="text-sm text-slate-500 mt-2">Data will appear shortly.</p>
     </div>
   ) : (
-    <section className="mt-6">
-      <div className="mx-auto overflow-hidden rounded-2xl border border-slate-100 bg-white">
-        <MarketHeaderRow />
-        <div className="space-y-0">
-          {displayAssets.map((crypto, index) => (
-            <CryptoRow
-              key={crypto.id}
-              crypto={crypto}
-              index={index}
-              isLast={index === displayAssets.length - 1}
-            />
-          ))}
-        </div>
+    <div className="overflow-hidden">
+      <MarketHeaderRow />
+      <div className="space-y-0">
+        {displayAssets.map((crypto, index) => (
+          <CryptoRow
+            key={crypto.id}
+            crypto={crypto}
+            index={index}
+            isLast={index === displayAssets.length - 1}
+          />
+        ))}
       </div>
-    </section>
+    </div>
   )
 
   return (
-    <PageShell
-      title="Live Market Overview"
-      subtitle="Real-time cryptocurrency prices and market data"
-      toolbar={toolbar}
-    >
-      {mainContent}
-    </PageShell>
+    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
+      {/* Light-blue outer panel */}
+      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-blue-600 p-6 space-y-4">
+        {/* Title on light blue */}
+        <header>
+          <h1 className="text-3xl font-semibold text-white">
+            Live Market Overview
+          </h1>
+          <p className="mt-1 text-sm text-slate-200">
+            Real-time cryptocurrency prices and market data
+          </p>
+        </header>
+
+        {/* Card 1: filters bar */}
+        <div className="rounded-2xl bg-white shadow-sm p-4">
+          {toolbar}  {/* existing filters + last-updated; remove its old outer card */}
+        </div>
+
+        {/* Card 2 + 3: table + sidebar ad */}
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Card 2: table */}
+          <div className="flex-1 rounded-2xl bg-white shadow-sm p-4">
+            {tableSection}   {/* existing table content without extra outer card */}
+          </div>
+
+          {/* Card 3: sidebar ad */}
+          <aside className="w-full lg:w-72 shrink-0 rounded-2xl bg-white shadow-sm p-4">
+            {sidebarAd}      {/* existing ad content */}
+          </aside>
+        </div>
+      </section>
+    </div>
   )
 }

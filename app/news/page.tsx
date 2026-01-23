@@ -17,43 +17,39 @@ export default function NewsIndex() {
   });
 
   return (
-    <PageShell
-      hero={
-        <div className="bg-gradient-to-b from-slate-50 to-white py-8">
-          <div className="space-y-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Cryptopedia · News</p>
-              <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900">Regulatory &amp; Market News</h1>
-              <p className="mt-2 text-slate-500 max-w-2xl">
-                Stay updated with regulatory developments and listing news for Hong Kong crypto traders.
-              </p>
-            </div>
+    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
+      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+        <header>
+          <p className="text-xs uppercase tracking-[0.2em] text-blue-100">Cryptopedia · News</p>
+          <h1 className="text-3xl sm:text-4xl font-semibold text-white">Regulatory &amp; Market News</h1>
+          <p className="mt-2 text-sm text-slate-100 max-w-2xl">
+            Stay updated with regulatory developments and listing news for Hong Kong crypto traders.
+          </p>
+        </header>
 
-            <div className="flex flex-wrap gap-2">
-              {SOURCES.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setFilter(s)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    filter === s ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-700'
-                  }`}
-                >
-                  {s}
-                </button>
+        <div className="rounded-2xl bg-white shadow-sm p-4">
+          <div className="mb-4 flex flex-wrap gap-2">
+            {SOURCES.map((s) => (
+              <button
+                key={s}
+                onClick={() => setFilter(s)}
+                className={`px-3 py-1 rounded-full text-sm font-medium ${filter === s ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-700'}`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filtered.map((item: NewsItem) => (
+                <NewsCard key={item.id} item={item} />
               ))}
             </div>
           </div>
         </div>
-      }
-    >
-      <div className="mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filtered.map((item: NewsItem) => (
-            <NewsCard key={item.id} item={item} />
-          ))}
-        </div>
-      </div>
-    </PageShell>
+      </section>
+    </div>
   );
 }
 
