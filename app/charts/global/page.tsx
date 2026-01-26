@@ -4,6 +4,8 @@
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
 import { type CryptoPrice } from '@/lib/api';
+import { getCache, isExpired, setCache } from '@/lib/cache';
+import { fetchMarkets } from '@/lib/coingeckoClient';
 
 // Make this page dynamic with ISR
 export const revalidate = 60; // Revalidate every 60 seconds
@@ -14,26 +16,25 @@ export default async function GlobalChartPage() {
   let error: string | null = null;
 
   try {
-    // Fetch market data from internal API.
-    // Use a relative path for internal API routes so the same code works on Vercel and locally.
-    const response = await fetch('/api/prices', { next: { revalidate: 60 } });
+    // Read market data directly from cache on the server to avoid internal HTTP calls.
+    let entry = getCache<CryptoPrice[]>('markets');
 
-    if (!response.ok) {
-      throw new Error(`API responded with status: ${response.status}`);
+    if (!entry || entry.value === null || isExpired(entry)) {
+      try {
+        const fresh = await fetchMarkets();
+        setCache('markets', fresh, 2 * 60 * 1000);
+        entry = getCache<CryptoPrice[]>('markets');
+      } catch (fetchErr) {
+        console.warn('[GlobalChartPage] Failed to fetch fresh market data:', fetchErr);
+      }
     }
 
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.message || data.error);
-    }
-
-    marketData = data.data.slice(0, 10); // Top 10 for display
+    const data = entry?.value ?? [];
+    marketData = data.slice(0, 10); // Top 10 for display
     totalMarketCap = marketData.reduce((sum, coin) => sum + (coin.market_cap || 0), 0);
-
   } catch (err) {
     error = 'Failed to load market data. The cache may not be warmed yet.';
-    console.error('Error fetching market data:', err);
+    console.error('Error reading market cache:', err);
   }
 
   return (

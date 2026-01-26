@@ -1,27 +1,30 @@
 // Category: Market & portfolio
 
 import PricesClient from './PricesClient'
+import { getCache, isExpired, setCache } from '@/lib/cache';
+import { fetchMarkets } from '@/lib/coingeckoClient';
 
 // Server component that passes initial data
 export default async function PricesPage() {
   try {
-    // Try to fetch initial data from internal API (cache).
-    // Use a relative URL so server-side rendering on Vercel does not attempt to call localhost.
-    const response = await fetch('/api/prices', { next: { revalidate: 30 } }); // Short revalidation for initial load
+    // Read cached market data directly on the server. Avoid fetching our own API via HTTP
+    // because Node's fetch requires an absolute URL in this runtime.
+    let entry = getCache('markets');
 
-    if (response.ok) {
-      const data = await response.json();
-      if (!data.error && data.data) {
-        return <PricesClient initialPrices={data.data} />
+    if (!entry || entry.value === null || isExpired(entry)) {
+      try {
+        const fresh = await fetchMarkets();
+        setCache('markets', fresh, 2 * 60 * 1000);
+        entry = getCache('markets');
+      } catch (err) {
+        console.warn('[PricesPage] Failed to warm cache:', err);
       }
     }
 
-    // If API fails, pass empty array - client will handle loading
-    console.warn('Failed to fetch initial prices from API, falling back to client loading');
-    return <PricesClient initialPrices={[]} />
-
+    const data = entry?.value ?? [];
+    return <PricesClient initialPrices={data} />
   } catch (error) {
-    console.error('Failed to fetch initial prices:', error)
+    console.error('Failed to get initial prices:', error)
     // Fall back to client-side loading if server fetch fails
     return <PricesClient initialPrices={[]} />
   }
