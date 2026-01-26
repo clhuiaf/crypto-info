@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { type CryptoPrice } from '@/lib/api';
 import { formatCurrency, formatPercentage } from '@/lib/utils';
+import { getCache, isExpired, setCache } from '@/lib/cache';
+import { fetchMarkets } from '@/lib/coingeckoClient';
 
 // Make this page dynamic with ISR - revalidate every 60 seconds
 // This allows it to show fresh data without hitting CoinGecko during build
@@ -19,26 +21,26 @@ export default async function AssetsIndex() {
   let error: string | null = null;
 
   try {
-    // Fetch from internal API that reads only from cache
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/prices`, {
-      next: { revalidate: 60 } // Match page revalidation
-    });
+    // Read from internal cache directly on the server to avoid making HTTP calls to our own API.
+    // This prevents Node's fetch from needing an absolute URL and is deploy-safe.
+    let entry = getCache<CryptoPrice[]>('markets');
 
-    if (!response.ok) {
-      throw new Error(`API responded with status: ${response.status}`);
+    if (!entry || entry.value === null || isExpired(entry)) {
+      try {
+        // Attempt to fetch fresh market data and warm the cache (same logic as the API route).
+        const fresh = await fetchMarkets();
+        setCache('markets', fresh, 2 * 60 * 1000);
+        entry = getCache<CryptoPrice[]>('markets');
+      } catch (fetchErr) {
+        console.warn('[AssetsPage] Failed to fetch fresh market data:', fetchErr);
+      }
     }
 
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.message || data.error);
-    }
-
-    // Take top 20 coins from cached data
-    cryptos = data.data.slice(0, 20);
+    const data = entry?.value ?? [];
+    cryptos = data.slice(0, 20);
   } catch (err) {
     error = 'Failed to load cryptocurrencies. The cache may not be warmed yet. Please try again in a few moments.';
-    console.error('Error fetching from /api/prices:', err);
+    console.error('Error reading market cache:', err);
   }
 
   return (

@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { getAssetBySymbol, assets } from '@/data/assets';
 import AssetDetailClient from '@/components/AssetDetailClient';
+import { getCache, isExpired, setCache } from '@/lib/cache';
+import { fetchAssetDetails } from '@/lib/coingeckoClient';
+import { CoinDetails } from '@/lib/api';
 
 interface AssetPageProps {
   params: {
@@ -37,43 +40,34 @@ export default async function AssetPage({ params }: AssetPageProps) {
   }
 
   // Fetch data from internal API that reads only from cache
-  let coinDetails = null;
+  let coinDetails: CoinDetails | null = null;
   let chartData: { time: number; price: number }[] = [];
   let lastUpdated: number | null = null;
   let isStale = false;
 
   try {
-    // Fetch asset data from internal API
-    const assetResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/assets/${params.symbol}`,
-      { next: { revalidate: 60 } }
-    );
-
-    if (assetResponse.ok) {
-      const assetData = await assetResponse.json();
-      coinDetails = assetData.data;
-      lastUpdated = assetData.lastUpdated;
-      isStale = assetData.stale;
+    // Prefer calling data sources directly on the server rather than HTTPing our own API routes.
+    // This avoids "Invalid URL" errors in Node and is deploy-safe.
+    // Try to read cached asset details first (if you have a cache key strategy you can use it here).
+    // For simplicity, fetch directly from CoinGecko if needed.
+    const details = await fetchAssetDetails(params.symbol);
+    if (details) {
+      // fetchAssetDetails returns data from CoinGecko; assert to CoinDetails so TypeScript understands the shape.
+      coinDetails = details as CoinDetails;
+      lastUpdated = Date.now();
+      isStale = false;
     } else {
-      console.warn(`Failed to fetch asset data for ${params.symbol}:`, assetResponse.status);
+      console.warn(`No asset details returned for ${params.symbol}`);
     }
 
-    // Fetch chart data from internal API
-    const chartResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/charts/${params.symbol}?days=7`,
-      { next: { revalidate: 60 } }
-    );
-
-    if (chartResponse.ok) {
-      const chartApiData = await chartResponse.json();
-      if (chartApiData.chartData) {
-        chartData = chartApiData.chartData.prices;
-      }
-    } else {
-      console.warn(`Failed to fetch chart data for ${params.symbol}:`, chartResponse.status);
-    }
+    // Fetch chart data directly from CoinGecko via lib/api helper for historical data.
+    // Using fetchCoinById or fetchHistoricalData would be ideal, but reuse fetchGlobalStats as a placeholder
+    // if detailed chart endpoint wrapper is not available in coingeckoClient.
+    // Here we call the helper in lib/api.ts for historical data instead.
+    const { fetchHistoricalData } = await import('@/lib/api');
+    chartData = await fetchHistoricalData(params.symbol, 7, true);
   } catch (err) {
-    console.warn('Failed to fetch data from internal APIs:', err);
+    console.warn('Failed to fetch data for asset page:', err);
   }
 
   return (
