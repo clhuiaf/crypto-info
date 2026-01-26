@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { type CryptoPrice } from '@/lib/api';
 import { formatCurrency, formatPercentage } from '@/lib/utils';
 import { getCache, isExpired, setCache } from '@/lib/cache';
+import PageShell from '@/components/PageShell';
 import { fetchMarkets } from '@/lib/coingeckoClient';
 
 // Make this page dynamic with ISR - revalidate every 60 seconds
@@ -44,8 +45,9 @@ export default async function AssetsIndex() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
-      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+    <div className="py-8">
+      <PageShell>
+        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
         <header>
           <h1 className="text-3xl font-semibold text-white">Asset Listings & Details</h1>
           <p className="mt-1 text-sm text-slate-100">
@@ -131,6 +133,7 @@ export default async function AssetsIndex() {
           )}
         </div>
       </section>
+      </PageShell>
     </div>
   );
 }

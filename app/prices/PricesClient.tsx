@@ -214,9 +214,10 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
   )
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
-      {/* Light-blue outer panel */}
-      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-blue-600 p-6 space-y-4">
+    <div className="py-8">
+      <PageShell>
+        {/* Light-blue outer panel */}
+        <section className="rounded-3xl bg-blue-600 p-6 space-y-4">
         {/* Title on light blue */}
         <header>
           <h1 className="text-3xl font-semibold text-white">
@@ -244,7 +245,8 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
             {sidebarAd}      {/* existing ad content */}
           </aside>
         </div>
-      </section>
+        </section>
+      </PageShell>
     </div>
   )
 }

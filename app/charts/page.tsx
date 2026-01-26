@@ -13,6 +13,7 @@ import { getAssetBySymbol } from '@/data/assets'
 import { CryptoPrice } from '@/lib/api'
 import { usePricesPolling } from '@/lib/usePricesPolling'
 import tokenIcons from '@/config/tokenIcons'
+import PageShell from '@/components/PageShell'
 
 // Dynamically import the ProChart component to reduce initial bundle size
 const ProChart = dynamic(() => import('@/components/ProChart'), {
@@ -79,9 +80,10 @@ export default function ChartsPage() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
-      {/* Light-blue outer panel */}
-      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+    <div className="py-8">
+      <PageShell>
+        {/* Light-blue outer panel */}
+        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
         {/* Title on light blue */}
         <header>
           <h1 className="text-3xl font-semibold text-white">Chart</h1>
@@ -250,7 +252,8 @@ export default function ChartsPage() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
+      </PageShell>
     </div>
   )
 }

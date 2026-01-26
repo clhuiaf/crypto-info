@@ -1,13 +1,13 @@
 export default function AssetsLoading() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl mb-8">
         <div className="h-8 bg-slate-200 rounded w-48 mb-2 animate-pulse"></div>
         <div className="h-5 bg-slate-200 rounded w-96 animate-pulse"></div>
       </div>
 
       {/* Asset cards grid skeleton */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {[...Array(9)].map((_, i) => (
           <div key={i} className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center mb-4">

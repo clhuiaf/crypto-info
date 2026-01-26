@@ -1,7 +1,8 @@
-'use client'
+ 'use client'
 import { ReactNode } from 'react'
 import Navbar from '@/components/Navbar'
 import FooterDisclaimer from '@/components/FooterDisclaimer'
+import PageShell from '@/components/PageShell'
 
 interface LayoutProps {
   children: ReactNode
@@ -33,10 +34,12 @@ export default function Layout({ children }: LayoutProps) {
       {children}
 
       {/* Separate dark-blue rounded frame for footer disclaimer */}
-      <div className="px-4 sm:px-6 lg:px-8 pb-8">
-        <div className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-2xl bg-white border border-gray-200 px-4 py-4 text-xs text-gray-500">
-          <FooterDisclaimer />
-        </div>
+      <div className="pb-8">
+        <PageShell>
+          <div className="rounded-2xl bg-white border border-gray-200 px-4 py-4 text-xs text-gray-500">
+            <FooterDisclaimer />
+          </div>
+        </PageShell>
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ import { fetchCoinById, type CryptoPrice } from '@/lib/api'
 import { usePricesPolling } from '@/lib/usePricesPolling'
 import { formatCurrency, formatPercentage, formatMarketCap } from '@/lib/utils'
 import MarketTable from '@/components/MarketTable'
+import PageShell from '@/components/PageShell'
 
 export default function WatchlistPage() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([])
@@ -98,28 +99,33 @@ export default function WatchlistPage() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center">
-          <p className="text-slate-500">Loading watchlist...</p>
-        </div>
+      <div className="py-8">
+        <PageShell>
+          <div className="text-center">
+            <p className="text-slate-500">Loading watchlist...</p>
+          </div>
+        </PageShell>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
-        </div>
+      <div className="py-8">
+        <PageShell>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-800">{error}</p>
+          </div>
+        </PageShell>
       </div>
     )
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
-      {/* Light-blue outer panel for Watchlist */}
-      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+    <div className="py-8">
+      <PageShell>
+        {/* Light-blue outer panel for Watchlist */}
+        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
         {/* Title on light blue */}
         <header>
           <h1 className="text-3xl font-semibold text-white">My Watchlist</h1>
@@ -141,7 +147,8 @@ export default function WatchlistPage() {
             })()
           )}
         </div>
-      </section>
+        </section>
+      </PageShell>
     </div>
   )
 }

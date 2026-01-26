@@ -23,7 +23,7 @@ export default function HeaderFilters({
 }: HeaderFiltersProps) {
   return (
     <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="py-6 md:py-8 space-y-4">
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">

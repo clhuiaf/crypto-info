@@ -3,11 +3,13 @@
 // TODO: Implement analytics tracking and popular guides display
 
 import Link from 'next/link';
+import PageShell from '@/components/PageShell';
 
 export default function PopularGuidesPage() {
   return (
-    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
-      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+    <div className="py-8">
+      <PageShell>
+        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
         <header>
           <Link href="/guides" className="inline-flex items-center text-blue-100 hover:text-blue-200 mb-1">
             ← Back to Guides
@@ -31,7 +33,8 @@ export default function PopularGuidesPage() {
             </Link>
           </div>
         </div>
-      </section>
+        </section>
+      </PageShell>
     </div>
   );
 }
