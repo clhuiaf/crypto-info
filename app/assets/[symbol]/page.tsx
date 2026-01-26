@@ -4,7 +4,8 @@ import { Metadata } from 'next';
 import { getAssetBySymbol, assets } from '@/data/assets';
 import AssetDetailClient from '@/components/AssetDetailClient';
 import { getCache, isExpired, setCache } from '@/lib/cache';
-import { fetchAssetDetails, fetchGlobalStats } from '@/lib/coingeckoClient';
+import { fetchAssetDetails } from '@/lib/coingeckoClient';
+import { CoinDetails } from '@/lib/api';
 
 interface AssetPageProps {
   params: {
@@ -39,7 +40,7 @@ export default async function AssetPage({ params }: AssetPageProps) {
   }
 
   // Fetch data from internal API that reads only from cache
-  let coinDetails = null;
+  let coinDetails: CoinDetails | null = null;
   let chartData: { time: number; price: number }[] = [];
   let lastUpdated: number | null = null;
   let isStale = false;
