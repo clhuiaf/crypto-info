@@ -52,7 +52,8 @@ export default async function AssetPage({ params }: AssetPageProps) {
     // For simplicity, fetch directly from CoinGecko if needed.
     const details = await fetchAssetDetails(params.symbol);
     if (details) {
-      coinDetails = details;
+      // fetchAssetDetails returns data from CoinGecko; assert to CoinDetails so TypeScript understands the shape.
+      coinDetails = details as CoinDetails;
       lastUpdated = Date.now();
       isStale = false;
     } else {
