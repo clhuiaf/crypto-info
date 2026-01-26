@@ -21,7 +21,7 @@ export default function ComparisonBar({ selectedExchanges, onClearSelection }: C
   return (
     <>
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-slate-200 shadow-[0_-8px_30px_rgba(15,23,42,0.1)] z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="mx-auto w-full max-w-6xl lg:max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-[0.16em]">
