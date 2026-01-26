@@ -71,8 +71,9 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
       .slice(0, 5) || [];
   }, [coinDetails?.tickers]);
 
-  // Use coinDetails image if available, otherwise use asset logo
+  // Prefer an explicit asset logoUrl, otherwise use coinDetails image if available
   const coinImage = coinDetails?.image?.large;
+  const logoSrc = (asset as any).logoUrl ?? coinImage;
 
   return (
     <div className="space-y-6">
@@ -80,17 +81,19 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
       <div className="bg-white rounded-lg shadow mb-6 p-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
           <div className="flex items-center mb-4 md:mb-0">
-            {coinImage ? (
-              <img
-                src={coinImage}
-                alt={asset.name}
-                className="h-16 w-16 rounded-full mr-4"
-              />
-            ) : (
-              <div className="flex-shrink-0 w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-3xl mr-4">
-                {asset.logo || asset.symbol}
-              </div>
-            )}
+            <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center mr-4">
+              {logoSrc ? (
+                <img
+                  src={logoSrc}
+                  alt={`${asset.name} logo`}
+                  className="w-12 h-12 object-contain rounded-full"
+                />
+              ) : (
+                <span className="text-3xl font-semibold text-slate-700">
+                  {asset.logo ?? asset.symbol[0]}
+                </span>
+              )}
+            </div>
             <div>
               <h2 className="text-3xl font-bold text-slate-900">{asset.name}</h2>
               <p className="text-lg text-slate-500 uppercase">{asset.symbol}</p>
@@ -147,26 +150,28 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Overview Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">Overview</h2>
-            <div className="prose max-w-none">
-              {coinDetails?.description?.en ? (
-                <p className="text-slate-700 whitespace-pre-line">
-                  {coinDetails.description.en.replace(/<[^>]*>/g, '').substring(0, 500)}
-                  {coinDetails.description.en.length > 500 && '...'}
-                </p>
-              ) : (
-                <p className="text-slate-700">{asset.description}</p>
-              )}
-            </div>
+      {/* Overview Section (full width above the info grid) */}
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Overview</h2>
+          <div className="prose max-w-none">
+            {coinDetails?.description?.en ? (
+              <p className="text-slate-700 whitespace-pre-line">
+                {coinDetails.description.en.replace(/<[^>]*>/g, '').substring(0, 500)}
+                {coinDetails.description.en.length > 500 && '...'}
+              </p>
+            ) : (
+              <p className="text-slate-700">{asset.description}</p>
+            )}
           </div>
+        </div>
+      </div>
 
-          {/* Key Info Section */}
-          <div className="bg-white rounded-lg shadow p-6">
+      {/* 2-column grid: Key Info (left) and Where to trade + Links (right). Listing Details spans both below. */}
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:items-stretch">
+        {/* Left Column - Key Info */}
+        <div className="space-y-6">
+          <div className="bg-white rounded-lg shadow p-6 h-full">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Key Info</h2>
             <div className="space-y-4">
               <div>
@@ -191,74 +196,57 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
               </div>
             </div>
           </div>
-
-          {/* Listing Details Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">Listing Details</h2>
-            <div className="space-y-4">
-              {genesisDate && (
-                <div>
-                  <p className="text-sm font-medium text-slate-600 mb-1">Listing/IDO Date</p>
-                  <p className="text-base text-slate-900">{formatDate(genesisDate)}</p>
-                </div>
-              )}
-
-              {exchanges.length > 0 && (
-                <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">Main Exchanges</p>
-                  <div className="flex flex-wrap gap-2">
-                    {exchanges.map((exchange) => (
-                      <span
-                        key={exchange}
-                        className="px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-md"
-                      >
-                        {exchange}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {tradingPairs.length > 0 && (
-                <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">Trading Pairs</p>
-                  <div className="flex flex-wrap gap-2">
-                    {tradingPairs.map((pair) => (
-                      <span
-                        key={pair}
-                        className="px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-md"
-                      >
-                        {pair}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {price !== undefined && (
-                <div>
-                  <p className="text-sm font-medium text-slate-600 mb-1">Initial Price</p>
-                  <p className="text-base text-slate-900">{formatCurrency(price)}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 7-Day Price Chart */}
-          {chartData.length > 0 && (
-            <Suspense fallback={
-              <div className="bg-white rounded-lg shadow p-12 text-center">
-                <p className="text-slate-500">Loading chart...</p>
-              </div>
-            }>
-              <PriceChart data={chartData} coinName={asset.name} />
-            </Suspense>
-          )}
         </div>
 
-        {/* Right Column - Sidebar */}
-        <div className="space-y-6">
-          {/* Links */}
+        {/* Right Column - Where to trade (stretches) and Links below */}
+        <div className="space-y-6 flex flex-col">
+          {/* Where to trade card */}
+          <div className="bg-white rounded-lg shadow p-6 h-full flex flex-col">
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">
+              Where to trade {asset.name}
+            </h2>
+
+            <p className="text-sm text-slate-600 mb-3">
+              Key venues where you can trade {asset.symbol} (for information only, not a recommendation).
+            </p>
+
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-slate-900">HashKey Exchange</span>
+                <span className="px-2 py-1 text-xs rounded-full bg-emerald-50 text-emerald-700">
+                  Licensed in HK
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-slate-900">OSL</span>
+                <span className="px-2 py-1 text-xs rounded-full bg-emerald-50 text-emerald-700">
+                  Licensed in HK
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-slate-900">Binance</span>
+                <span className="px-2 py-1 text-xs rounded-full bg-slate-100 text-slate-700">
+                  Offshore
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-slate-900">Bybit</span>
+                <span className="px-2 py-1 text-xs rounded-full bg-slate-100 text-slate-700">
+                  Offshore
+                </span>
+              </div>
+            </div>
+
+            <p className="mt-4 text-xs text-slate-500">
+              This list is for informational and educational purposes only and does not constitute
+              investment or trading advice.
+            </p>
+          </div>
+
+          {/* Links card (kept below Where to trade) */}
           {coinDetails?.links && (
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Links</h2>
@@ -337,7 +325,7 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
                     className="flex items-center text-blue-600 hover:underline"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
+                      <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463 a.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
                     </svg>
                     Reddit
                   </a>
@@ -354,6 +342,69 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
             </div>
           )}
         </div>
+        
+        {/* Listing Details Section (span full width under the two columns) */}
+        <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Listing Details</h2>
+          <div className="space-y-4">
+            {genesisDate && (
+              <div>
+                <p className="text-sm font-medium text-slate-600 mb-1">Listing/IDO Date</p>
+                <p className="text-base text-slate-900">{formatDate(genesisDate)}</p>
+              </div>
+            )}
+
+            {exchanges.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-slate-600 mb-2">Main Exchanges</p>
+                <div className="flex flex-wrap gap-2">
+                  {exchanges.map((exchange) => (
+                    <span
+                      key={exchange}
+                      className="px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-md"
+                    >
+                      {exchange}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {tradingPairs.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-slate-600 mb-2">Trading Pairs</p>
+                <div className="flex flex-wrap gap-2">
+                  {tradingPairs.map((pair) => (
+                    <span
+                      key={pair}
+                      className="px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-md"
+                    >
+                      {pair}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {price !== undefined && (
+              <div>
+                <p className="text-sm font-medium text-slate-600 mb-1">Initial Price</p>
+                <p className="text-base text-slate-900">{formatCurrency(price)}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 7-Day Price Chart */}
+        {chartData.length > 0 && (
+          <Suspense fallback={
+            <div className="bg-white rounded-lg shadow p-12 text-center">
+              <p className="text-slate-500">Loading chart...</p>
+            </div>
+          }>
+            <PriceChart data={chartData} coinName={asset.name} />
+          </Suspense>
+        )}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import AssetDetailClient from '@/components/AssetDetailClient';
 import { getCache, isExpired, setCache } from '@/lib/cache';
 import { fetchAssetDetails } from '@/lib/coingeckoClient';
 import { CoinDetails } from '@/lib/api';
+import PageShell from '@/components/PageShell';
 
 interface AssetPageProps {
   params: {
@@ -69,26 +70,51 @@ export default async function AssetPage({ params }: AssetPageProps) {
   } catch (err) {
     console.warn('Failed to fetch data for asset page:', err);
   }
-
+  // Try to pick up a market image from cached markets so we always have a logo for listing symbols.
+  let assetWithLogo = asset;
+  try {
+    const marketsEntry = getCache<any>('markets');
+    const markets = (marketsEntry?.value ?? []) as any[];
+    const marketMatch = markets.find((m: any) => (m.symbol ?? '').toUpperCase() === params.symbol.toUpperCase());
+    if (marketMatch?.image) {
+      assetWithLogo = { ...asset, logoUrl: marketMatch.image };
+    }
+  } catch (e) {
+    // ignore cache errors; asset will render with existing fallbacks
+  }
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Listing Information
-        </h1>
-        {lastUpdated && (
-          <p className="text-sm text-slate-600" suppressHydrationWarning>
-            Last updated: {new Date(lastUpdated).toLocaleTimeString('en-US', {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit'
-            })}
-            {isStale && <span className="text-orange-600 ml-2">(Data ~10min old)</span>}
+    <div className="py-8">
+      <PageShell>
+        <section className="rounded-3xl bg-[#2b7bff] p-6 space-y-4">
+        {/* Title on light blue */}
+        <header className="mb-2">
+          <h1 className="text-3xl font-bold text-white">
+            Listing Information
+          </h1>
+          <p className="mt-1 text-sm text-blue-100">
+            Detailed information for this cryptocurrency and its listings.
           </p>
-        )}
-      </div>
 
-      <AssetDetailClient asset={asset} coinDetails={coinDetails} chartData={chartData} />
+          {lastUpdated && (
+            <p className="mt-2 text-sm text-blue-100" suppressHydrationWarning>
+              Last updated: {new Date(lastUpdated).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+              })}
+              {isStale && <span className="text-amber-200 ml-2">(Data ~10min old)</span>}
+            </p>
+          )}
+        </header>
+
+        {/* White content area with separate cards (AssetDetailClient already renders card sections) */}
+        <div className="space-y-4">
+          <div className="space-y-6">
+            <AssetDetailClient asset={assetWithLogo} coinDetails={coinDetails} chartData={chartData} />
+          </div>
+        </div>
+        </section>
+      </PageShell>
     </div>
   );
 }
