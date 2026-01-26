@@ -1,4 +1,14 @@
-export type AssetCategory = 'Layer 1' | 'Layer 2' | 'Stablecoin' | 'DeFi' | 'Meme' | 'Exchange Token' | 'NFT';
+export type AssetCategory =
+  | 'Layer 1'
+  | 'Layer 2'
+  | 'Stablecoin'
+  | 'DeFi'
+  | 'Meme'
+  | 'Exchange Token'
+  | 'NFT'
+  | 'Wrapped Asset'
+  | 'Lending'
+  | 'Staked ETH';
 
 export type Asset = {
   id: string;
