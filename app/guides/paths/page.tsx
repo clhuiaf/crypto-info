@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function LearningPathsPage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
-      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+      <section className="mx-auto w-full max-w-6xl lg:max-w-7xl rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
         <header>
           <Link href="/guides" className="inline-flex items-center text-blue-100 hover:text-blue-200 mb-1">
             ← Back to Guides

@@ -8,8 +8,9 @@ import { getGuidesByCategory } from '@/data/guides';
 
 export default function GuidesIndex() {
   return (
-    <div className="px-4 sm:px-6 lg:px-8 pb-10 mt-8">
-      <section className="mx-auto max-w-7xl lg:max-w-[1400px] xl:max-w-[1600px] rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+    <div className="py-8">
+      <PageShell>
+        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
         <header>
           <p className="text-xs uppercase tracking-[0.2em] text-blue-100">Cryptopedia · Guides</p>
           <h1 className="text-3xl sm:text-4xl font-semibold text-white">Crypto Trading Education</h1>
@@ -60,7 +61,8 @@ export default function GuidesIndex() {
             })}
           </div>
         </div>
-      </section>
+        </section>
+      </PageShell>
     </div>
   );
 }
