@@ -3,13 +3,14 @@
 import PricesClient from './PricesClient'
 import { getCache, isExpired, setCache } from '@/lib/cache';
 import { fetchMarkets } from '@/lib/coingeckoClient';
+import { type CryptoPrice } from '@/lib/api';
 
 // Server component that passes initial data
 export default async function PricesPage() {
   try {
     // Read cached market data directly on the server. Avoid fetching our own API via HTTP
     // because Node's fetch requires an absolute URL in this runtime.
-    let entry = getCache('markets');
+    let entry = getCache<CryptoPrice[]>('markets');
 
     if (!entry || entry.value === null || isExpired(entry)) {
       try {
@@ -21,7 +22,7 @@ export default async function PricesPage() {
       }
     }
 
-    const data = entry?.value ?? [];
+    const data: CryptoPrice[] = entry?.value ?? [];
     return <PricesClient initialPrices={data} />
   } catch (error) {
     console.error('Failed to get initial prices:', error)
