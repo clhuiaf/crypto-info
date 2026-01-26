@@ -8,7 +8,8 @@ export type Asset = {
   baseChain: string;
   launchYear: number;
   tradingPairs: string[];
-  logo?: string; // Optional logo URL or emoji placeholder
+  logo?: string; // Optional emoji or short placeholder
+  logoUrl?: string; // Optional URL to a logo image
   description: string;
   riskNote: string;
 };
