@@ -5,11 +5,9 @@ import PricesClient from './PricesClient'
 // Server component that passes initial data
 export default async function PricesPage() {
   try {
-    // Try to fetch initial data from internal API (cache)
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/prices`,
-      { next: { revalidate: 30 } } // Short revalidation for initial load
-    );
+    // Try to fetch initial data from internal API (cache).
+    // Use a relative URL so server-side rendering on Vercel does not attempt to call localhost.
+    const response = await fetch('/api/prices', { next: { revalidate: 30 } }); // Short revalidation for initial load
 
     if (response.ok) {
       const data = await response.json();

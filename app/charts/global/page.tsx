@@ -14,11 +14,9 @@ export default async function GlobalChartPage() {
   let error: string | null = null;
 
   try {
-    // Fetch market data from internal API
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/prices`,
-      { next: { revalidate: 60 } }
-    );
+    // Fetch market data from internal API.
+    // Use a relative path for internal API routes so the same code works on Vercel and locally.
+    const response = await fetch('/api/prices', { next: { revalidate: 60 } });
 
     if (!response.ok) {
       throw new Error(`API responded with status: ${response.status}`);

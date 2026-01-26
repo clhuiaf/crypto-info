@@ -19,8 +19,10 @@ export default async function AssetsIndex() {
   let error: string | null = null;
 
   try {
-    // Fetch from internal API that reads only from cache
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/prices`, {
+    // Fetch from internal API that reads only from cache.
+    // NOTE: Use a relative path for internal API routes so the call works both locally and on Vercel.
+    // Do NOT hardcode localhost in production code (use NEXT_PUBLIC_SITE_URL only when an absolute URL is required).
+    const response = await fetch('/api/prices', {
       next: { revalidate: 60 } // Match page revalidation
     });
 

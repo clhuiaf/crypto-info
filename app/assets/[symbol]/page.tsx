@@ -43,11 +43,9 @@ export default async function AssetPage({ params }: AssetPageProps) {
   let isStale = false;
 
   try {
-    // Fetch asset data from internal API
-    const assetResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/assets/${params.symbol}`,
-      { next: { revalidate: 60 } }
-    );
+    // Fetch asset data from internal API.
+    // Use relative API paths so server-side rendering on Vercel won't attempt to call localhost.
+    const assetResponse = await fetch(`/api/assets/${params.symbol}`, { next: { revalidate: 60 } });
 
     if (assetResponse.ok) {
       const assetData = await assetResponse.json();
@@ -59,10 +57,7 @@ export default async function AssetPage({ params }: AssetPageProps) {
     }
 
     // Fetch chart data from internal API
-    const chartResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/charts/${params.symbol}?days=7`,
-      { next: { revalidate: 60 } }
-    );
+    const chartResponse = await fetch(`/api/charts/${params.symbol}?days=7`, { next: { revalidate: 60 } });
 
     if (chartResponse.ok) {
       const chartApiData = await chartResponse.json();
