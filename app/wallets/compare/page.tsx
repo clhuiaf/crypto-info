@@ -23,6 +23,7 @@ export default function WalletComparePage() {
         </p>
       </div>
 
+
       <div className="bg-white rounded-lg shadow p-12 text-center">
         <h2 className="text-xl font-semibold text-slate-900 mb-4">Coming Soon</h2>
         <p className="text-slate-600 mb-6">
@@ -37,5 +38,6 @@ export default function WalletComparePage() {
         </Link>
       </div>
     </div>
+  </div>
   );
 }
