@@ -37,5 +37,6 @@ export default function LargeCapsPage() {
         </Link>
       </div>
     </div>
+  </div>
   );
 }

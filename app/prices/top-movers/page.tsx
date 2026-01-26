@@ -37,5 +37,6 @@ export default function TopMoversPage() {
         </Link>
       </div>
     </div>
+  </div>
   );
 }
