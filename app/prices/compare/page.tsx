@@ -37,5 +37,6 @@ export default function CoinComparisonPage() {
         </Link>
       </div>
     </div>
+  </div>
   );
 }

@@ -37,5 +37,6 @@ export default function ExchangeComparePage() {
         </Link>
       </div>
     </div>
+  </div>
   );
 }
