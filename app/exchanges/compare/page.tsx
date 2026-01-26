@@ -6,7 +6,8 @@ import Link from 'next/link';
 
 export default function ExchangeComparePage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl">
       <div className="mb-8">
         <Link
           href="/exchanges"
