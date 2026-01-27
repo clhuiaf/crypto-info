@@ -156,7 +156,7 @@ export default async function Page({ params }: GuideDetailPageProps) {
                   Compare Hong Kong Exchanges
                 </Link>
                 <Link
-                  href="/news/hong-kong"
+                  href="/news"
                   className="inline-flex items-center px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:text-blue-600 text-sm font-medium transition-all shadow-sm hover:shadow-md"
                 >
                   Hong Kong Crypto News
