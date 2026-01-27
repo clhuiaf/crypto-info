@@ -33,12 +33,14 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main content area */}
       {children}
 
-      {/* Separate dark-blue rounded frame for footer disclaimer */}
+      {/* Footer disclaimer — place inside the blue rounded frame and use the same white inner card as About page */}
       <div className="pb-8">
         <PageShell>
-          <div className="rounded-2xl bg-white border border-gray-200 px-4 py-4 text-xs text-gray-500">
-            <FooterDisclaimer />
-          </div>
+          <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6">
+            <div className="rounded-2xl bg-white shadow-sm p-6">
+              <FooterDisclaimer />
+            </div>
+          </section>
         </PageShell>
       </div>
     </div>
