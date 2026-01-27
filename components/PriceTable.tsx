@@ -94,8 +94,8 @@ export default function PriceTable({ cryptos }: PriceTableProps) {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center min-w-0">
                       <img
                         src={crypto.image}
                         alt={crypto.name}
@@ -106,7 +106,7 @@ export default function PriceTable({ cryptos }: PriceTableProps) {
                         className="hover:underline"
                       >
                         <div>
-                          <div className="text-sm font-medium text-slate-900 hover:text-blue-600">
+                          <div className="text-sm font-medium text-slate-900 hover:text-blue-600 whitespace-normal break-words">
                             {crypto.name}
                           </div>
                           <div className="text-sm text-slate-500 uppercase">
