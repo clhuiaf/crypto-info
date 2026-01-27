@@ -125,7 +125,7 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
             />
             <div className="flex-1 min-w-0 before:content-[''] after:content-[''] flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-slate-900 truncate">
+                <div className="text-sm font-medium text-slate-900 whitespace-normal break-words">
                   {crypto.name}
                 </div>
                 <div className="text-xs uppercase tracking-wide text-slate-500">
@@ -175,7 +175,7 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
         />
         <div className="min-w-0 flex items-center justify-between w-full">
           <div>
-            <p className="truncate text-sm font-medium text-slate-900">
+            <p className="text-sm font-medium text-slate-900 whitespace-normal break-words">
               {crypto.name}
             </p>
             <p className="text-xs uppercase tracking-wide text-slate-500">
