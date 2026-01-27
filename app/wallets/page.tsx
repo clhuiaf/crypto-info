@@ -201,13 +201,29 @@ export default function WalletsPage() {
   )
 
   return (
-    <PageShell
-      title="Crypto Wallets"
-      subtitle="Find the right wallet for your crypto storage and management needs. Compare security features, supported networks, and ease of use."
-      toolbar={toolbar}
-    >
-      {mainContent}
-    </PageShell>
+    <div className="py-8">
+      <PageShell>
+        {/* Light-blue outer panel matching Prices/Assets/Exchanges pages */}
+        <section className="rounded-3xl bg-blue-600 p-6 space-y-4">
+          <header>
+            <h1 className="text-3xl font-semibold text-white">Crypto Wallets</h1>
+            <p className="mt-1 text-sm text-slate-200">
+              Find the right wallet for your crypto storage and management needs. Compare security features, supported networks, and ease of use.
+            </p>
+          </header>
+
+          {/* Card: toolbar */}
+          <div className="rounded-2xl bg-white shadow-sm p-4">
+            {toolbar}
+          </div>
+
+          {/* Card: main content (sidebar + wallet cards) */}
+          <div className="rounded-2xl bg-white shadow-sm p-4">
+            {mainContent}
+          </div>
+        </section>
+      </PageShell>
+    </div>
   );
 }
 

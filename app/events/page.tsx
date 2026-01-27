@@ -107,13 +107,29 @@ export default function EventsPage() {
   )
 
   return (
-    <PageShell
-      title="Exchange Events"
-      subtitle="Ongoing promos and airdrops by exchange. Find the latest trading competitions, fee rebates, and special offers."
-      toolbar={toolbar}
-    >
-      {mainContent}
-    </PageShell>
+    <div className="py-8">
+      <PageShell>
+        {/* Light-blue outer panel matching Prices/Assets/Exchanges/Wallets pages */}
+        <section className="rounded-3xl bg-blue-600 p-6 space-y-4">
+          <header>
+            <h1 className="text-3xl font-semibold text-white">Promotions & Airdrops</h1>
+            <p className="mt-1 text-sm text-slate-200">
+              Ongoing promos and airdrops by exchange. Find the latest trading competitions, fee rebates, and special offers.
+            </p>
+          </header>
+
+          {/* Card: toolbar */}
+          <div className="rounded-2xl bg-white shadow-sm p-4">
+            {toolbar}
+          </div>
+
+          {/* Card: main content */}
+          <div className="rounded-2xl bg-white shadow-sm p-4">
+            {mainContent}
+          </div>
+        </section>
+      </PageShell>
+    </div>
   );
 }
 
