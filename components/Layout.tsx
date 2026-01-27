@@ -36,8 +36,8 @@ export default function Layout({ children }: LayoutProps) {
       {/* Footer disclaimer — place inside the blue rounded frame and use the same white inner card as About page */}
       <div className="pb-8">
         <PageShell>
-          <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6">
-            <div className="rounded-2xl bg-white shadow-sm p-6">
+          <section className="brand-frame">
+            <div className="brand-inner">
               <FooterDisclaimer />
             </div>
           </section>

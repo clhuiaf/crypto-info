@@ -204,7 +204,7 @@ export default function WalletsPage() {
     <div className="py-8">
       <PageShell>
         {/* Light-blue outer panel matching Prices/Assets/Exchanges pages */}
-        <section className="rounded-3xl bg-blue-600 p-6 space-y-4">
+        <section className="brand-frame space-y-4">
           <header>
             <h1 className="text-3xl font-semibold text-white">Crypto Wallets</h1>
             <p className="mt-1 text-sm text-slate-200">

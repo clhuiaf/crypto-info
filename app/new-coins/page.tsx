@@ -12,7 +12,7 @@ export default async function NewCoinsPage() {
   return (
     <div className="py-8">
       <PageShell>
-        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+        <section className="brand-frame space-y-4">
         <header>
           <h1 className="text-3xl font-semibold text-white">New Coins Discovery</h1>
           <p className="mt-1 text-sm text-slate-100 max-w-2xl">

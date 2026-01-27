@@ -125,7 +125,7 @@ export default function WatchlistPage() {
     <div className="py-8">
       <PageShell>
         {/* Light-blue outer panel for Watchlist */}
-        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+        <section className="brand-frame space-y-4">
         {/* Title on light blue */}
         <header>
           <h1 className="text-3xl font-semibold text-white">My Watchlist</h1>

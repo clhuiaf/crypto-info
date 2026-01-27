@@ -85,18 +85,18 @@ export default async function AssetPage({ params }: AssetPageProps) {
   return (
     <div className="py-8">
       <PageShell>
-        <section className="rounded-3xl bg-[#2b7bff] p-6 space-y-4">
+        <section className="brand-frame space-y-4">
         {/* Title on light blue */}
         <header className="mb-2">
           <h1 className="text-3xl font-bold text-white">
             Listing Information
           </h1>
-          <p className="mt-1 text-sm text-blue-100">
+          <p className="mt-1 text-sm brand-icon">
             Detailed information for this cryptocurrency and its listings.
           </p>
 
           {lastUpdated && (
-            <p className="mt-2 text-sm text-blue-100" suppressHydrationWarning>
+            <p className="mt-2 text-sm brand-icon" suppressHydrationWarning>
               Last updated: {new Date(lastUpdated).toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
