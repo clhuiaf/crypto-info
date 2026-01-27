@@ -167,7 +167,7 @@ export default function ExchangesPage() {
       right={
         <button
           onClick={() => {}}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 font-medium text-sm shadow-sm hover:shadow-md transition-all"
+          className="px-4 py-2 rounded-lg font-medium text-sm shadow-sm hover:shadow-md transition-all brand-button"
         >
           Show exchanges
         </button>
