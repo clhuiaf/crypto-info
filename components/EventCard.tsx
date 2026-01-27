@@ -156,7 +156,7 @@ export default function EventCard({ event }: EventCardProps) {
             href={event.ctaUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-all border border-blue-600 shadow-sm hover:shadow-md"
+            className="inline-flex items-center px-5 py-3 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 transition-all border border-blue-600 shadow-sm hover:shadow-md"
           >
             {event.ctaLabel}
             <svg
