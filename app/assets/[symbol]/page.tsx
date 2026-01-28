@@ -1,12 +1,12 @@
 // Category: Market & portfolio
-import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { getAssetBySymbol, assets } from '@/data/assets';
+import { getAssetBySymbol } from '@/data/assets';
 import AssetDetailClient from '@/components/AssetDetailClient';
-import { getCache, isExpired, setCache } from '@/lib/cache';
-import { fetchAssetDetails } from '@/lib/coingeckoClient';
 import { CoinDetails } from '@/lib/api';
+import AssetNotFound from '@/components/AssetNotFound';
 import PageShell from '@/components/PageShell';
+import newCoinsDemo from '@/data/newCoinsDemo';
+import { Asset } from '@/types/asset';
 
 interface AssetPageProps {
   params: {
@@ -20,68 +20,89 @@ export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function generateMetadata({ params }: AssetPageProps): Promise<Metadata> {
   const asset = getAssetBySymbol(params.symbol);
-
-  if (!asset) {
+  if (asset) {
     return {
-      title: 'Asset Not Found | Cryptopedia',
+      title: `${asset.name} (${asset.symbol}) – overview and where to trade in Hong Kong | Cryptopedia`,
+      description: `Learn about ${asset.name} (${asset.symbol}), a ${asset.category.toLowerCase()} crypto asset. Find where to trade ${asset.symbol} on licensed and unlicensed exchanges in Hong Kong.`,
+    };
+  }
+
+  const demo = newCoinsDemo.find((c) => (c.symbol ?? '').toLowerCase() === params.symbol.toLowerCase());
+  if (demo) {
+    return {
+      title: `${demo.name} (${demo.symbol}) – listing info (demo) | Cryptopedia`,
+      description: `Demo listing information for ${demo.name} (${demo.symbol}).`,
     };
   }
 
   return {
-    title: `${asset.name} (${asset.symbol}) – overview and where to trade in Hong Kong | Cryptopedia`,
-    description: `Learn about ${asset.name} (${asset.symbol}), a ${asset.category.toLowerCase()} crypto asset. Find where to trade ${asset.symbol} on licensed and unlicensed exchanges in Hong Kong.`,
+    title: 'Asset Not Found | Cryptopedia',
   };
 }
 
 export default async function AssetPage({ params }: AssetPageProps) {
   const asset = getAssetBySymbol(params.symbol);
+  const demo = newCoinsDemo.find((c) => (c.symbol ?? '').toLowerCase() === params.symbol.toLowerCase());
 
-  if (!asset) {
-    notFound();
+  // For demo new coins, synthesize an Asset-like object so we can reuse the same Listing Information UI.
+  const assetForRender: Asset | null = asset
+    ? asset
+    : demo
+      ? ({
+          id: demo.id,
+          symbol: demo.symbol.toUpperCase(),
+          name: demo.name,
+          // Use a generic category that fits the existing AssetCategory union.
+          category: 'Other',
+          baseChain: demo.network ?? '—',
+          launchYear: demo.listing_date ? new Date(demo.listing_date).getFullYear() : new Date().getFullYear(),
+          tradingPairs: ['USDT', 'USD'],
+          logo: demo.symbol?.[0] ?? '•',
+          description:
+            'This is a newly discovered/demo listing. Full verified listing details and richer data cards are coming soon.',
+          riskNote:
+            'Coming soon: this listing is not yet fully verified. Treat all demo data as informational only.',
+        } as unknown as Asset)
+      : null;
+
+  // Listing info pages are "wikipedia-style": no live market data or charts.
+  const lastUpdated: number | null = null;
+  const isStale = false;
+  const coinDetails: CoinDetails | null = demo
+    ? ({
+        id: demo.id,
+        symbol: demo.symbol.toLowerCase(),
+        name: demo.name,
+        image: { large: '', small: '' },
+        market_data: {
+          current_price: { usd: 0, hkd: 0 },
+          price_change_percentage_24h: 0,
+          market_cap: { usd: 0, hkd: 0 },
+          fully_diluted_valuation: { usd: 0, hkd: 0 },
+        },
+        genesis_date: demo.listing_date ?? null,
+        platforms: demo.platforms ?? {},
+        links: {},
+        description: { en: '' },
+        tickers: [],
+      } as CoinDetails)
+    : null;
+
+  // Note: existing coins intentionally render with `coinDetails = null` to avoid live market data.
+
+  if (!assetForRender) {
+    return (
+      <div className="py-8">
+        <PageShell>
+          <section className="brand-frame space-y-4">
+            <AssetNotFound symbol={params.symbol} />
+          </section>
+        </PageShell>
+      </div>
+    );
   }
 
-  // Fetch data from internal API that reads only from cache
-  let coinDetails: CoinDetails | null = null;
-  let chartData: { time: number; price: number }[] = [];
-  let lastUpdated: number | null = null;
-  let isStale = false;
-
-  try {
-    // Prefer calling data sources directly on the server rather than HTTPing our own API routes.
-    // This avoids "Invalid URL" errors in Node and is deploy-safe.
-    // Try to read cached asset details first (if you have a cache key strategy you can use it here).
-    // For simplicity, fetch directly from CoinGecko if needed.
-    const details = await fetchAssetDetails(params.symbol);
-    if (details) {
-      // fetchAssetDetails returns data from CoinGecko; assert to CoinDetails so TypeScript understands the shape.
-      coinDetails = details as CoinDetails;
-      lastUpdated = Date.now();
-      isStale = false;
-    } else {
-      console.warn(`No asset details returned for ${params.symbol}`);
-    }
-
-    // Fetch chart data directly from CoinGecko via lib/api helper for historical data.
-    // Using fetchCoinById or fetchHistoricalData would be ideal, but reuse fetchGlobalStats as a placeholder
-    // if detailed chart endpoint wrapper is not available in coingeckoClient.
-    // Here we call the helper in lib/api.ts for historical data instead.
-    const { fetchHistoricalData } = await import('@/lib/api');
-    chartData = await fetchHistoricalData(params.symbol, 7, true);
-  } catch (err) {
-    console.warn('Failed to fetch data for asset page:', err);
-  }
-  // Try to pick up a market image from cached markets so we always have a logo for listing symbols.
-  let assetWithLogo = asset;
-  try {
-    const marketsEntry = getCache<any>('markets');
-    const markets = (marketsEntry?.value ?? []) as any[];
-    const marketMatch = markets.find((m: any) => (m.symbol ?? '').toUpperCase() === params.symbol.toUpperCase());
-    if (marketMatch?.image) {
-      assetWithLogo = { ...asset, logoUrl: marketMatch.image };
-    }
-  } catch (e) {
-    // ignore cache errors; asset will render with existing fallbacks
-  }
+  const assetWithLogo = assetForRender as any;
   return (
     <div className="py-8">
       <PageShell>
@@ -94,6 +115,19 @@ export default async function AssetPage({ params }: AssetPageProps) {
           <p className="mt-1 text-sm brand-icon">
             Detailed information for this cryptocurrency and its listings.
           </p>
+
+          {!demo && (
+            <p className="mt-1 text-xs text-slate-200">
+              Demo data only for existing tokens – values are illustrative and not live market prices.
+            </p>
+          )}
+
+          {demo && (
+            <p className="mt-2 text-sm text-slate-100">
+              <span className="font-semibold">Coming soon:</span> this is a new coin from the Discovery list (demo).
+              Full verified data cards will appear when available.
+            </p>
+          )}
 
           {lastUpdated && (
             <p className="mt-2 text-sm brand-icon" suppressHydrationWarning>
@@ -110,7 +144,7 @@ export default async function AssetPage({ params }: AssetPageProps) {
         {/* White content area with separate cards (AssetDetailClient already renders card sections) */}
         <div className="space-y-4">
           <div className="space-y-6">
-            <AssetDetailClient asset={assetWithLogo} coinDetails={coinDetails} chartData={chartData} />
+            <AssetDetailClient asset={assetWithLogo} coinDetails={coinDetails} />
           </div>
         </div>
         </section>
