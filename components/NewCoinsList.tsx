@@ -1,8 +1,7 @@
 'use client'
 
-import { formatCurrency, formatMarketCap, formatDate } from '@/lib/utils'
-import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '@/lib/watchlist'
-import { useState, useEffect } from 'react'
+import { formatCurrency } from '@/lib/utils'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import TokenIcon from '@/components/TokenIcon'
@@ -30,38 +29,7 @@ interface NewCoinsListProps {
 }
 
 export default function NewCoinsList({ coins }: NewCoinsListProps) {
-  const [watchlistIds, setWatchlistIds] = useState<Set<string>>(new Set())
   const [filter, setFilter] = useState<'all' | 'cex' | 'dex'>('all')
-
-  useEffect(() => {
-    const ids = new Set<string>()
-    coins.forEach((coin) => {
-      if (isInWatchlist(coin.id)) {
-        ids.add(coin.id)
-      }
-    })
-    setWatchlistIds(ids)
-  }, [coins])
-
-  const handleWatchlistToggle = (coin: NewCoinDemo) => {
-    const isWatched = watchlistIds.has(coin.id)
-
-    if (isWatched) {
-      removeFromWatchlist(coin.id)
-      setWatchlistIds((prev) => {
-        const next = new Set(prev)
-        next.delete(coin.id)
-        return next
-      })
-    } else {
-      addToWatchlist({
-        id: coin.id,
-        symbol: coin.symbol,
-        name: coin.name,
-      })
-      setWatchlistIds((prev) => new Set(prev).add(coin.id))
-    }
-  }
 
   const filtered = coins.filter((c) => {
     if (filter === 'all') return true
@@ -91,8 +59,6 @@ export default function NewCoinsList({ coins }: NewCoinsListProps) {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6">
         {filtered.map((coin) => {
-          const isWatched = watchlistIds.has(coin.id)
-
           return (
             <Link
               key={coin.id}
@@ -136,15 +102,24 @@ export default function NewCoinsList({ coins }: NewCoinsListProps) {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
-                <div>
-                  <div className="text-xs text-slate-600">Market Cap</div>
-                  <div className="text-sm font-medium text-slate-900">{coin.market_cap ? formatMarketCap(coin.market_cap) : '—'}</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-slate-600">FDV</div>
-                  <div className="text-sm font-medium text-slate-900">{coin.fully_diluted_valuation ? formatMarketCap(coin.fully_diluted_valuation) : '—'}</div>
-                </div>
+              <div className="pt-3 border-t border-slate-200">
+                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors">
+                  View details
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </span>
               </div>
             </Link>
           )

@@ -1,76 +1,15 @@
 'use client';
 
-import { useState, useEffect, useMemo, Suspense } from 'react';
-import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { Asset } from '@/types/asset';
 import { CoinDetails } from '@/lib/api';
-import { formatCurrency, formatPercentage, formatMarketCap, formatDate } from '@/lib/utils';
-import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '@/lib/watchlist';
-
-// Dynamically import the chart component to reduce bundle size
-const PriceChart = dynamic(() => import('@/components/PriceChart'), {
-  loading: () => (
-    <div className="bg-white rounded-lg shadow p-12 text-center">
-      <p className="text-slate-500">Loading chart...</p>
-    </div>
-  ),
-  ssr: false
-});
+// Watchlist intentionally removed from Listing Information pages to keep UX focused on research.
 
 interface AssetDetailClientProps {
   asset: Asset;
   coinDetails: CoinDetails | null;
-  chartData: { time: number; price: number }[];
 }
 
-export default function AssetDetailClient({ asset, coinDetails, chartData }: AssetDetailClientProps) {
-  const [isWatched, setIsWatched] = useState(false);
-
-  // Use coinDetails ID if available, otherwise use asset symbol
-  const watchlistId = coinDetails?.id || asset.symbol.toLowerCase();
-
-  useEffect(() => {
-    setIsWatched(isInWatchlist(watchlistId));
-  }, [watchlistId]);
-
-  const handleWatchlistToggle = () => {
-    if (isWatched) {
-      removeFromWatchlist(watchlistId);
-      setIsWatched(false);
-    } else {
-      addToWatchlist({
-        id: watchlistId,
-        symbol: asset.symbol,
-        name: asset.name,
-      });
-      setIsWatched(true);
-    }
-  };
-
-  // Extract data from coinDetails if available
-  const price = coinDetails?.market_data?.current_price?.hkd;
-  const change24h = coinDetails?.market_data?.price_change_percentage_24h;
-  const marketCap = coinDetails?.market_data?.market_cap?.hkd;
-  const fdv = coinDetails?.market_data?.fully_diluted_valuation?.hkd;
-  const genesisDate = coinDetails?.genesis_date;
-
-  // Memoize expensive computations
-  const tradingPairs = useMemo(() => {
-    return coinDetails?.tickers
-      ?.slice(0, 10)
-      .map((ticker) => `${ticker.base}/${ticker.target}`)
-      .filter((pair, index, self) => self.indexOf(pair) === index)
-      .slice(0, 5) || asset.tradingPairs.map((pair) => `${asset.symbol}/${pair}`);
-  }, [coinDetails?.tickers, asset.tradingPairs, asset.symbol]);
-
-  const exchanges = useMemo(() => {
-    return coinDetails?.tickers
-      ?.map((ticker) => ticker.market.name)
-      .filter((name, index, self) => self.indexOf(name) === index)
-      .slice(0, 5) || [];
-  }, [coinDetails?.tickers]);
-
+export default function AssetDetailClient({ asset, coinDetails }: AssetDetailClientProps) {
   // Prefer an explicit asset logoUrl, otherwise use coinDetails image if available
   const coinImage = coinDetails?.image?.large;
   const logoSrc = (asset as any).logoUrl ?? coinImage;
@@ -79,7 +18,7 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
     <div className="space-y-6">
       {/* Hero Section */}
       <div className="bg-white rounded-lg shadow mb-6 p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 gap-3">
           <div className="flex items-center mb-4 md:mb-0">
             <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center mr-4">
               {logoSrc ? (
@@ -99,55 +38,28 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
               <p className="text-lg text-slate-500 uppercase">{asset.symbol}</p>
             </div>
           </div>
-          <button
-            onClick={handleWatchlistToggle}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              isWatched
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-            }`}
-          >
-            {isWatched ? '✓ In Watchlist' : '+ Add to Watchlist'}
-          </button>
+          {/* Replaces the watchlist CTA: compact meta pills + disclaimer (less empty at top, non-redundant). */}
+          <div className="w-full md:w-auto md:min-w-[320px]">
+            <div className="flex md:justify-end flex-wrap gap-2">
+              <span className="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-800">
+                <span className="text-slate-500">Source:</span>{' '}
+                {coinDetails ? 'Cache / Demo' : 'Local'}
+              </span>
+              <span className="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-800">
+                <span className="text-slate-500">Region:</span> Hong Kong focus
+              </span>
+              <span className="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-800">
+                <span className="text-slate-500">Mode:</span> Wiki
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-slate-500 md:text-right">
+              Informational only • Not investment advice
+            </p>
+          </div>
         </div>
 
         {/* Price Stats Grid */}
-        {(price !== undefined || marketCap !== undefined) && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {price !== undefined && (
-              <div>
-                <p className="text-sm text-slate-600 mb-1">Price (HKD)</p>
-                <p className="text-xl font-semibold text-slate-900">HKD {price.toFixed(2)}</p>
-              </div>
-            )}
-            {change24h !== undefined && (
-              <div>
-                <p className="text-sm text-slate-600 mb-1">24h Change</p>
-                <p
-                  className={`text-xl font-semibold ${
-                    change24h >= 0 ? 'text-green-600' : 'text-red-600'
-                  }`}
-                >
-                  {formatPercentage(change24h)}
-                </p>
-              </div>
-            )}
-            {marketCap !== undefined && (
-              <div>
-                <p className="text-sm text-slate-600 mb-1">Market Cap</p>
-                <p className="text-xl font-semibold text-slate-900">{formatMarketCap(marketCap)}</p>
-              </div>
-            )}
-            {fdv !== undefined && (
-              <div>
-                <p className="text-sm text-slate-600 mb-1">FDV</p>
-                <p className="text-xl font-semibold text-slate-900">
-                  {fdv ? formatMarketCap(fdv) : 'N/A'}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Market stats intentionally hidden: treat this page as a stable "wiki" overview (no frequently changing price data). */}
       </div>
 
       {/* Overview Section (full width above the info grid) */}
@@ -185,10 +97,6 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-1">Launch Year</p>
                 <p className="text-base text-slate-900">{asset.launchYear}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-600 mb-1">Typical Trading Pairs</p>
-                <p className="text-base text-slate-900">{asset.tradingPairs.join(', ')}</p>
               </div>
               <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                 <p className="text-xs font-medium text-amber-900">Risk Note</p>
@@ -343,68 +251,7 @@ export default function AssetDetailClient({ asset, coinDetails, chartData }: Ass
           )}
         </div>
         
-        {/* Listing Details Section (span full width under the two columns) */}
-        <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Listing Details</h2>
-          <div className="space-y-4">
-            {genesisDate && (
-              <div>
-                <p className="text-sm font-medium text-slate-600 mb-1">Listing/IDO Date</p>
-                <p className="text-base text-slate-900">{formatDate(genesisDate)}</p>
-              </div>
-            )}
-
-            {exchanges.length > 0 && (
-              <div>
-                <p className="text-sm font-medium text-slate-600 mb-2">Main Exchanges</p>
-                <div className="flex flex-wrap gap-2">
-                  {exchanges.map((exchange) => (
-                    <span
-                      key={exchange}
-                      className="px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-md"
-                    >
-                      {exchange}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {tradingPairs.length > 0 && (
-              <div>
-                <p className="text-sm font-medium text-slate-600 mb-2">Trading Pairs</p>
-                <div className="flex flex-wrap gap-2">
-                  {tradingPairs.map((pair) => (
-                    <span
-                      key={pair}
-                      className="px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-md"
-                    >
-                      {pair}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {price !== undefined && (
-              <div>
-                <p className="text-sm font-medium text-slate-600 mb-1">Initial Price</p>
-                <p className="text-base text-slate-900">{formatCurrency(price)}</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* 7-Day Price Chart */}
-        {chartData.length > 0 && (
-          <Suspense fallback={
-            <div className="bg-white rounded-lg shadow p-12 text-center">
-              <p className="text-slate-500">Loading chart...</p>
-            </div>
-          }>
-            <PriceChart data={chartData} coinName={asset.name} />
-          </Suspense>
-        )}
+        {/* Listing Details Section removed: avoids price/trading-pair repetition and keeps page "wiki-style". */}
       </div>
     </div>
   );
