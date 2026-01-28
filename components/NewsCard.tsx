@@ -21,7 +21,7 @@ export default function NewsCard({ item }: NewsCardProps) {
       <p className="text-sm text-slate-600 line-clamp-3 mb-4">{item.summary}</p>
 
       <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
-        <Link href={item.url || '#'} className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:underline">
+        <Link href="/hk-news/updates-coming-soon" className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:underline">
           View updates →
         </Link>
       </div>
