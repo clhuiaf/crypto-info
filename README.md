@@ -1,152 +1,150 @@
-# Cryptopedia
+# Cryptopedia / Crypto通
 
-Cryptopedia (Chinese name: Crypto通) is a comprehensive Hong Kong-focused crypto research hub providing live prices, professional-grade charts, watchlist functionality, exchange and wallet comparisons, and regulatory news updates for cryptocurrency traders and investors.
+An HK‑centric crypto encyclopedia for prices, context, and learning — built with Next.js.
+
+## Overview
+
+Cryptopedia (Crypto通) is a Hong Kong–focused crypto information hub for retail users and beginners who want a clean way to explore market data, understand assets, and follow relevant local developments.
+
+The app provides a live market overview, asset pages, “new coins” discovery, exchange/wallet comparison, Hong Kong‑centric news, and structured educational guides. It’s designed to be approachable, while still offering data‑driven pages that experienced users can use as a starting point for deeper research.
+
+This project is **information and education only**: no private keys, no trading execution, and no custody.
 
 ## Features
 
-### Market & Portfolio
-- **Live Market Overview** (`/prices`): Real-time cryptocurrency prices with comprehensive market data including price, 1-hour, 24-hour, and 7-day changes, volume, and market capitalization
-- **Watchlist** (`/watchlist`): Personalized tracking of favorite cryptocurrencies using the full market table interface with local storage persistence
+- **Live market overview**: prices, % changes, volume, market cap, sortable tables, responsive UI
+- **Asset detail pages**: per‑asset pages with charts and key stats
+- **Charts**: interactive chart views with common timeframes and indicators (where available)
+- **New coins discovery**: newly listed / trending assets pages for exploration
+- **Exchanges & wallets**: comparison pages and filters for common selection criteria
+- **Hong Kong news focus**: HK‑relevant regulatory / market updates surfaced in a dedicated section
+- **Educational guides**: structured guides covering basics → advanced concepts
+- **Watchlist**: quick tracking for selected assets (local persistence)
+- **Auth (coming soon)**: placeholder flows/pages for future sign‑in (e.g., Google)
+- **Ad‑friendly layout**: sponsor placements/slots designed to be non‑intrusive and clearly labeled
 
-### Charts
-- **Pro-level Chart Page** (`/charts`): Advanced charting with multiple timeframes, chart types (line, candlestick, OHLC), and overlays including SMA 20/50/200 and Bollinger Bands
-- **Technical Indicators**: RSI, MACD, and Volume indicators built-in
-- **Advanced Indicators Drawer**: Additional indicators including Stochastic RSI, VWAP, and ATR for professional analysis
+## Tech stack
 
-### Platforms & Opportunities
-- **Exchange Events** (`/events`): Track upcoming exchange events and listings
-- **Exchange Finder** (`/exchanges`): Compare licensed and unlicensed crypto exchanges with filtering by country (HK, UK, US, SG), legal status, products, fees, and minimum deposits
-- **Wallets** (`/wallets`): Comprehensive wallet comparison with filtering by type, custody model, supported networks, and use cases
+- **Framework**: Next.js (App Router), React
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Data source**: CoinGecko API (with an internal caching layer)
+- **Deployment**: AWS Lightsail (single instance today; designed to scale later)
+- **Analytics/monitoring (optional placeholders)**: Google Analytics / Plausible / Sentry (IDs/config via env)
 
-### Learning
-- **Educational Guides** (`/guides`): Comprehensive guides covering technical indicators, candlestick patterns, risk management, and crypto fundamentals
-- **Structured Learning Path**: Categorized content from basic concepts to advanced trading strategies
-
-### News
-- **Regulatory & Market News** (`/news`): Curated news feed with filter pills for All, SFC, HKEX, and ETF-related content
-- **Hong Kong Focus**: Specialized coverage of regulatory developments and market events relevant to Hong Kong traders
-
-## Screenshots
-
-- **Live Market Overview**: Full market table displaying real-time prices, changes, volume, and market cap for top cryptocurrencies
-- **Watchlist**: Personalized portfolio tracking with the same comprehensive data table interface
-- **Chart**: Professional-grade charting interface with multiple overlays, indicators, and timeframe options
-- **Exchange Finder**: Advanced filtering and comparison interface for crypto exchanges with regulatory status indicators
-- **New Coins Discovery**: Dedicated section for tracking recently listed and trending cryptocurrencies
-- **Regulatory & Market News**: Filtered news interface with source categorization and regulatory focus
-
-## Setup and Development
+## Getting started (local development)
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- Package manager: npm
+- **Node.js**: 18+ (recommended: latest LTS)
+- **Package manager**: npm (or pnpm/yarn — pick one and be consistent)
 
-### Installation
+### Setup
 
-1. **Clone the repository:**
+1) Clone:
+
 ```bash
-git clone <repository-url>
+git clone <your-repo-url>
 cd crypto-info
 ```
 
-2. **Install dependencies:**
+2) Install dependencies:
+
 ```bash
 npm install
 ```
 
-3. **Set up environment variables:**
+3) Configure environment variables:
 
-Create a `.env.local` file in the root directory with the following placeholders:
 ```bash
-# CoinGecko API (free tier, no API key required)
-COINGECKO_API_BASE_URL=https://api.coingecko.com/api/v3
-
-# Optional: Database URL for user authentication (if implemented)
-# DATABASE_URL="your-database-connection-string"
-
-# Optional: JWT secret for authentication (if implemented)
-# JWT_SECRET="your-jwt-secret"
+cp .env.local.example .env.local 2>/dev/null || true
+# Or create .env.local manually (see "Environment configuration" below)
 ```
 
-4. **Run the development server:**
+4) Start the dev server:
+
 ```bash
 npm run dev
 ```
 
-5. **Open [http://localhost:3000](http://localhost:3000)** in your browser
+Open `http://localhost:3000`.
 
-### Build for Production
+### Production build (local)
 
 ```bash
 npm run build
-npm start
+npm run start
 ```
 
-## Tech Stack
+## Environment configuration
 
-- **Next.js 14** - React framework with App Router
-- **TypeScript** - Type safety and developer experience
-- **Tailwind CSS** - Utility-first CSS framework
-- **Prisma** - Database ORM for user authentication and data management
-- **Lightweight Charts** - High-performance financial charting library
-- **Recharts** - Additional chart visualization components
-- **CoinGecko API** - Real-time cryptocurrency market data
+Create a `.env.local` file in the project root. Use **generic placeholders** (do not commit real secrets).
 
-## Design and Code Conventions
+Common values:
 
-The UI follows a clean, professional fintech design language with consistent use of real token icons and reusable table/card patterns. Key conventions include:
+```bash
+# Public site URL (used for metadata, canonical URLs, and share links)
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
-- **No emojis** in user-facing labels and interfaces
-- **TypeScript-first** development with strict type checking
-- **Component organization** following Next.js App Router patterns
-- **ESLint/Prettier** for consistent code formatting
-- **Responsive design** with mobile-first approach
-- **Consistent color palette** using slate grays, blue accents, and status-based color coding
+# CoinGecko configuration
+COINGECKO_API_BASE_URL=https://api.coingecko.com/api/v3
+# Optional: if you use a paid plan or a proxy in front of CoinGecko
+COINGECKO_API_KEY=your_key_if_applicable
 
-## Project Structure
+# Optional: caching / rate-limit tuning (exact behavior depends on implementation)
+COINGECKO_CACHE_TTL_SECONDS=60
+COINGECKO_RATE_LIMIT_RPS=5
 
-```
-crypto-info/
-├── app/                    # Next.js App Router pages
-│   ├── assets/            # Asset detail and listing pages
-│   ├── auth/              # Authentication pages
-│   ├── charts/            # Chart pages with global view
-│   ├── events/            # Exchange events
-│   ├── exchanges/         # Exchange comparison
-│   ├── guides/            # Educational content
-│   ├── listing-info/      # Asset listing information
-│   ├── new-coins/         # New coin discovery
-│   ├── news/              # Regulatory news
-│   ├── prices/            # Market overview and prices
-│   ├── wallets/           # Wallet comparison
-│   └── watchlist/         # User watchlist
-├── components/            # Reusable React components
-├── config/                # Configuration files
-├── data/                  # Mock data and content
-├── lib/                   # Utility functions and API integration
-├── prisma/                # Database schema and migrations
-├── types/                 # TypeScript type definitions
-└── public/                # Static assets
+# Optional: analytics (choose one)
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_PLAUSIBLE_DOMAIN=example.com
+
+# Optional: monitoring
+SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0
 ```
 
-## Routes
+Notes:
+- **Never** commit `.env.local`.
+- If you add new required env vars, update this section (and consider adding an `.env.local.example`).
 
-| Route | Description |
-|-------|-------------|
-| `/` | Home page redirecting to exchanges |
-| `/prices` | Live market overview with price tables |
-| `/charts` | Professional charting interface |
-| `/watchlist` | Personal cryptocurrency watchlist |
-| `/exchanges` | Exchange comparison and finder |
-| `/wallets` | Wallet comparison tool |
-| `/news` | Regulatory and market news |
-| `/guides` | Educational content and guides |
-| `/new-coins` | New and trending cryptocurrencies |
-| `/events` | Exchange events and listings |
-| `/assets/[symbol]` | Individual asset detail pages |
-| `/auth` | User authentication (coming soon) |
+## Architecture overview
+
+- **Next.js app structure**: This is a Next.js **App Router** project. Routes live under `app/`, with shared UI in `app/layout.tsx` and reusable UI in `components/`. Pages frequently compose a shared shell (e.g., `PageShell`) and “coming soon” placeholders (e.g., `ComingSoonSection`) for unfinished areas.
+
+- **Data layer & caching**: Market data is sourced from CoinGecko through server-side API routes under `app/api/`. Requests are cached to reduce latency and limit upstream calls. Caching is designed to keep “fast-moving” endpoints fresh while avoiding unnecessary refetches.
+
+- **Deployment (AWS Lightsail)**: The app is deployed as a standard Next.js Node process on a Lightsail instance. Today it runs as a single instance; the code is structured to allow later scaling (e.g., external cache, CDN, multiple instances behind a load balancer).
+
+## Development & coding conventions
+
+- **TypeScript-first**: prefer explicit types for public functions and shared data structures.
+- **Linting/formatting**: run lint before opening a PR.
+
+```bash
+npm run lint
+```
+
+- **Commits/PRs**: use a conventional prefix to keep history readable:
+  - `feat:` new user-facing functionality
+  - `fix:` bug fixes
+  - `refactor:` non-functional changes
+  - `chore:` tooling/deps
+  - `docs:` documentation
+
+- **Tests**: if/when a test runner is configured, add and run tests for non-trivial logic changes.
+
+## Roadmap / planned improvements
+
+- **Real authentication** (replace placeholders) and synced user settings
+- **Richer watchlist/portfolio** (still non-custodial; user-owned data only)
+- **Deeper HK regulatory coverage** (more sources, better tagging, timelines)
+- **More localization** (broader Chinese coverage and improved terminology consistency)
+- **Performance & caching** (stronger cache invalidation, edge/CDN strategy, better rate-limit handling)
+
+## Disclaimer
+
+Cryptopedia / Crypto通 is provided **for informational and educational purposes only**. It does not constitute investment advice, financial advice, trading advice, or any other kind of professional advice. You are solely responsible for your investment decisions and should do your own research (DYOR).
 
 ## License
 
-Private project - All rights reserved
+License: **TBA**.
