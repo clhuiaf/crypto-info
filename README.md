@@ -1,6 +1,6 @@
-# Cryptopedia / Crypto通
+# Cryptopedia – Hong Kong Crypto Research Hub 🇭🇰
 
-An HK‑centric crypto encyclopedia for prices, context, and learning — built with Next.js.
+An HK‑centric crypto encyclopedia for prices, context, and learning — built with Next.js and TypeScript.
 
 ## Overview
 
