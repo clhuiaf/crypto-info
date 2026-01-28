@@ -10,9 +10,9 @@ export default function GuidesIndex() {
   return (
     <div className="py-8">
       <PageShell>
-        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+        <section className="brand-frame space-y-4">
         <header>
-          <p className="text-xs uppercase tracking-[0.2em] text-blue-100">Cryptopedia · Guides</p>
+          <p className="text-xs uppercase tracking-[0.2em] brand-icon">Cryptopedia · Guides</p>
           <h1 className="text-3xl sm:text-4xl font-semibold text-white">Crypto Trading Education</h1>
           <p className="mt-2 text-sm text-slate-100 max-w-2xl">
             Structured learning guides covering trading concepts, technical analysis, risk management, and market patterns.

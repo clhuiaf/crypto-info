@@ -9,9 +9,9 @@ export default function PopularGuidesPage() {
   return (
     <div className="py-8">
       <PageShell>
-        <section className="rounded-3xl bg-[var(--brand-color,#2563eb)] p-6 space-y-4">
+        <section className="brand-frame space-y-4">
         <header>
-          <Link href="/guides" className="inline-flex items-center text-blue-100 hover:text-blue-200 mb-1">
+          <Link href="/guides" className="inline-flex items-center brand-icon mb-1">
             ← Back to Guides
           </Link>
           <h1 className="text-3xl font-semibold text-white mb-1">Most Viewed Guides</h1>

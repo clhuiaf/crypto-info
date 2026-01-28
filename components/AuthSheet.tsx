@@ -137,14 +137,14 @@ export default function AuthSheet({ open, onClose }: AuthSheetProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="w-full py-3 rounded-lg font-medium disabled:opacity-50 transition-colors brand-button"
             >
               {mode === 'login' ? 'Log in' : 'Create account'}
             </button>
           </form>
 
           <div className="text-center mt-6">
-            <button onClick={toggleMode} className="text-blue-600 hover:text-blue-700 text-sm">
+            <button onClick={toggleMode} className="brand-icon hover:opacity-90 text-sm">
               {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
             </button>
           </div>

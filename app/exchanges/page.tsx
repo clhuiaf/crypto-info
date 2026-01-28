@@ -167,7 +167,7 @@ export default function ExchangesPage() {
       right={
         <button
           onClick={() => {}}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 font-medium text-sm shadow-sm hover:shadow-md transition-all"
+          className="px-4 py-2 rounded-lg font-medium text-sm shadow-sm hover:shadow-md transition-all brand-button"
         >
           Show exchanges
         </button>
@@ -232,7 +232,7 @@ export default function ExchangesPage() {
     <div className="py-8">
       <PageShell>
         {/* Light-blue outer panel matching Prices/Assets pages */}
-        <section className="rounded-3xl bg-blue-600 p-6 space-y-4">
+        <section className="brand-frame space-y-4">
           <header>
             <h1 className="text-3xl font-semibold text-white">Find the right crypto exchange</h1>
             <p className="mt-1 text-sm text-slate-200">

@@ -217,7 +217,7 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
     <div className="py-8">
       <PageShell>
         {/* Light-blue outer panel */}
-        <section className="rounded-3xl bg-blue-600 p-6 space-y-4">
+        <section className="brand-frame space-y-4">
         {/* Title on light blue */}
         <header>
           <h1 className="text-3xl font-semibold text-white">
