@@ -52,7 +52,8 @@ export default async function AssetPage({ params }: AssetPageProps) {
           id: demo.id,
           symbol: demo.symbol.toUpperCase(),
           name: demo.name,
-          category: demo.network ? `${demo.network} (New Coin)` : 'New Coin',
+          // Use a generic category that fits the existing AssetCategory union.
+          category: 'Other',
           baseChain: demo.network ?? '—',
           launchYear: demo.listing_date ? new Date(demo.listing_date).getFullYear() : new Date().getFullYear(),
           tradingPairs: ['USDT', 'USD'],
@@ -61,7 +62,7 @@ export default async function AssetPage({ params }: AssetPageProps) {
             'This is a newly discovered/demo listing. Full verified listing details and richer data cards are coming soon.',
           riskNote:
             'Coming soon: this listing is not yet fully verified. Treat all demo data as informational only.',
-        } as Asset)
+        } as unknown as Asset)
       : null;
 
   // Listing info pages are "wikipedia-style": no live market data or charts.
