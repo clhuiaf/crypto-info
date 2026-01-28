@@ -1,13 +1,13 @@
 export default function PricesLoading() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl mb-8">
         <div className="h-8 bg-slate-200 rounded w-48 mb-2 animate-pulse"></div>
         <div className="h-5 bg-slate-200 rounded w-96 animate-pulse"></div>
       </div>
 
       {/* Price table skeleton */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl bg-white rounded-lg shadow overflow-hidden">
         {/* Table header */}
         <div className="px-6 py-4 border-b border-slate-200">
           <div className="grid grid-cols-6 gap-4">

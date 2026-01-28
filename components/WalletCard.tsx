@@ -105,13 +105,13 @@ export default function WalletCard({ wallet }: WalletCardProps) {
             href={wallet.websiteUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-medium text-sm text-center transition-all shadow-sm hover:shadow-md"
+            className="flex-1 px-5 py-3 bg-slate-900 text-white rounded-full hover:bg-slate-800 font-medium text-sm text-center transition-all shadow-sm hover:shadow-md"
           >
             Visit wallet
           </a>
           <Link
             href={`/wallets/${wallet.slug}`}
-            className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-slate-700 hover:bg-slate-50 font-medium text-sm text-center shadow-sm hover:shadow-md transition-all"
+            className="flex-1 px-5 py-3 border border-slate-200 rounded-full text-slate-700 bg-white hover:bg-slate-50 font-medium text-sm text-center shadow-sm hover:shadow-md transition-all"
           >
             Learn more →
           </Link>

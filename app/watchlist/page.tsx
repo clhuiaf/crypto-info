@@ -7,6 +7,7 @@ import { fetchCoinById, type CryptoPrice } from '@/lib/api'
 import { usePricesPolling } from '@/lib/usePricesPolling'
 import { formatCurrency, formatPercentage, formatMarketCap } from '@/lib/utils'
 import MarketTable from '@/components/MarketTable'
+import PageShell from '@/components/PageShell'
 
 export default function WatchlistPage() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([])
@@ -98,54 +99,56 @@ export default function WatchlistPage() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center">
-          <p className="text-slate-500">Loading watchlist...</p>
-        </div>
+      <div className="py-8">
+        <PageShell>
+          <div className="text-center">
+            <p className="text-slate-500">Loading watchlist...</p>
+          </div>
+        </PageShell>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
-        </div>
+      <div className="py-8">
+        <PageShell>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-800">{error}</p>
+          </div>
+        </PageShell>
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          My Watchlist
-        </h1>
-        <p className="text-slate-600">
-          Track your favorite cryptocurrencies
-        </p>
-      </div>
+    <div className="py-8">
+      <PageShell>
+        {/* Light-blue outer panel for Watchlist */}
+        <section className="brand-frame space-y-4">
+        {/* Title on light blue */}
+        <header>
+          <h1 className="text-3xl font-semibold text-white">My Watchlist</h1>
+          <p className="mt-1 text-sm text-slate-100">Track your favorite cryptocurrencies</p>
+        </header>
 
-      {watchlist.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-12 text-center">
-          <p className="text-slate-500 mb-4">
-            Your watchlist is empty.
-          </p>
-          <p className="text-sm text-slate-400">
-            Add coins from the Prices or New Coins pages to get started.
-          </p>
+        {/* White card containing the watchlist/table */}
+        <div className="rounded-2xl bg-white shadow-sm p-4">
+          {watchlist.length === 0 ? (
+            <div className="p-12 text-center">
+              <p className="text-slate-500 mb-4">Your watchlist is empty.</p>
+              <p className="text-sm text-slate-400">Add coins from the Prices or New Coins pages to get started.</p>
+            </div>
+          ) : (
+            // Build assets array in the same order as the watchlist, omitting missing market data
+            (() => {
+              const assets = watchlist.map((item) => cryptoData.get(item.id)).filter((a): a is CryptoPrice => !!a)
+              return <MarketTable assets={assets} />
+            })()
+          )}
         </div>
-      ) : (
-        // Build assets array in the same order as the watchlist, omitting missing market data
-        (() => {
-          const assets = watchlist
-            .map((item) => cryptoData.get(item.id))
-            .filter((a): a is CryptoPrice => !!a)
-
-          return <MarketTable assets={assets} />
-        })()
-      )}
+        </section>
+      </PageShell>
     </div>
   )
 }

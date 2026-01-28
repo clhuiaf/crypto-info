@@ -116,10 +116,6 @@ export const navConfig: NavCategory[] = [
             href: "/guides/risk-management",
           },
           {
-            label: "Beginner Starter Path",
-            href: "/guides/crypto-basics/what-is-bitcoin",
-          },
-          {
             label: "Most Viewed Guides",
             href: "/guides/popular",
           },

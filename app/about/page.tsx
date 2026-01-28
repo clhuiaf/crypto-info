@@ -1,5 +1,6 @@
 // Category: About
 import { Metadata } from 'next';
+import PageShell from '@/components/PageShell';
 
 export const metadata: Metadata = {
   title: 'About Cryptopedia | Hong Kong Crypto Hub',
@@ -8,13 +9,17 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <section className="text-center space-y-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
-            About Cryptopedia
-          </h1>
+    <div className="py-8">
+      <PageShell>
+        <section className="brand-frame space-y-4">
+        <header className="text-center">
+          <h1 className="text-4xl font-bold text-white tracking-tight">About Cryptopedia</h1>
+          <p className="mt-2 text-sm text-slate-100 max-w-2xl mx-auto">
+            Learn about Cryptopedia, your independent Hong Kong-focused crypto hub for comparing exchanges, wallets, and market opportunities.
+          </p>
+        </header>
 
+        <div className="rounded-2xl bg-white shadow-sm p-6">
           <div className="space-y-6 text-lg text-slate-700 leading-relaxed">
             <p>
               Cryptopedia is a Hong Kong–focused crypto hub that helps investors compare exchanges, wallets, and opportunities in one place.
@@ -33,7 +38,8 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
-      </section>
-    </main>
+        </section>
+      </PageShell>
+    </div>
   );
 }

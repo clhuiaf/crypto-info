@@ -1,5 +1,6 @@
 // Category: Market & portfolio
 import NewCoinsList from '@/components/NewCoinsList'
+import PageShell from '@/components/PageShell';
 import newCoinsDemo from '@/data/newCoinsDemo'
 
 export const revalidate = 600 // Demo data; revalidate kept for parity with other pages
@@ -9,17 +10,21 @@ export default async function NewCoinsPage() {
   const newCoins = newCoinsDemo
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">New Coins Discovery</h1>
-          <p className="text-slate-600 max-w-2xl">
+    <div className="py-8">
+      <PageShell>
+        <section className="brand-frame space-y-4">
+        <header>
+          <h1 className="text-3xl font-semibold text-white">New Coins Discovery</h1>
+          <p className="mt-1 text-sm text-slate-100 max-w-2xl">
             Explore recently listed and trending demo cryptocurrencies. (Demo data only)
           </p>
-        </div>
+        </header>
 
-        <NewCoinsList coins={newCoins} />
-      </div>
+        <div className="rounded-2xl bg-white shadow-sm p-4">
+          <NewCoinsList coins={newCoins} />
+        </div>
+        </section>
+      </PageShell>
     </div>
   )
 }

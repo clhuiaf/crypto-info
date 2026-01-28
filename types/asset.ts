@@ -1,4 +1,14 @@
-export type AssetCategory = 'Layer 1' | 'Layer 2' | 'Stablecoin' | 'DeFi' | 'Meme' | 'Exchange Token' | 'NFT';
+export type AssetCategory =
+  | 'Layer 1'
+  | 'Layer 2'
+  | 'Stablecoin'
+  | 'DeFi'
+  | 'Meme'
+  | 'Exchange Token'
+  | 'NFT'
+  | 'Wrapped Asset'
+  | 'Lending'
+  | 'Staked ETH';
 
 export type Asset = {
   id: string;
@@ -8,7 +18,8 @@ export type Asset = {
   baseChain: string;
   launchYear: number;
   tradingPairs: string[];
-  logo?: string; // Optional logo URL or emoji placeholder
+  logo?: string; // Optional emoji or short placeholder
+  logoUrl?: string; // Optional URL to a logo image
   description: string;
   riskNote: string;
 };

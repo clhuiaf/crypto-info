@@ -38,11 +38,11 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <div className="flex items-center space-x-2 relative flex-shrink-0">
-              <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm font-bold shadow-sm">
+              <div className="h-8 w-8 rounded-lg brand-logo flex items-center justify-center text-white text-sm font-bold shadow-sm">
                 CP
               </div>
               <Link href="/" className="text-xl font-semibold text-slate-900 tracking-tight">
@@ -112,7 +112,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setAuthOpen(true)}
-              className="hidden sm:inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors shadow-sm hover:shadow-md"
+              className="hidden sm:inline-flex items-center px-4 py-2 brand-button text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors shadow-sm hover:shadow-md"
             >
               Sign up / Log in
             </button>

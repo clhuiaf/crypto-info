@@ -6,7 +6,8 @@ import Link from 'next/link';
 
 export default function WalletComparePage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto w-full max-w-6xl lg:max-w-7xl">
       <div className="mb-8">
         <Link
           href="/wallets"
@@ -22,6 +23,7 @@ export default function WalletComparePage() {
         </p>
       </div>
 
+
       <div className="bg-white rounded-lg shadow p-12 text-center">
         <h2 className="text-xl font-semibold text-slate-900 mb-4">Coming Soon</h2>
         <p className="text-slate-600 mb-6">
@@ -36,5 +38,6 @@ export default function WalletComparePage() {
         </Link>
       </div>
     </div>
+  </div>
   );
 }

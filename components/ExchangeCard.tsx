@@ -181,7 +181,7 @@ export default function ExchangeCard({ exchange, isSelected, onToggleSelect }: E
         <div className="flex flex-col sm:flex-row gap-3 mt-5">
           <button
             onClick={() => onToggleSelect(exchange.id)}
-            className={`flex-1 px-4 py-2.5 rounded-xl font-medium text-sm transition-all border shadow-sm hover:shadow-md ${
+            className={`flex-1 px-5 py-3 rounded-full font-medium text-sm transition-all shadow-sm hover:shadow-md ${
               isSelected
                 ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-500'
                 : 'bg-slate-900 text-white border-slate-900 hover:bg-slate-800'
@@ -189,7 +189,7 @@ export default function ExchangeCard({ exchange, isSelected, onToggleSelect }: E
           >
             Compare
           </button>
-          <button className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-slate-700 hover:bg-slate-50 font-medium text-sm shadow-sm hover:shadow-md transition-all">
+          <button className="flex-1 px-5 py-3 border border-slate-200 rounded-full text-slate-700 bg-white hover:bg-slate-50 font-medium text-sm shadow-sm hover:shadow-md transition-all">
             Open with referral
           </button>
         </div>
