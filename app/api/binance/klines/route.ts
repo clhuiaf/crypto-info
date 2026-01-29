@@ -3,6 +3,20 @@ import { BinanceInterval } from '@/lib/binanceMarketData'
 
 export const runtime = 'nodejs'
 
+// Very small in-memory cache to smooth over transient Binance / network issues
+// in production (especially on Vercel). This lives per Lambda instance.
+type CacheEntry = {
+  data: any
+  expiresAt: number
+}
+
+const CACHE_TTL_MS = 15_000 // 15 seconds is enough for near-real-time charts
+const klinesCache = new Map<string, CacheEntry>()
+
+function makeCacheKey(symbol: string, interval: string, limit: number) {
+  return `${symbol}:${interval}:${limit}`
+}
+
 function isValidInterval(v: string): v is BinanceInterval {
   return [
     '1m',
@@ -42,24 +56,50 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Invalid interval' }, { status: 400 })
   }
 
+  const cacheKey = makeCacheKey(symbol, interval, limit)
+  const now = Date.now()
+  const cached = klinesCache.get(cacheKey)
+  if (cached && cached.expiresAt > now) {
+    return NextResponse.json(cached.data)
+  }
+
   const url = `https://api.binance.com/api/v3/klines?symbol=${encodeURIComponent(
     symbol
   )}&interval=${encodeURIComponent(interval)}&limit=${encodeURIComponent(String(limit))}`
 
-  const res = await fetch(url, {
-    // allow Next to cache briefly on the server; the chart will still live-update via WS
-    next: { revalidate: 10 },
-  })
+  try {
+    const res = await fetch(url, {
+      // let Binance handle its own caching; we keep a tiny app-level cache above
+      cache: 'no-store',
+    })
 
-  if (!res.ok) {
-    const body = await res.text().catch(() => '')
+    if (!res.ok) {
+      const body = await res.text().catch(() => '')
+
+      // Soft-fallback: if we have recent cached data, return that instead of 5xx
+      if (cached && cached.expiresAt > now - CACHE_TTL_MS * 2) {
+        return NextResponse.json(cached.data)
+      }
+
+      return NextResponse.json(
+        { error: `Binance upstream error (${res.status})`, details: body.slice(0, 200) },
+        { status: 502 }
+      )
+    }
+
+    const data = await res.json()
+    klinesCache.set(cacheKey, { data, expiresAt: now + CACHE_TTL_MS })
+    return NextResponse.json(data)
+  } catch (err) {
+    // Network / DNS / temporary failures: fall back to cache if possible
+    if (cached && cached.expiresAt > now - CACHE_TTL_MS * 2) {
+      return NextResponse.json(cached.data)
+    }
+
     return NextResponse.json(
-      { error: `Binance upstream error (${res.status})`, details: body.slice(0, 200) },
+      { error: 'Failed to reach Binance klines API', details: String(err).slice(0, 200) },
       { status: 502 }
     )
   }
-
-  const data = await res.json()
-  return NextResponse.json(data)
 }
 
