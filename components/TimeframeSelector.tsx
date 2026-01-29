@@ -1,11 +1,14 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import { Timeframe, TIMEFRAME_CONFIGS } from '@/types/chart'
 
 interface TimeframeSelectorProps {
   selectedTimeframe: Timeframe
   onTimeframeChange: (timeframe: Timeframe) => void
+  timeframes?: Timeframe[]
+  storageKey?: string
+  enablePersistence?: boolean
   className?: string
 }
 
@@ -14,22 +17,33 @@ const TIMEFRAME_ORDER: Timeframe[] = ['1m', '5m', '15m', '1H', '4H', '1D', '1W',
 export default function TimeframeSelector({
   selectedTimeframe,
   onTimeframeChange,
+  timeframes,
+  storageKey = 'chart-timeframe',
+  enablePersistence = true,
   className = ''
 }: TimeframeSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const allowedTimeframes = useMemo(() => (timeframes?.length ? timeframes : TIMEFRAME_ORDER), [timeframes])
+  const allowedKey = useMemo(() => allowedTimeframes.join('|'), [allowedTimeframes])
+  const restoreKeyRef = useRef<string | null>(null)
 
-  // Load last selected timeframe from localStorage on mount
+  // Load last selected timeframe from localStorage once per allowed timeframe set.
   useEffect(() => {
-    const savedTimeframe = localStorage.getItem('chart-timeframe') as Timeframe
-    if (savedTimeframe && TIMEFRAME_ORDER.includes(savedTimeframe)) {
+    if (!enablePersistence) return
+    if (restoreKeyRef.current === allowedKey) return
+    restoreKeyRef.current = allowedKey
+
+    const savedTimeframe = localStorage.getItem(storageKey) as Timeframe
+    if (savedTimeframe && allowedTimeframes.includes(savedTimeframe) && savedTimeframe !== selectedTimeframe) {
       onTimeframeChange(savedTimeframe)
     }
-  }, [onTimeframeChange])
+  }, [onTimeframeChange, allowedKey, allowedTimeframes, selectedTimeframe, storageKey, enablePersistence])
 
   // Save timeframe to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem('chart-timeframe', selectedTimeframe)
-  }, [selectedTimeframe])
+    if (!enablePersistence) return
+    localStorage.setItem(storageKey, selectedTimeframe)
+  }, [selectedTimeframe, storageKey, enablePersistence])
 
   const handleTimeframeSelect = (timeframe: Timeframe) => {
     onTimeframeChange(timeframe)
@@ -60,7 +74,7 @@ export default function TimeframeSelector({
       {isOpen && (
         <div className="absolute z-50 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg">
           <div className="py-1">
-            {TIMEFRAME_ORDER.map((timeframe) => {
+            {allowedTimeframes.map((timeframe) => {
               const config = TIMEFRAME_CONFIGS[timeframe]
               return (
                 <button

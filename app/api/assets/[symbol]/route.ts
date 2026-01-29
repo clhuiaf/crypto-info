@@ -3,7 +3,7 @@ import { getCache, isExpired, setCache } from '@/lib/cache';
 import { fetchAssetDetails } from '@/lib/coingeckoClient';
 
 // Symbol to CoinGecko ID mapping
-const symbolToCoinGeckoId: Record<string, string> = {
+const SYMBOL_TO_COINGECKO_ID: Record<string, string> = {
   'BTC': 'bitcoin',
   'ETH': 'ethereum',
   'USDT': 'tether',
@@ -26,7 +26,7 @@ export async function GET(
   { params }: { params: { symbol: string } }
 ) {
   const symbol = params.symbol.toUpperCase();
-  const coinGeckoId = symbolToCoinGeckoId[symbol];
+  const coinGeckoId = SYMBOL_TO_COINGECKO_ID[symbol];
 
   if (!coinGeckoId) {
     return NextResponse.json(
