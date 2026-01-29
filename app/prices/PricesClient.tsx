@@ -189,17 +189,20 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
       <p className="text-sm text-slate-500 mt-2">Data will appear shortly.</p>
     </div>
   ) : (
-    <div className="overflow-hidden">
-      <MarketHeaderRow />
-      <div className="space-y-0">
-        {displayAssets.map((crypto, index) => (
-          <CryptoRow
-            key={crypto.id}
-            crypto={crypto}
-            index={index}
-            isLast={index === displayAssets.length - 1}
-          />
-        ))}
+    <div className="overflow-x-auto">
+      {/* Keep desktop columns from collapsing when the card gets narrow (e.g. next to sidebar). */}
+      <div className="min-w-0 lg:min-w-[980px]">
+        <MarketHeaderRow />
+        <div className="space-y-0">
+          {displayAssets.map((crypto, index) => (
+            <CryptoRow
+              key={crypto.id}
+              crypto={crypto}
+              index={index}
+              isLast={index === displayAssets.length - 1}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
