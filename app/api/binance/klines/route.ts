@@ -67,39 +67,57 @@ export async function GET(req: Request) {
     symbol
   )}&interval=${encodeURIComponent(interval)}&limit=${encodeURIComponent(String(limit))}`
 
-  try {
-    const res = await fetch(url, {
-      // let Binance handle its own caching; we keep a tiny app-level cache above
-      cache: 'no-store',
-    })
+  let lastError: unknown = null
 
-    if (!res.ok) {
-      const body = await res.text().catch(() => '')
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(url, {
+        // let Binance handle its own caching; we keep a tiny app-level cache above
+        cache: 'no-store',
+      })
 
-      // Soft-fallback: if we have recent cached data, return that instead of 5xx
-      if (cached && cached.expiresAt > now - CACHE_TTL_MS * 2) {
-        return NextResponse.json(cached.data)
+      if (!res.ok) {
+        const body = await res.text().catch(() => '')
+        lastError = { status: res.status, body }
+
+        // If Binance is briefly unhappy (5xx), retry a couple of times.
+        if (res.status >= 500 && res.status < 600 && attempt < 2) {
+          await new Promise((r) => setTimeout(r, 150 * (attempt + 1)))
+          continue
+        }
+
+        // Soft-fallback: if we have recent cached data, return that instead of 5xx
+        if (cached && cached.expiresAt > now - CACHE_TTL_MS * 2) {
+          return NextResponse.json(cached.data)
+        }
+
+        return NextResponse.json(
+          { error: `Binance upstream error (${res.status})`, details: body.slice(0, 200) },
+          { status: 502 }
+        )
       }
 
-      return NextResponse.json(
-        { error: `Binance upstream error (${res.status})`, details: body.slice(0, 200) },
-        { status: 502 }
-      )
+      const data = await res.json()
+      klinesCache.set(cacheKey, { data, expiresAt: now + CACHE_TTL_MS })
+      return NextResponse.json(data)
+    } catch (err) {
+      lastError = err
+      // network/DNS/etc – small backoff then retry
+      if (attempt < 2) {
+        await new Promise((r) => setTimeout(r, 150 * (attempt + 1)))
+        continue
+      }
     }
-
-    const data = await res.json()
-    klinesCache.set(cacheKey, { data, expiresAt: now + CACHE_TTL_MS })
-    return NextResponse.json(data)
-  } catch (err) {
-    // Network / DNS / temporary failures: fall back to cache if possible
-    if (cached && cached.expiresAt > now - CACHE_TTL_MS * 2) {
-      return NextResponse.json(cached.data)
-    }
-
-    return NextResponse.json(
-      { error: 'Failed to reach Binance klines API', details: String(err).slice(0, 200) },
-      { status: 502 }
-    )
   }
+
+  // Network / DNS / repeated failures: fall back to cache if possible
+  if (cached && cached.expiresAt > now - CACHE_TTL_MS * 2) {
+    return NextResponse.json(cached.data)
+  }
+
+  return NextResponse.json(
+    { error: 'Failed to reach Binance klines API after retries', details: String(lastError).slice(0, 200) },
+    { status: 502 }
+  )
 }
 
