@@ -100,7 +100,7 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
     <>
       <article
         className={[
-          'grid grid-cols-[32px,40px,minmax(0,2.4fr),minmax(120px,1fr),80px,80px,80px,minmax(150px,1.1fr),minmax(150px,1.1fr)] items-center gap-3',
+          'grid grid-cols-[28px,32px,minmax(0,1.8fr),minmax(96px,1fr),72px,72px,72px,minmax(120px,1.1fr),minmax(120px,1.1fr)] md:grid-cols-[32px,40px,minmax(0,2.4fr),minmax(120px,1fr),80px,80px,80px,minmax(150px,1.1fr),minmax(150px,1.1fr)] items-center gap-3',
           'min-h-16 px-4 py-3 md:px-6 md:py-4',
           isLast ? 'rounded-b-xl' : ''
         ].join(' ')}
