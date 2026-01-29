@@ -144,32 +144,48 @@ export default function Navbar() {
                   <div className="px-3 py-2 text-sm font-semibold text-slate-900 uppercase tracking-wider">
                     {category.label}
                   </div>
-                  {category.sections.map((section) => (
-                    <div key={section.title} className="ml-4 space-y-1">
-                      <div className="px-3 py-1 text-xs font-medium text-slate-500 uppercase tracking-wider">
-                        {section.title}
+
+                  {/* If a category has no sections (e.g. About), show its primary link */}
+                  {category.sections.length === 0 ? (
+                    <Link
+                      href={category.primaryHref}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`block ml-4 px-3 py-2 rounded-md text-sm transition-colors ${
+                        isActive(category.primaryHref)
+                          ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600'
+                          : 'text-slate-700 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="font-medium">{category.label}</div>
+                    </Link>
+                  ) : (
+                    category.sections.map((section) => (
+                      <div key={section.title} className="ml-4 space-y-1">
+                        <div className="px-3 py-1 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                          {section.title}
+                        </div>
+                        {section.links.map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`block px-3 py-2 rounded-md text-sm transition-colors ${
+                              isActive(link.href)
+                                ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600'
+                                : 'text-slate-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            <div className="font-medium">{link.label}</div>
+                            {link.description && (
+                              <div className="text-xs text-slate-500 mt-1">
+                                {link.description}
+                              </div>
+                            )}
+                          </Link>
+                        ))}
                       </div>
-                      {section.links.map((link) => (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={`block px-3 py-2 rounded-md text-sm transition-colors ${
-                            isActive(link.href)
-                              ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600'
-                              : 'text-slate-700 hover:bg-slate-50'
-                          }`}
-                        >
-                          <div className="font-medium">{link.label}</div>
-                          {link.description && (
-                            <div className="text-xs text-slate-500 mt-1">
-                              {link.description}
-                            </div>
-                          )}
-                        </Link>
-                      ))}
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               ))}
             </div>
