@@ -1,7 +1,7 @@
 // Category: Market & portfolio
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import AssetSelector from '@/components/AssetSelector'
 import TimeframeSelector from '@/components/TimeframeSelector'
 import { Timeframe } from '@/types/chart'
@@ -10,6 +10,26 @@ import { usePricesPolling } from '@/lib/usePricesPolling'
 import tokenIcons from '@/config/tokenIcons'
 import PageShell from '@/components/PageShell'
 import TradingChart from '@/components/charts/TradingChart'
+
+// Whitelist of tokens that have USDT trading pairs on Binance
+// These are verified to work with Binance klines API
+const BINANCE_SUPPORTED_SYMBOLS = [
+  'BTC',
+  'ETH',
+  'SOL',
+  'BNB',
+  'ADA',
+  'XRP',
+  'DOT',
+  'AVAX',
+  'LINK',
+  'UNI',
+  'ATOM',
+  'DOGE',
+  'TRX',
+  'BCH',
+  'WBTC',
+] as const
 
 export default function ChartsPage() {
   const [selectedSymbol, setSelectedSymbol] = useState<string>('BTC')
@@ -21,19 +41,37 @@ export default function ChartsPage() {
     pollingInterval: 30000 // 30 seconds for charts page
   })
 
-  const selectedAsset = getAssetBySymbol(selectedSymbol)
+  // Ensure selected symbol is in the supported list, reset to BTC if not
+  const validSelectedSymbol = useMemo(() => {
+    if (BINANCE_SUPPORTED_SYMBOLS.includes(selectedSymbol.toUpperCase() as any)) {
+      return selectedSymbol
+    }
+    return 'BTC'
+  }, [selectedSymbol])
+
+  // Reset to valid symbol if current selection is not supported
+  useEffect(() => {
+    if (validSelectedSymbol !== selectedSymbol) {
+      setSelectedSymbol(validSelectedSymbol)
+    }
+  }, [validSelectedSymbol, selectedSymbol])
+
+  const selectedAsset = getAssetBySymbol(validSelectedSymbol)
   // Find real crypto data for icons
-  const selectedCrypto = cryptoData.find(crypto => crypto.symbol.toUpperCase() === selectedSymbol.toUpperCase())
+  const selectedCrypto = cryptoData.find(crypto => crypto.symbol.toUpperCase() === validSelectedSymbol.toUpperCase())
 
   const handleSymbolChange = (symbol: string) => {
-    setSelectedSymbol(symbol)
+    // Only allow changing to supported symbols
+    if (BINANCE_SUPPORTED_SYMBOLS.includes(symbol.toUpperCase() as any)) {
+      setSelectedSymbol(symbol)
+    }
   }
 
   const chartSymbol = useMemo(() => {
     // Default to the most liquid USDT pair on Binance for this app
     // TradingChart accepts "BTC", "BTCUSDT" or "BINANCE:BTCUSDT"
-    return `${selectedSymbol}USDT`
-  }, [selectedSymbol])
+    return `${validSelectedSymbol}USDT`
+  }, [validSelectedSymbol])
 
   return (
     <div className="py-8">
@@ -43,7 +81,9 @@ export default function ChartsPage() {
         {/* Title on light blue */}
         <header>
           <h1 className="text-3xl font-semibold text-white">Chart</h1>
-          <p className="mt-1 text-sm text-slate-100">Live candlesticks powered by real exchange data</p>
+          <p className="mt-1 text-sm text-slate-100">
+            Demo: Live candlesticks powered by Binance exchange data
+          </p>
         </header>
 
         {/* Card 1: Controls (keeps the previous stacked layout) */}
@@ -53,9 +93,10 @@ export default function ChartsPage() {
               <div className="flex items-center gap-3 min-w-0">
                 <label className="text-sm font-medium text-gray-700 shrink-0">Asset</label>
                 <AssetSelector
-                  selectedSymbol={selectedSymbol}
+                  selectedSymbol={validSelectedSymbol}
                   onSymbolChange={handleSymbolChange}
                   cryptoData={cryptoData}
+                  allowedSymbols={BINANCE_SUPPORTED_SYMBOLS}
                 />
               </div>
 
@@ -72,7 +113,7 @@ export default function ChartsPage() {
             </div>
 
             <div className="text-xs text-gray-500">
-              Live candles via Binance (USDT pairs). No API keys required.
+              Live candles via Binance (USDT pairs).
             </div>
           </div>
         </div>
@@ -83,10 +124,10 @@ export default function ChartsPage() {
             {/* Chart Header */}
             <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                {tokenIcons[selectedSymbol.toUpperCase()] ? (
+                {tokenIcons[validSelectedSymbol.toUpperCase()] ? (
                   <img
-                    src={tokenIcons[selectedSymbol.toUpperCase()]}
-                    alt={selectedAsset?.name || selectedSymbol}
+                    src={tokenIcons[validSelectedSymbol.toUpperCase()]}
+                    alt={selectedAsset?.name || validSelectedSymbol}
                     className="h-8 w-8 rounded-full"
                   />
                 ) : selectedCrypto ? (
@@ -97,12 +138,12 @@ export default function ChartsPage() {
                   />
                 ) : (
                   <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600">
-                    {selectedSymbol.slice(0, 2).toUpperCase()}
+                    {validSelectedSymbol.slice(0, 2).toUpperCase()}
                   </div>
                 )}
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900">
-                    {selectedAsset?.name || selectedSymbol} ({selectedSymbol})
+                    {selectedAsset?.name || validSelectedSymbol} ({validSelectedSymbol})
                   </h2>
                   <p className="text-sm text-gray-500">
                     {timeframe} Chart

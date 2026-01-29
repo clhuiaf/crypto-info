@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { assets, getAssetBySymbol } from '@/data/assets'
 import { Asset } from '@/types/asset'
 import { CryptoPrice } from '@/lib/api'
@@ -12,21 +12,28 @@ interface AssetSelectorProps {
   className?: string
   placeholder?: string
   cryptoData?: CryptoPrice[]
+  allowedSymbols?: readonly string[]
 }
 
-const TOP_COINS = ['BTC', 'ETH', 'SOL', 'BNB', 'ADA', 'XRP', 'DOT', 'AVAX', 'LINK', 'UNI']
 
 export default function AssetSelector({
   selectedSymbol,
   onSymbolChange,
   className = '',
   placeholder = 'Add comparison...',
-  cryptoData = []
+  cryptoData = [],
+  allowedSymbols
 }: AssetSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredAssets, setFilteredAssets] = useState<Asset[]>(assets)
-  const [activeTab, setActiveTab] = useState<'all' | 'top'>('top')
+
+  // Filter assets by allowedSymbols if provided
+  const availableAssets = useMemo(() => {
+    if (!allowedSymbols) return assets
+    const allowedSet = new Set(allowedSymbols.map(s => s.toUpperCase()))
+    return assets.filter(asset => allowedSet.has(asset.symbol.toUpperCase()))
+  }, [allowedSymbols])
 
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -34,13 +41,9 @@ export default function AssetSelector({
   const selectedAsset = getAssetBySymbol(selectedSymbol)
   const selectedCrypto = cryptoData.find(crypto => crypto.symbol.toUpperCase() === selectedSymbol.toUpperCase())
 
-  // Filter assets based on search term and active tab
+  // Filter assets based on search term
   useEffect(() => {
-    let filtered = assets
-
-    if (activeTab === 'top') {
-      filtered = assets.filter(asset => TOP_COINS.includes(asset.symbol))
-    }
+    let filtered = availableAssets
 
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase()
@@ -51,7 +54,7 @@ export default function AssetSelector({
     }
 
     setFilteredAssets(filtered)
-  }, [searchTerm, activeTab])
+  }, [searchTerm, availableAssets])
 
   // Handle clicking outside to close dropdown
   useEffect(() => {
@@ -77,14 +80,6 @@ export default function AssetSelector({
     onSymbolChange(asset.symbol)
     setIsOpen(false)
     setSearchTerm('')
-  }
-
-  const handleTabChange = (tab: 'all' | 'top') => {
-    setActiveTab(tab)
-    setSearchTerm('')
-    if (inputRef.current) {
-      inputRef.current.focus()
-    }
   }
 
   return (
@@ -142,30 +137,6 @@ export default function AssetSelector({
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
-          </div>
-
-          {/* Tabs */}
-          <div className="flex border-b border-gray-100">
-            <button
-              onClick={() => handleTabChange('top')}
-              className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === 'top'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Top Coins
-            </button>
-            <button
-              onClick={() => handleTabChange('all')}
-              className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === 'all'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              All Assets
-            </button>
           </div>
 
           {/* Asset list */}
