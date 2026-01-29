@@ -16,7 +16,8 @@
   }
   /* Brand frame used for page hero panels (blue rounded background) */
   .brand-frame {
-    @apply rounded-3xl p-6;
+    /* Slightly tighter radius on mobile, original radius preserved on desktop */
+    @apply rounded-2xl lg:rounded-3xl p-6;
     background-color: var(--brand-color);
   }
 
