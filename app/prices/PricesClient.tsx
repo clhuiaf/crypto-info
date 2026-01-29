@@ -191,7 +191,7 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
   ) : (
     <div className="overflow-x-auto">
       {/* Keep desktop columns from collapsing when the card gets narrow (e.g. next to sidebar). */}
-      <div className="min-w-0 lg:min-w-[980px]">
+      <div className="min-w-0 md:min-w-[980px]">
         <MarketHeaderRow />
         <div className="space-y-0">
           {displayAssets.map((crypto, index) => (

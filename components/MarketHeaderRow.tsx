@@ -2,7 +2,7 @@
 
 export default function MarketHeaderRow() {
   return (
-    <div className="hidden lg:grid lg:grid-cols-[32px,40px,minmax(0,2.4fr),minmax(120px,1fr),80px,80px,80px,minmax(150px,1.1fr),minmax(150px,1.1fr)] lg:items-center gap-3 px-6 py-3 text-xs font-semibold text-slate-500">
+    <div className="hidden md:grid md:grid-cols-[32px,40px,minmax(0,2.4fr),minmax(120px,1fr),80px,80px,80px,minmax(150px,1.1fr),minmax(150px,1.1fr)] md:items-center gap-3 px-6 py-3 text-xs font-semibold text-slate-500">
       <div></div> {/* Star column */}
       <div>#</div>
       <div>Coin</div>
