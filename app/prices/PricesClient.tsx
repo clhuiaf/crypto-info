@@ -134,15 +134,15 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
     switch (view) {
       case VIEW.GAINERS:
         list = list
+          .filter((c) => (c.price_change_percentage_24h ?? 0) > 0)
           .slice()
           .sort((a, b) => (b.price_change_percentage_24h ?? 0) - (a.price_change_percentage_24h ?? 0))
-          .slice(0, 50)
         break
       case VIEW.LOSERS:
         list = list
+          .filter((c) => (c.price_change_percentage_24h ?? 0) < 0)
           .slice()
           .sort((a, b) => (a.price_change_percentage_24h ?? 0) - (b.price_change_percentage_24h ?? 0))
-          .slice(0, 50)
         break
       case VIEW.ALL:
       default:
