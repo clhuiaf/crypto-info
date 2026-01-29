@@ -70,53 +70,46 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
   const displayPrices = market?.data?.length ? market.data : initialPrices;
 
   // Filters / view state
-  const [assetFilter, setAssetFilter] = useState<'all' | 'highlights'>('all')
   const VIEW = {
     ALL: 'all',
     GAINERS: 'gainers',
     LOSERS: 'losers',
-    VOLUME: 'volume',
-    MARKET_CAP: 'marketcap',
   } as const
   type ViewKey = (typeof VIEW)[keyof typeof VIEW]
   const [view, setView] = useState<ViewKey>(VIEW.ALL)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const toolbar = (
     <PageToolbar
       left={
-        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
-          <div className="flex items-center space-x-3">
-            <label htmlFor="view" className="sr-only">View</label>
-            <select
-              id="view"
-              value={view}
-              onChange={(e) => setView(e.target.value as ViewKey)}
-              className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value={VIEW.ALL}>All assets</option>
-              <option value={VIEW.GAINERS}>Top gainers (24h)</option>
-              <option value={VIEW.LOSERS}>Top losers (24h)</option>
-              <option value={VIEW.VOLUME}>Highest volume (24h)</option>
-              <option value={VIEW.MARKET_CAP}>Largest market cap</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="assetFilter" className="sr-only">Asset filter</label>
-            <select
-              id="assetFilter"
-              value={assetFilter}
-              onChange={(e) => setAssetFilter(e.target.value as 'all' | 'highlights')}
-              className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">All assets</option>
-              <option value="highlights">Highlights</option>
-            </select>
-          </div>
+        <div className="w-full sm:w-auto">
+          <label htmlFor="view" className="sr-only">Filter</label>
+          <select
+            id="view"
+            value={view}
+            onChange={(e) => setView(e.target.value as ViewKey)}
+            className="w-full sm:w-56 px-3 py-2 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value={VIEW.ALL}>All assets</option>
+            <option value={VIEW.GAINERS}>Top gainers (24h)</option>
+            <option value={VIEW.LOSERS}>Top losers (24h)</option>
+          </select>
+        </div>
+      }
+      center={
+        <div className="w-full sm:w-[420px]">
+          <label htmlFor="marketSearch" className="sr-only">Search</label>
+          <input
+            id="marketSearch"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by name or symbol"
+            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
         </div>
       }
       right={
-        <span className="text-xs text-slate-500" suppressHydrationWarning>
+        <span className="text-xs text-slate-500 sm:text-right" suppressHydrationWarning>
           {market && market.data.length > 0
             ? `Last updated: ${new Date(market.lastUpdated).toLocaleTimeString('en-US', {
                 hour: '2-digit',
@@ -137,39 +130,37 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
 
     let list = [...displayPrices]
 
-    // Apply asset filter first
-    if (assetFilter === 'highlights') {
-      // simple heuristic: highlights are large-cap assets (> $1B)
-      list = list.filter((c) => (c.market_cap ?? 0) > 1_000_000_000)
-    }
-
-    // Apply view sorting
+    // Apply dropdown view (sort/limit)
     switch (view) {
       case VIEW.GAINERS:
-        return list
+        list = list
           .slice()
           .sort((a, b) => (b.price_change_percentage_24h ?? 0) - (a.price_change_percentage_24h ?? 0))
           .slice(0, 50)
+        break
       case VIEW.LOSERS:
-        return list
+        list = list
           .slice()
           .sort((a, b) => (a.price_change_percentage_24h ?? 0) - (b.price_change_percentage_24h ?? 0))
           .slice(0, 50)
-      case VIEW.VOLUME:
-        return list
-          .slice()
-          .sort((a, b) => (b.total_volume ?? 0) - (a.total_volume ?? 0))
-          .slice(0, 50)
-      case VIEW.MARKET_CAP:
-        return list
-          .slice()
-          .sort((a, b) => (b.market_cap ?? 0) - (a.market_cap ?? 0))
-          .slice(0, 50)
+        break
       case VIEW.ALL:
       default:
-        return list
+        break
     }
-  }, [displayPrices, assetFilter, view])
+
+    // Apply search (case-insensitive name OR symbol match)
+    const q = searchQuery.trim().toLowerCase()
+    if (q) {
+      list = list.filter((c) => {
+        const name = (c.name ?? '').toLowerCase()
+        const symbol = (c.symbol ?? '').toLowerCase()
+        return name.includes(q) || symbol.includes(q)
+      })
+    }
+
+    return list
+  }, [displayPrices, view, searchQuery])
 
   const sidebarAd = (
     <div className="h-72 w-full rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center overflow-hidden">
