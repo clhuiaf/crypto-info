@@ -100,63 +100,14 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
     <>
       <article
         className={[
-          // Mobile sizing/tap targets
-          'min-h-16 px-4 py-3',
-          // Desktop grid stays exactly as before
-          'md:grid md:grid-cols-[32px,40px,minmax(0,2.4fr),minmax(120px,1fr),80px,80px,80px,minmax(150px,1.1fr),minmax(150px,1.1fr)] md:items-center md:gap-3 md:px-6 md:py-4',
+          // Always render full columns; rely on horizontal scroll wrapper on small screens
+          'grid grid-cols-[32px,40px,minmax(0,2.4fr),minmax(120px,1fr),80px,80px,80px,minmax(150px,1.1fr),minmax(150px,1.1fr)] items-center gap-3',
+          // Tap targets + padding
+          'min-h-16 px-4 py-3 md:px-6 md:py-4',
           isLast ? 'rounded-b-xl' : ''
         ].join(' ')}
       >
-      {/* Mobile layout */}
-        <div className="grid grid-cols-[auto,minmax(0,1fr),auto] items-center gap-3 md:hidden">
-          <button
-            onClick={handleWatchlistToggle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className="relative p-2 rounded-md hover:bg-slate-100 transition-colors"
-            aria-pressed={isInWatchlistState}
-            aria-label={isInWatchlistState ? `Remove ${crypto.name} from watchlist` : `Add ${crypto.name} to watchlist`}
-          >
-            {starIcon}
-          </button>
-
-          <div className="min-w-0 flex items-center gap-3">
-            <div className="text-sm text-slate-500 w-8 tabular-nums">
-              {index + 1}
-            </div>
-
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <img
-                src={crypto.image}
-                alt={crypto.name}
-                className="h-7 w-7 rounded-full flex-shrink-0"
-              />
-              <div className="min-w-0 flex items-center justify-between w-full">
-                <div className="min-w-0">
-                  <div className="text-sm font-medium text-slate-900 truncate">
-                    {crypto.name}
-                  </div>
-                  <div className="text-[11px] uppercase tracking-wide text-slate-500 truncate">
-                    {crypto.symbol}
-                  </div>
-                </div>
-                {action ? <div className="ml-3 flex-shrink-0">{action}</div> : null}
-              </div>
-            </div>
-          </div>
-
-          <div className="text-right min-w-[96px]">
-            <div className="text-sm font-semibold text-slate-900 tabular-nums whitespace-nowrap">
-              {formatCurrency(crypto.current_price)}
-            </div>
-            <div className={`text-sm font-semibold tabular-nums whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_24h)}`}>
-              {formatPercentage(crypto.price_change_percentage_24h)}
-            </div>
-          </div>
-        </div>
-
-      {/* Desktop grid layout */}
-      <div className="hidden md:flex md:items-center md:justify-center">
+      <div className="flex items-center justify-center">
         <button
           onClick={handleWatchlistToggle}
           onMouseEnter={handleMouseEnter}
@@ -169,11 +120,11 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
         </button>
       </div>
 
-      <div className="hidden md:block text-sm text-slate-500">
+      <div className="text-sm text-slate-500 tabular-nums">
         {index + 1}
       </div>
 
-      <div className="hidden md:flex md:items-center gap-3 min-w-0 before:content-[''] after:content-['']">
+      <div className="flex items-center gap-3 min-w-0 before:content-[''] after:content-['']">
         <Image
           src={crypto.image}
           alt={crypto.name}
@@ -194,27 +145,27 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
         </div>
       </div>
 
-      <div className="hidden md:block text-sm font-medium text-slate-900 text-right whitespace-nowrap">
+      <div className="text-sm font-medium text-slate-900 text-right whitespace-nowrap tabular-nums">
         {formatCurrency(crypto.current_price)}
       </div>
 
-      <div className={`hidden md:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_1h)}`}>
+      <div className={`text-sm font-medium text-right whitespace-nowrap tabular-nums ${getChangeColor(crypto.price_change_percentage_1h)}`}>
         {formatPercentage(crypto.price_change_percentage_1h)}
       </div>
 
-      <div className={`hidden md:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_24h)}`}>
+      <div className={`text-sm font-medium text-right whitespace-nowrap tabular-nums ${getChangeColor(crypto.price_change_percentage_24h)}`}>
         {formatPercentage(crypto.price_change_percentage_24h)}
       </div>
 
-      <div className={`hidden md:block text-sm font-medium text-right whitespace-nowrap ${getChangeColor(crypto.price_change_percentage_7d)}`}>
+      <div className={`text-sm font-medium text-right whitespace-nowrap tabular-nums ${getChangeColor(crypto.price_change_percentage_7d)}`}>
         {formatPercentage(crypto.price_change_percentage_7d)}
       </div>
 
-      <div className="hidden md:block text-sm text-slate-500 text-right whitespace-nowrap">
+      <div className="text-sm text-slate-500 text-right whitespace-nowrap tabular-nums">
         {formatVolume(crypto.total_volume)}
       </div>
 
-      <div className="hidden md:block text-sm text-slate-500 text-right whitespace-nowrap">
+      <div className="text-sm text-slate-500 text-right whitespace-nowrap tabular-nums">
         {formatMarketCap(crypto.market_cap)}
       </div>
 

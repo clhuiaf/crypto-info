@@ -16,7 +16,7 @@ export default function MarketTable({ assets, onRemove, showActions = false }: M
     <section className="mt-6">
       <div className="mx-auto overflow-hidden rounded-2xl border border-slate-100 bg-white">
         <div className="overflow-x-auto">
-          <div className="min-w-0 md:min-w-[980px]">
+          <div className="min-w-[980px]">
             <MarketHeaderRow />
             <div className="space-y-0">
               {assets.map((asset, index) => {
