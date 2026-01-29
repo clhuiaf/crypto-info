@@ -189,20 +189,17 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
       <p className="text-sm text-slate-500 mt-2">Data will appear shortly.</p>
     </div>
   ) : (
-    <div className="overflow-x-auto">
-      {/* Keep desktop columns from collapsing when the card gets narrow (e.g. next to sidebar). */}
-      <div className="min-w-[980px]">
-        <MarketHeaderRow />
-        <div className="space-y-0">
-          {displayAssets.map((crypto, index) => (
-            <CryptoRow
-              key={crypto.id}
-              crypto={crypto}
-              index={index}
-              isLast={index === displayAssets.length - 1}
-            />
-          ))}
-        </div>
+    <div className="overflow-hidden">
+      <MarketHeaderRow />
+      <div className="space-y-0">
+        {displayAssets.map((crypto, index) => (
+          <CryptoRow
+            key={crypto.id}
+            crypto={crypto}
+            index={index}
+            isLast={index === displayAssets.length - 1}
+          />
+        ))}
       </div>
     </div>
   )
@@ -211,7 +208,7 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
     <div className="py-8">
       <PageShell>
         {/* Light-blue outer panel */}
-        <section className="brand-frame space-y-4">
+        <section className="brand-frame space-y-4 rounded-2xl lg:rounded-3xl px-3 sm:px-4 lg:px-6">
         {/* Title on light blue */}
         <header>
           <h1 className="text-3xl font-semibold text-white">
@@ -223,12 +220,12 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
         </header>
 
         {/* Card 1: filters bar */}
-        <div className="rounded-2xl bg-white shadow-sm p-4">
+        <div className="rounded-2xl bg-white shadow-sm p-4 w-full mx-auto">
           {toolbar}  {/* existing filters + last-updated; remove its old outer card */}
         </div>
 
         {/* Card 2 + 3: table + sidebar ad */}
-        <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-col lg:flex-row gap-4 w-full mx-auto">
           {/* Card 2: table */}
           <div className="flex-1 rounded-2xl bg-white shadow-sm p-4">
             {tableSection}   {/* existing table content without extra outer card */}
