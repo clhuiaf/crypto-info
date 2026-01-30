@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { CryptoPrice } from '@/lib/api'
 import { ReactNode, useState, useEffect } from 'react'
 import { formatCurrency, formatPercentage, formatMarketCap, formatVolume } from '@/lib/utils'
@@ -129,7 +128,7 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
 
       <div className="flex items-center gap-3 min-w-0 before:content-[''] after:content-['']">
         {!imageError && iconSrc ? (
-          <Image
+          <img
             src={iconSrc}
             alt={crypto.name}
             width={24}
