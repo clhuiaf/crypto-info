@@ -17,9 +17,9 @@ export type Wallet = {
   cons: string;
   websiteUrl: string;
   slug: string;
+  logoUrl?: string;      // optional local logo image path (e.g., '/logos/ledger.png')
   // Optional sponsored placement support for inline ads inside wallet cards
   sponsored?: boolean;
-  bannerUrl?: string;
 };
 
 export type WalletFilterType = 'All' | 'Hardware only' | 'Non-custodial only' | 'Beginner friendly';

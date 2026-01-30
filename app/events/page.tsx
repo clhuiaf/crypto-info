@@ -9,19 +9,19 @@ import { mockEvents } from '@/data/mockEvents';
 import { Event, EventType } from '@/types/event';
 
 export default function EventsPage() {
-  const [selectedExchange, setSelectedExchange] = useState<string>('All');
-  const [selectedEventType, setSelectedEventType] = useState<EventType | 'All'>('All');
+  const [selectedExchange, setSelectedExchange] = useState<string>('All exchanges');
+  const [selectedEventType, setSelectedEventType] = useState<EventType | 'All event types'>('All event types');
 
   // Get unique exchange names for filter
   const exchangeNames = useMemo(() => {
     const names = new Set(mockEvents.map((event) => event.exchangeName));
-    return ['All', ...Array.from(names).sort()];
+    return ['All exchanges', ...Array.from(names).sort()];
   }, []);
 
   // Get unique event types for filter
   const eventTypes = useMemo(() => {
     const types = new Set(mockEvents.map((event) => event.eventType));
-    return ['All', ...Array.from(types).sort()] as (EventType | 'All')[];
+    return ['All event types', ...Array.from(types).sort()] as (EventType | 'All event types')[];
   }, []);
 
   // Filter events
@@ -29,12 +29,12 @@ export default function EventsPage() {
     let filtered = [...mockEvents];
 
     // Filter by exchange
-    if (selectedExchange !== 'All') {
+    if (selectedExchange !== 'All exchanges') {
       filtered = filtered.filter((event) => event.exchangeName === selectedExchange);
     }
 
     // Filter by event type
-    if (selectedEventType !== 'All') {
+    if (selectedEventType !== 'All event types') {
       filtered = filtered.filter((event) => event.eventType === selectedEventType);
     }
 
@@ -66,7 +66,7 @@ export default function EventsPage() {
 
           <select
             value={selectedEventType}
-            onChange={(e) => setSelectedEventType(e.target.value as EventType | 'All')}
+            onChange={(e) => setSelectedEventType(e.target.value as EventType | 'All event types')}
             className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             {eventTypes.map((type) => (

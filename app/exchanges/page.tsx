@@ -10,9 +10,10 @@ import PageToolbar from '@/components/PageToolbar';
 // SidebarPlaceholder removed — sponsored sidebar removed per design
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { mockExchanges } from '@/data/mockExchanges';
-import { Exchange, FilterType, SortType, SidebarFilters } from '@/types/exchange';
+import { Exchange, SortType, SidebarFilters } from '@/types/exchange';
 
-const DEFAULT_FILTER: FilterType = 'Licensed only';
+type LicenseFilter = 'All exchanges' | 'Licensed' | 'Unlicensed';
+const DEFAULT_LICENSE_FILTER: LicenseFilter = 'All exchanges';
 
 const initialSidebarFilters: SidebarFilters = {
   legalStatus: {
@@ -31,7 +32,7 @@ const initialSidebarFilters: SidebarFilters = {
 };
 
 export default function ExchangesPage() {
-  const [filter, setFilter] = useState<FilterType>(DEFAULT_FILTER);
+  const [licenseFilter, setLicenseFilter] = useState<LicenseFilter>(DEFAULT_LICENSE_FILTER);
   const [sort, setSort] = useState<SortType>('Fees (low to high)');
   const [sidebarFilters, setSidebarFilters] = useState<SidebarFilters>(initialSidebarFilters);
   const [selectedExchangeIds, setSelectedExchangeIds] = useState<Set<string>>(new Set());
@@ -44,15 +45,13 @@ export default function ExchangesPage() {
     // Apply country filter (locked to HK)
     filtered = filtered.filter((ex) => ex.country === 'HK');
 
-    // Apply main filter (top bar)
-    if (filter === 'Licensed only') {
+    // Apply license filter
+    if (licenseFilter === 'Licensed') {
       filtered = filtered.filter((ex) => ex.licensed);
-    } else if (filter === 'Spot only') {
-      filtered = filtered.filter((ex) => ex.products.includes('Spot'));
-    } else if (filter === 'Derivatives only') {
-      filtered = filtered.filter((ex) => ex.products.includes('Derivatives'));
+    } else if (licenseFilter === 'Unlicensed') {
+      filtered = filtered.filter((ex) => !ex.licensed);
     }
-    // "Licensed + unlicensed" shows all by license; sidebar can further restrict
+    // "All exchanges" shows all by license
 
     // Apply sidebar filters
     const { legalStatus, products, minDeposit } = sidebarFilters;
@@ -105,7 +104,7 @@ export default function ExchangesPage() {
     });
 
     return sorted;
-  }, [filter, sort, sidebarFilters]);
+  }, [licenseFilter, sort, sidebarFilters]);
 
   const selectedExchanges = useMemo(() => {
     return mockExchanges.filter((ex) => selectedExchangeIds.has(ex.id));
@@ -125,7 +124,7 @@ export default function ExchangesPage() {
 
   const handleClearFilters = () => {
     setSidebarFilters(initialSidebarFilters);
-    setFilter(DEFAULT_FILTER);
+    setLicenseFilter(DEFAULT_LICENSE_FILTER);
   };
 
   const handleClearSelection = () => {
@@ -136,19 +135,14 @@ export default function ExchangesPage() {
     <PageToolbar
       left={
         <>
-          <span className="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md text-xs font-medium">
-            Hong Kong 🇭🇰
-          </span>
-
           <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value as FilterType)}
+            value={licenseFilter}
+            onChange={(e) => setLicenseFilter(e.target.value as LicenseFilter)}
             className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            <option value="Licensed only">Licensed only</option>
-            <option value="Licensed + unlicensed">All exchanges</option>
-            <option value="Spot only">Spot only</option>
-            <option value="Derivatives only">Derivatives only</option>
+            <option value="All exchanges">All exchanges</option>
+            <option value="Licensed">Licensed</option>
+            <option value="Unlicensed">Unlicensed</option>
           </select>
 
           <select
@@ -165,12 +159,7 @@ export default function ExchangesPage() {
         </>
       }
       right={
-        <button
-          onClick={() => {}}
-          className="px-4 py-2 rounded-lg font-medium text-sm shadow-sm hover:shadow-md transition-all brand-button"
-        >
-          Show exchanges
-        </button>
+        <span className="text-xs text-slate-500">Compare fees · License status</span>
       }
     />
   )
@@ -210,11 +199,11 @@ export default function ExchangesPage() {
         {filteredAndSortedExchanges.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No exchanges found matching your filters.</p>
-            <p className="text-gray-400 text-sm mt-2">Country: HK, Filter: {filter}</p>
+            <p className="text-gray-400 text-sm mt-2">Country: HK</p>
           </div>
         ) : (
           filteredAndSortedExchanges.map((exchange) => (
-            <ErrorBoundary key={`${exchange.id}-${filter}`}>
+            <ErrorBoundary key={exchange.id}>
               <ExchangeCard
                 exchange={exchange}
                 isSelected={selectedExchangeIds.has(exchange.id)}

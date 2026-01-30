@@ -12,13 +12,30 @@ export default function WalletCard({ wallet }: WalletCardProps) {
   return (
     <div className="card-surface p-5 md:p-6">
       <div className="relative">
-        {/* Top row: Name and Type badge */}
+        {/* Top row: Logo, Name and Type badge */}
         <div className="flex justify-between items-start mb-4 gap-3">
-          <div>
-            <h3 className="text-lg md:text-xl font-semibold text-slate-900 tracking-tight">
-              {wallet.name}
-            </h3>
-            <p className="mt-1 text-xs text-slate-500">{wallet.type} · {wallet.custody}</p>
+          <div className="flex items-start gap-3">
+            {wallet.logoUrl && (
+              <img
+                src={wallet.logoUrl}
+                alt={`${wallet.name} logo`}
+                className="w-14 h-14 rounded-lg object-contain flex-shrink-0 border border-slate-200 bg-white p-1"
+                loading="lazy"
+                onError={(e) => {
+                  try {
+                    e.currentTarget.style.display = 'none';
+                  } catch (err) {
+                    // Silently fail
+                  }
+                }}
+              />
+            )}
+            <div>
+              <h3 className="text-lg md:text-xl font-semibold text-slate-900 tracking-tight">
+                {wallet.name}
+              </h3>
+              <p className="mt-1 text-xs text-slate-500">{wallet.type} · {wallet.custody}</p>
+            </div>
           </div>
           <div className="flex flex-col items-end space-y-1">
             <span className="badge-soft bg-blue-50 text-blue-700 border border-blue-200">
@@ -94,10 +111,8 @@ export default function WalletCard({ wallet }: WalletCardProps) {
           </div>
         </div>
 
-        {/* Sponsored placement (if any) */}
-        {wallet.sponsored && (
-          <SponsoredPlacementNotice bannerUrl={wallet.bannerUrl} websiteUrl={wallet.websiteUrl} />
-        )}
+        {/* Sponsored placement */}
+        <SponsoredPlacementNotice websiteUrl={wallet.websiteUrl} />
 
         {/* Bottom row: Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 mt-5">

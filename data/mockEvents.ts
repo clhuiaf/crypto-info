@@ -14,7 +14,6 @@ export const mockEvents: Event[] = [
     ctaLabel: 'Join Airdrop',
     ctaUrl: 'https://www.binance.com/en/activity/airdrop',
     isSponsored: true,
-    bannerUrl: '/banners/binance.jpg',
   },
   {
     id: '2',
@@ -28,7 +27,7 @@ export const mockEvents: Event[] = [
     requirements: 'Min. trading volume $1,000, KYC verified',
     ctaLabel: 'Register Now',
     ctaUrl: 'https://www.binance.com/en/futures/competition',
-    isSponsored: false,
+    isSponsored: true,
   },
   {
     id: '3',
@@ -43,7 +42,6 @@ export const mockEvents: Event[] = [
     ctaLabel: 'Start Learning',
     ctaUrl: 'https://www.coinbase.com/learn',
     isSponsored: true,
-    bannerUrl: '/banners/coinbase.jpg',
   },
   {
     id: '4',
@@ -57,7 +55,7 @@ export const mockEvents: Event[] = [
     requirements: 'New account, min. deposit $100',
     ctaLabel: 'Claim Rebate',
     ctaUrl: 'https://www.kraken.com/promotions/fee-rebate',
-    isSponsored: false,
+    isSponsored: true,
   },
   {
     id: '5',
@@ -72,7 +70,6 @@ export const mockEvents: Event[] = [
     ctaLabel: 'View Listings',
     ctaUrl: 'https://www.okx.com/listings',
     isSponsored: true,
-    bannerUrl: '/banners/okx.jpg',
   },
   {
     id: '6',
@@ -86,7 +83,7 @@ export const mockEvents: Event[] = [
     requirements: 'Hold CRO tokens, staking period 30 days',
     ctaLabel: 'Stake Now',
     ctaUrl: 'https://crypto.com/supercharger',
-    isSponsored: false,
+    isSponsored: true,
   },
   {
     id: '7',
@@ -101,7 +98,6 @@ export const mockEvents: Event[] = [
     ctaLabel: 'Get Referral Link',
     ctaUrl: 'https://www.bybit.com/referral',
     isSponsored: true,
-    bannerUrl: '/banners/bybit.jpg',
   },
   {
     id: '8',
@@ -115,7 +111,7 @@ export const mockEvents: Event[] = [
     requirements: 'New ActiveTrader account, min. trade $500',
     ctaLabel: 'Start Trading',
     ctaUrl: 'https://www.gemini.com/activetrader',
-    isSponsored: false,
+    isSponsored: true,
   },
 ];
 

@@ -1,14 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import { Event } from '@/types/event';
+import SponsoredPlacementNotice from '@/components/SponsoredPlacementNotice';
 
 interface EventCardProps {
   event: Event;
 }
 
 export default function EventCard({ event }: EventCardProps) {
-  const [bannerError, setBannerError] = useState(false);
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -111,44 +110,8 @@ export default function EventCard({ event }: EventCardProps) {
           </div>
         )}
 
-        {/* Banner Area */}
-        {event.bannerUrl && !bannerError ? (
-          <div className="mb-4 relative rounded-xl overflow-hidden border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-sm">
-            <div className="absolute top-2 left-2 z-10">
-              <span className="badge-soft bg-amber-200 text-amber-900 border border-amber-300 text-[10px] font-semibold px-2 py-1">
-                Ad
-              </span>
-            </div>
-            <a
-              href={event.ctaUrl}
-              target="_blank"
-              rel="noreferrer sponsored"
-              className="block w-full cursor-pointer hover:opacity-90 transition-opacity"
-            >
-              <div className="relative w-full" style={{ minHeight: '90px' }}>
-                <img
-                  src={event.bannerUrl}
-                  alt={`${event.exchangeName} event banner`}
-                  className="w-full h-auto object-cover block"
-                  style={{ minHeight: '90px', display: 'block', width: '100%' }}
-                  onError={() => {
-                    setBannerError(true);
-                  }}
-                  loading="lazy"
-                />
-              </div>
-            </a>
-            <p className="absolute bottom-2 right-2 text-[10px] font-medium text-amber-800 bg-amber-200/90 px-2 py-1 rounded border border-amber-300 backdrop-blur-sm">
-              Sponsored
-            </p>
-          </div>
-        ) : (
-          <div className="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-4" style={{ minHeight: '90px' }}>
-            <p className="text-xs text-slate-500 text-center">
-              Banner area - Event promotion image can be displayed here
-            </p>
-          </div>
-        )}
+        {/* Sponsored Placement Notice */}
+        <SponsoredPlacementNotice websiteUrl={event.ctaUrl} />
 
         {/* CTA Button */}
         <div className="flex justify-end">

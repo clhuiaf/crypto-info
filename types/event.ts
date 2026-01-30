@@ -19,7 +19,6 @@ export type Event = {
   ctaLabel: string; // e.g., "Join Now", "Learn More"
   ctaUrl: string; // Link to exchange campaign page
   isSponsored: boolean; // If true, show "Sponsored" tag
-  bannerUrl?: string; // Optional banner image for the event
 };
 
 
