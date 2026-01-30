@@ -158,6 +158,9 @@ export default function ExchangesPage() {
           </select>
         </>
       }
+      right={
+        <span className="text-xs text-slate-500">Compare fees · License status</span>
+      }
     />
   )
 

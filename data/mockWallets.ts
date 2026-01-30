@@ -15,6 +15,8 @@ export const mockWallets: Wallet[] = [
     cons: 'Requires hardware purchase, not ideal for frequent DeFi trading',
     websiteUrl: 'https://www.ledger.com',
     slug: 'ledger-nano-x',
+    logoUrl: '/logos/ledger.png',
+    sponsored: true,
   },
   {
     id: '2',
@@ -30,21 +32,8 @@ export const mockWallets: Wallet[] = [
     cons: 'Browser-based security risks, primarily Ethereum-focused',
     websiteUrl: 'https://metamask.io',
     slug: 'metamask',
-  },
-  {
-    id: '3',
-    name: 'Coinbase Wallet',
-    type: 'Mobile',
-    custody: 'Non-custodial',
-    platforms: ['iOS', 'Android', 'Browser'],
-    networks: ['Ethereum', 'Bitcoin', 'Multi-chain'],
-    useCases: ['Beginner friendly', 'DeFi', 'NFTs'],
-    features: ['Non-custodial', 'User-friendly', 'Coinbase integration', 'DApp browser'],
-    supportedAssets: ['BTC', 'ETH', 'USDT', 'USDC', 'DOGE'],
-    pros: 'Very beginner-friendly, integrates with Coinbase exchange',
-    cons: 'Less control over private keys compared to hardware wallets',
-    websiteUrl: 'https://www.coinbase.com/wallet',
-    slug: 'coinbase-wallet',
+    logoUrl: '/logos/metamask.png',
+    sponsored: true,
   },
   {
     id: '4',
@@ -60,6 +49,8 @@ export const mockWallets: Wallet[] = [
     cons: 'Higher price point, requires computer connection',
     websiteUrl: 'https://trezor.io',
     slug: 'trezor-model-t',
+    logoUrl: '/logos/trezor.png',
+    sponsored: true,
   },
   {
     id: '5',
@@ -75,6 +66,7 @@ export const mockWallets: Wallet[] = [
     cons: 'Mobile-only, less secure than hardware wallets',
     websiteUrl: 'https://trustwallet.com',
     slug: 'trust-wallet',
+    logoUrl: '/logos/trust-wallet.png',
     // Demo sponsored placement
     sponsored: true,
   },
@@ -92,6 +84,8 @@ export const mockWallets: Wallet[] = [
     cons: 'Solana-only, limited to Solana ecosystem',
     websiteUrl: 'https://phantom.app',
     slug: 'phantom',
+    logoUrl: '/logos/phantom.png',
+    sponsored: true,
   },
   {
     id: '7',
@@ -107,6 +101,8 @@ export const mockWallets: Wallet[] = [
     cons: 'Desktop software requires download, less secure than hardware',
     websiteUrl: 'https://www.exodus.com',
     slug: 'exodus',
+    logoUrl: '/logos/exodus.png',
+    sponsored: true,
   },
   {
     id: '8',
@@ -122,6 +118,7 @@ export const mockWallets: Wallet[] = [
     cons: 'Custodial (not your keys), limited DeFi access, higher fees',
     websiteUrl: 'https://www.coinbase.com',
     slug: 'coinbase',
+    logoUrl: '/logos/coinbase.png',
     sponsored: true,
   },
 ];

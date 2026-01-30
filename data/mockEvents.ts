@@ -27,7 +27,7 @@ export const mockEvents: Event[] = [
     requirements: 'Min. trading volume $1,000, KYC verified',
     ctaLabel: 'Register Now',
     ctaUrl: 'https://www.binance.com/en/futures/competition',
-    isSponsored: false,
+    isSponsored: true,
   },
   {
     id: '3',
@@ -55,7 +55,7 @@ export const mockEvents: Event[] = [
     requirements: 'New account, min. deposit $100',
     ctaLabel: 'Claim Rebate',
     ctaUrl: 'https://www.kraken.com/promotions/fee-rebate',
-    isSponsored: false,
+    isSponsored: true,
   },
   {
     id: '5',
@@ -83,7 +83,7 @@ export const mockEvents: Event[] = [
     requirements: 'Hold CRO tokens, staking period 30 days',
     ctaLabel: 'Stake Now',
     ctaUrl: 'https://crypto.com/supercharger',
-    isSponsored: false,
+    isSponsored: true,
   },
   {
     id: '7',
@@ -111,7 +111,7 @@ export const mockEvents: Event[] = [
     requirements: 'New ActiveTrader account, min. trade $500',
     ctaLabel: 'Start Trading',
     ctaUrl: 'https://www.gemini.com/activetrader',
-    isSponsored: false,
+    isSponsored: true,
   },
 ];
 

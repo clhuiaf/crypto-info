@@ -1,6 +1,7 @@
 'use client';
 
 import { Event } from '@/types/event';
+import SponsoredPlacementNotice from '@/components/SponsoredPlacementNotice';
 
 interface EventCardProps {
   event: Event;
@@ -110,16 +111,7 @@ export default function EventCard({ event }: EventCardProps) {
         )}
 
         {/* Sponsored Placement Notice */}
-        {event.isSponsored && (
-          <div className="mb-4 rounded-xl border border-amber-100 bg-amber-50/80 px-3 py-2">
-            <div className="flex items-center gap-2">
-              <span className="badge-soft bg-amber-100 text-amber-800 border border-amber-200">Ad</span>
-              <p className="text-xs text-amber-900">
-                Sponsored placement – may offer referral bonuses or promotions.
-              </p>
-            </div>
-          </div>
-        )}
+        <SponsoredPlacementNotice websiteUrl={event.ctaUrl} />
 
         {/* CTA Button */}
         <div className="flex justify-end">

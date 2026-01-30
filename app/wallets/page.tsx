@@ -132,7 +132,7 @@ export default function WalletsPage() {
             onChange={(e) => setFilter(e.target.value as WalletFilterType)}
             className="px-3 py-1.5 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            <option value="All">All</option>
+            <option value="All">All wallets</option>
             <option value="Hardware only">Hardware only</option>
             <option value="Non-custodial only">Non-custodial only</option>
             <option value="Beginner friendly">Beginner friendly</option>
