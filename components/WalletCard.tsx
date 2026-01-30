@@ -96,7 +96,7 @@ export default function WalletCard({ wallet }: WalletCardProps) {
 
         {/* Sponsored placement (if any) */}
         {wallet.sponsored && (
-          <SponsoredPlacementNotice bannerUrl={wallet.bannerUrl} websiteUrl={wallet.websiteUrl} />
+          <SponsoredPlacementNotice websiteUrl={wallet.websiteUrl} />
         )}
 
         {/* Bottom row: Buttons */}

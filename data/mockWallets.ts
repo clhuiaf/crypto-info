@@ -77,7 +77,6 @@ export const mockWallets: Wallet[] = [
     slug: 'trust-wallet',
     // Demo sponsored placement
     sponsored: true,
-    bannerUrl: '/banners/crypto-com.jpg',
   },
   {
     id: '6',
@@ -124,7 +123,6 @@ export const mockWallets: Wallet[] = [
     websiteUrl: 'https://www.coinbase.com',
     slug: 'coinbase',
     sponsored: true,
-    bannerUrl: '/banners/coinbase.jpg',
   },
 ];
 

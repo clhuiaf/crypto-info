@@ -17,20 +17,6 @@ export default function Layout({ children }: LayoutProps) {
         <Navbar />
       </header>
 
-      {/* Top Horizontal Ad Banner */}
-      <div className="w-full border-b bg-white">
-        <div className="w-full py-3">
-          <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: '970/90' }}>
-            <img
-              src="/banners/square-ad-rec-mcm.jpg"
-              alt="Top advertisement"
-              className="w-full h-full object-contain"
-              loading="eager"
-            />
-          </div>
-        </div>
-      </div>
-
       {/* Main content area */}
       {children}
 

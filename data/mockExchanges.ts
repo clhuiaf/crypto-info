@@ -18,7 +18,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.01,
     logoUrl: '/logos/binance.png', // Place your logo at public/logos/binance.png
-    bannerUrl: '/banners/binance.jpg', // Place your banner image at public/banners/binance.jpg
     websiteUrl: 'https://www.binance.com',
   },
   {
@@ -36,7 +35,6 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 100,
     hasPerps: false,
     logoUrl: '/logos/hashkey.png',
-    bannerUrl: '/banners/hashkey.jpg',
     websiteUrl: 'https://hashkey.com',
   },
   {
@@ -54,7 +52,6 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 1000,
     hasPerps: false,
     logoUrl: '/logos/osl.png',
-    bannerUrl: '/banners/osl.jpg',
     websiteUrl: 'https://www.osl.com',
   },
   {
@@ -73,7 +70,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.012,
     logoUrl: '/logos/okx.png',
-    bannerUrl: '/banners/okx.jpg',
     websiteUrl: 'https://www.okx.com',
   },
   {
@@ -92,7 +88,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.01,
     logoUrl: '/logos/bybit.png',
-    bannerUrl: '/banners/bybit.jpg',
     websiteUrl: 'https://www.bybit.com',
   },
   {
@@ -111,7 +106,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.011,
     logoUrl: '/logos/mexc.png',
-    bannerUrl: '/banners/mexc.jpg',
     websiteUrl: 'https://www.mexc.com',
   },
   {
@@ -130,7 +124,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.012,
     logoUrl: '/logos/kucoin.png',
-    bannerUrl: '/banners/kucoin.jpg',
     websiteUrl: 'https://www.kucoin.com',
   },
   {
@@ -149,7 +142,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.013,
     logoUrl: '/logos/gateio.png',
-    bannerUrl: '/banners/gateio.jpg',
     websiteUrl: 'https://www.gate.io',
   },
   {
@@ -168,7 +160,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.015,
     logoUrl: '/logos/kraken.png',
-    bannerUrl: '/banners/kraken.jpg',
     websiteUrl: 'https://www.kraken.com',
   },
   {
@@ -187,7 +178,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.01,
     logoUrl: '/logos/crypto-com.png',
-    bannerUrl: '/banners/crypto-com.jpg',
     websiteUrl: 'https://crypto.com',
   },
   {
@@ -206,7 +196,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.012,
     logoUrl: '/logos/btcc.png',
-    bannerUrl: '/banners/btcc.jpg',
     websiteUrl: 'https://www.btcc.com',
   },
   {
@@ -225,7 +214,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.01,
     logoUrl: '/logos/huobi.png',
-    bannerUrl: '/banners/huobi.jpg',
     websiteUrl: 'https://www.huobi.com',
   },
 
@@ -245,7 +233,6 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 1,
     hasPerps: false,
     logoUrl: '/logos/coinbase.png',
-    bannerUrl: '/banners/coinbase.jpg',
     websiteUrl: 'https://www.coinbase.com',
   },
   {
@@ -263,7 +250,6 @@ export const mockExchanges: Exchange[] = [
     minDepositUsd: 0,
     hasPerps: false,
     logoUrl: '/logos/gemini.png',
-    bannerUrl: '/banners/gemini.jpg',
     websiteUrl: 'https://www.gemini.com',
   },
   {
@@ -282,7 +268,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.02,
     logoUrl: '/logos/bitfinex.png',
-    bannerUrl: '/banners/bitfinex.jpg',
     websiteUrl: 'https://www.bitfinex.com',
   },
   {
@@ -301,7 +286,6 @@ export const mockExchanges: Exchange[] = [
     hasPerps: true,
     fundingRate: 0.01,
     logoUrl: '/logos/ftx.png',
-    bannerUrl: '/banners/ftx.jpg',
     websiteUrl: 'https://www.ftx.com',
   },
 ];
