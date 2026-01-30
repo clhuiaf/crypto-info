@@ -1,4 +1,4 @@
-# Cryptopedia – Hong Kong Crypto Research Hub 🇭🇰
+# Cryptopedia – Hong Kong Crypto Research Hub
 
 An HK‑centric crypto encyclopedia for prices, context, and learning — built with Next.js and TypeScript.
 
@@ -58,7 +58,7 @@ npm install
 
 ```bash
 cp .env.local.example .env.local 2>/dev/null || true
-# Or create .env.local manually (see "Environment configuration" below)
+# Or create .env.local manually if you need to override defaults
 ```
 
 4) Start the dev server:
@@ -75,37 +75,6 @@ Open `http://localhost:3000`.
 npm run build
 npm run start
 ```
-
-## Environment configuration
-
-Create a `.env.local` file in the project root. Use **generic placeholders** (do not commit real secrets).
-
-Common values:
-
-```bash
-# Public site URL (used for metadata, canonical URLs, and share links)
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-
-# CoinGecko configuration
-COINGECKO_API_BASE_URL=https://api.coingecko.com/api/v3
-# Optional: if you use a paid plan or a proxy in front of CoinGecko
-COINGECKO_API_KEY=your_key_if_applicable
-
-# Optional: caching / rate-limit tuning (exact behavior depends on implementation)
-COINGECKO_CACHE_TTL_SECONDS=60
-COINGECKO_RATE_LIMIT_RPS=5
-
-# Optional: analytics (choose one)
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-NEXT_PUBLIC_PLAUSIBLE_DOMAIN=example.com
-
-# Optional: monitoring
-SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0
-```
-
-Notes:
-- **Never** commit `.env.local`.
-- If you add new required env vars, update this section (and consider adding an `.env.local.example`).
 
 ## Architecture overview
 
@@ -146,5 +115,4 @@ npm run lint
 Cryptopedia / Crypto通 is provided **for informational and educational purposes only**. It does not constitute investment advice, financial advice, trading advice, or any other kind of professional advice. You are solely responsible for your investment decisions and should do your own research (DYOR).
 
 ## License
-
 License: **TBA**.
