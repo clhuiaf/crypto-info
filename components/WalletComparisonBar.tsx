@@ -1,22 +1,22 @@
 'use client';
 
-import { Exchange } from '@/types/exchange';
+import { Wallet } from '@/types/wallet';
 import { useState } from 'react';
 
-interface ComparisonBarProps {
-  selectedExchanges: Exchange[];
+interface WalletComparisonBarProps {
+  selectedWallets: Wallet[];
   onClearSelection: () => void;
 }
 
-export default function ComparisonBar({ selectedExchanges, onClearSelection }: ComparisonBarProps) {
+export default function WalletComparisonBar({ selectedWallets, onClearSelection }: WalletComparisonBarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (selectedExchanges.length === 0) {
+  if (selectedWallets.length === 0) {
     return null;
   }
 
-  const maxExchanges = 3;
-  const displayExchanges = selectedExchanges.slice(0, maxExchanges);
+  const maxWallets = 3;
+  const displayWallets = selectedWallets.slice(0, maxWallets);
 
   return (
     <>
@@ -25,20 +25,20 @@ export default function ComparisonBar({ selectedExchanges, onClearSelection }: C
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-[0.16em]">
-                Selected ({selectedExchanges.length}):
+                Selected ({selectedWallets.length}):
               </span>
               <div className="flex gap-2 flex-wrap">
-                {displayExchanges.map((exchange) => (
+                {displayWallets.map((wallet) => (
                   <span
-                    key={exchange.id}
+                    key={wallet.id}
                     className="px-3 py-1 bg-slate-900 text-white rounded-full text-xs font-medium"
                   >
-                    {exchange.name}
+                    {wallet.name}
                   </span>
                 ))}
-                {selectedExchanges.length > maxExchanges && (
+                {selectedWallets.length > maxWallets && (
                   <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">
-                    +{selectedExchanges.length - maxExchanges} more
+                    +{selectedWallets.length - maxWallets} more
                   </span>
                 )}
               </div>
@@ -73,10 +73,10 @@ export default function ComparisonBar({ selectedExchanges, onClearSelection }: C
               <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center z-10">
                 <div>
                   <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
-                    Compare exchanges
+                    Compare wallets
                   </h2>
                   <p className="text-xs text-slate-500 mt-1">
-                    Side‑by‑side view of fees, tokens, legal status, and minimum deposits.
+                    Side‑by‑side view of type, custody, platforms, networks, and features.
                   </p>
                 </div>
                 <button
@@ -94,62 +94,96 @@ export default function ComparisonBar({ selectedExchanges, onClearSelection }: C
                         <th className="pb-3 pr-6 font-semibold text-slate-500 text-xs uppercase tracking-[0.16em]">
                           Feature
                         </th>
-                        {displayExchanges.map((exchange) => (
+                        {displayWallets.map((wallet) => (
                           <th
-                            key={exchange.id}
+                            key={wallet.id}
                             className="pb-3 px-4 font-semibold text-slate-900 text-sm"
                           >
-                            {exchange.name}
+                            {wallet.name}
                           </th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="border-b border-slate-100">
-                        <td className="py-3 pr-6 font-medium text-slate-700">Legal status</td>
-                        {displayExchanges.map((exchange) => (
-                          <td key={exchange.id} className="py-3 px-4 text-slate-700">
-                            {exchange.licensed ? (
+                        <td className="py-3 pr-6 font-medium text-slate-700">Type</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700">
+                            <span className="badge-soft bg-blue-50 text-blue-700 border border-blue-200">
+                              {wallet.type}
+                            </span>
+                          </td>
+                        ))}
+                      </tr>
+                      <tr className="border-b border-slate-100">
+                        <td className="py-3 pr-6 font-medium text-slate-700">Custody</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700">
+                            {wallet.custody === 'Non-custodial' ? (
                               <span className="badge-soft bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                Licensed
+                                Non-custodial
                               </span>
                             ) : (
-                              <span className="badge-soft bg-rose-50 text-rose-700 border border-rose-200">
-                                Unlicensed
+                              <span className="badge-soft bg-amber-50 text-amber-700 border border-amber-200">
+                                Custodial
                               </span>
                             )}
                           </td>
                         ))}
                       </tr>
                       <tr className="border-b border-slate-100">
-                        <td className="py-3 pr-6 font-medium text-slate-700">Products</td>
-                        {displayExchanges.map((exchange) => (
-                          <td key={exchange.id} className="py-3 px-4 text-slate-700">
-                            {exchange.products.join(', ')}
+                        <td className="py-3 pr-6 font-medium text-slate-700">Platforms</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700">
+                            {wallet.platforms.join(', ')}
                           </td>
                         ))}
                       </tr>
                       <tr className="border-b border-slate-100">
-                        <td className="py-3 pr-6 font-medium text-slate-700">Fees</td>
-                        {displayExchanges.map((exchange) => (
-                          <td key={exchange.id} className="py-3 px-4 text-slate-700">
-                            Maker {exchange.makerFee}% · Taker {exchange.takerFee}%
+                        <td className="py-3 pr-6 font-medium text-slate-700">Networks</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700">
+                            {wallet.networks.join(', ')}
                           </td>
                         ))}
                       </tr>
                       <tr className="border-b border-slate-100">
-                        <td className="py-3 pr-6 font-medium text-slate-700">Tokens</td>
-                        {displayExchanges.map((exchange) => (
-                          <td key={exchange.id} className="py-3 px-4 text-slate-700">
-                            {exchange.tokensTotal}+ total
+                        <td className="py-3 pr-6 font-medium text-slate-700">Key features</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700">
+                            {wallet.features.join(', ')}
+                          </td>
+                        ))}
+                      </tr>
+                      <tr className="border-b border-slate-100">
+                        <td className="py-3 pr-6 font-medium text-slate-700">Supported assets</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700 font-mono">
+                            {wallet.supportedAssets.join(', ')}
+                          </td>
+                        ))}
+                      </tr>
+                      <tr className="border-b border-slate-100">
+                        <td className="py-3 pr-6 font-medium text-slate-700">Use cases</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700">
+                            {wallet.useCases.join(', ')}
                           </td>
                         ))}
                       </tr>
                       <tr>
-                        <td className="py-3 pr-6 font-medium text-slate-700">Min deposit</td>
-                        {displayExchanges.map((exchange) => (
-                          <td key={exchange.id} className="py-3 px-4 text-slate-700">
-                            ${exchange.minDepositUsd} USD
+                        <td className="py-3 pr-6 font-medium text-slate-700">Pros</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700 text-xs">
+                            {wallet.pros}
+                          </td>
+                        ))}
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-6 font-medium text-slate-700">Cons</td>
+                        {displayWallets.map((wallet) => (
+                          <td key={wallet.id} className="py-3 px-4 text-slate-700 text-xs">
+                            {wallet.cons}
                           </td>
                         ))}
                       </tr>
@@ -164,4 +198,3 @@ export default function ComparisonBar({ selectedExchanges, onClearSelection }: C
     </>
   );
 }
-

@@ -150,9 +150,14 @@ export default function ExchangeCard({ exchange, isSelected, onToggleSelect }: E
           >
             Compare
           </button>
-          <button className="flex-1 px-5 py-3 border border-slate-200 rounded-full text-slate-700 bg-white hover:bg-slate-50 font-medium text-sm shadow-sm hover:shadow-md transition-all">
-            Open with referral
-          </button>
+          <a
+            href={exchange.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 px-5 py-3 border border-slate-200 rounded-full text-center text-slate-700 bg-white hover:bg-slate-50 font-medium text-sm shadow-sm hover:shadow-md transition-all"
+          >
+            Visit exchange
+          </a>
         </div>
       </div>
     </div>

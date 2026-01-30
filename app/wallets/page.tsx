@@ -4,6 +4,7 @@
 import { useState, useMemo } from 'react';
 import WalletSidebar from '@/components/WalletSidebar';
 import WalletCard from '@/components/WalletCard';
+import WalletComparisonBar from '@/components/WalletComparisonBar';
 import PageShell from '@/components/PageShell';
 import PageToolbar from '@/components/PageToolbar';
 import { mockWallets } from '@/data/mockWallets';
@@ -38,6 +39,7 @@ export default function WalletsPage() {
   const [filter, setFilter] = useState<WalletFilterType>('All');
   const [sort, setSort] = useState<WalletSortType>('Name (A-Z)');
   const [sidebarFilters, setSidebarFilters] = useState<WalletSidebarFilters>(initialSidebarFilters);
+  const [selectedWalletIds, setSelectedWalletIds] = useState<Set<string>>(new Set());
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   // Filter and sort wallets
@@ -119,8 +121,28 @@ export default function WalletsPage() {
     return sorted;
   }, [filter, sort, sidebarFilters]);
 
+  const selectedWallets = useMemo(() => {
+    return mockWallets.filter((w) => selectedWalletIds.has(w.id));
+  }, [selectedWalletIds]);
+
+  const handleToggleSelect = (id: string) => {
+    const newSet = new Set(selectedWalletIds);
+    if (newSet.has(id)) {
+      newSet.delete(id);
+    } else {
+      if (newSet.size < 3) {
+        newSet.add(id);
+      }
+    }
+    setSelectedWalletIds(newSet);
+  };
+
   const handleClearFilters = () => {
     setSidebarFilters(initialSidebarFilters);
+  };
+
+  const handleClearSelection = () => {
+    setSelectedWalletIds(new Set());
   };
 
   const toolbar = (
@@ -193,7 +215,12 @@ export default function WalletsPage() {
           </div>
         ) : (
           filteredAndSortedWallets.map((wallet) => (
-            <WalletCard key={wallet.id} wallet={wallet} />
+            <WalletCard
+              key={wallet.id}
+              wallet={wallet}
+              isSelected={selectedWalletIds.has(wallet.id)}
+              onToggleSelect={handleToggleSelect}
+            />
           ))
         )}
       </div>
@@ -223,6 +250,12 @@ export default function WalletsPage() {
           </div>
         </section>
       </PageShell>
+
+      {/* Comparison Bar */}
+      <WalletComparisonBar
+        selectedWallets={selectedWallets}
+        onClearSelection={handleClearSelection}
+      />
     </div>
   );
 }
