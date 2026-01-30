@@ -1,16 +1,17 @@
 'use client';
 
-import Link from 'next/link';
 import { Wallet } from '@/types/wallet';
 import SponsoredPlacementNotice from '@/components/SponsoredPlacementNotice';
 
 interface WalletCardProps {
   wallet: Wallet;
+  isSelected: boolean;
+  onToggleSelect: (id: string) => void;
 }
 
-export default function WalletCard({ wallet }: WalletCardProps) {
+export default function WalletCard({ wallet, isSelected, onToggleSelect }: WalletCardProps) {
   return (
-    <div className="card-surface p-5 md:p-6">
+    <div className={`card-surface p-5 md:p-6 ${isSelected ? 'border-2 border-blue-500 shadow-md shadow-blue-100' : ''}`}>
       <div className="relative">
         {/* Top row: Logo, Name and Type badge */}
         <div className="flex justify-between items-start mb-4 gap-3">
@@ -116,20 +117,24 @@ export default function WalletCard({ wallet }: WalletCardProps) {
 
         {/* Bottom row: Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 mt-5">
+          <button
+            onClick={() => onToggleSelect(wallet.id)}
+            className={`flex-1 px-5 py-3 rounded-full font-medium text-sm transition-all shadow-sm hover:shadow-md ${
+              isSelected
+                ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-500'
+                : 'bg-slate-900 text-white border-slate-900 hover:bg-slate-800'
+            }`}
+          >
+            Compare
+          </button>
           <a
             href={wallet.websiteUrl}
             target="_blank"
-            rel="noreferrer"
-            className="flex-1 px-5 py-3 bg-slate-900 text-white rounded-full hover:bg-slate-800 font-medium text-sm text-center transition-all shadow-sm hover:shadow-md"
+            rel="noopener noreferrer"
+            className="flex-1 px-5 py-3 border border-slate-200 rounded-full text-slate-700 bg-white hover:bg-slate-50 font-medium text-sm text-center shadow-sm hover:shadow-md transition-all"
           >
             Visit wallet
           </a>
-          <Link
-            href={`/wallets/${wallet.slug}`}
-            className="flex-1 px-5 py-3 border border-slate-200 rounded-full text-slate-700 bg-white hover:bg-slate-50 font-medium text-sm text-center shadow-sm hover:shadow-md transition-all"
-          >
-            Learn more →
-          </Link>
         </div>
       </div>
     </div>
