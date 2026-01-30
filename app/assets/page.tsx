@@ -53,9 +53,6 @@ export default async function AssetsIndex() {
           <p className="mt-1 text-sm text-slate-100">
             Detailed information cards for major cryptocurrencies and their exchange listings.
           </p>
-          <p className="mt-1 text-xs text-slate-200">
-            Demo data only for existing tokens – values are illustrative and not live market prices.
-          </p>
         </header>
 
         <div className="rounded-2xl bg-white shadow-sm p-4">
