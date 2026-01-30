@@ -2,12 +2,16 @@
 
 import { Event } from '@/types/event';
 import SponsoredPlacementNotice from '@/components/SponsoredPlacementNotice';
+import { mockExchanges } from '@/data/mockExchanges';
 
 interface EventCardProps {
   event: Event;
 }
 
 export default function EventCard({ event }: EventCardProps) {
+
+  const exchangeUrl =
+    mockExchanges.find((ex) => ex.name === event.exchangeName)?.websiteUrl ?? event.ctaUrl;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -111,12 +115,12 @@ export default function EventCard({ event }: EventCardProps) {
         )}
 
         {/* Sponsored Placement Notice */}
-        <SponsoredPlacementNotice websiteUrl={event.ctaUrl} />
+        <SponsoredPlacementNotice websiteUrl={exchangeUrl} />
 
         {/* CTA Button */}
         <div className="flex justify-end">
           <a
-            href={event.ctaUrl}
+            href={exchangeUrl}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center px-5 py-3 rounded-full font-medium text-sm shadow-sm hover:shadow-md transition-all brand-button border border-transparent"
