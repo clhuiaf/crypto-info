@@ -10,9 +10,12 @@ interface AssetDetailClientProps {
 }
 
 export default function AssetDetailClient({ asset, coinDetails }: AssetDetailClientProps) {
-  // Prefer an explicit asset logoUrl, otherwise use coinDetails image if available
+  // Always prefer CoinGecko image over local logoUrl to avoid 404s
+  // Only use asset.logoUrl if it's a valid external URL (not a local /logos/ path)
   const coinImage = coinDetails?.image?.large;
-  const logoSrc = (asset as any).logoUrl ?? coinImage;
+  const assetLogoUrl = (asset as any).logoUrl;
+  // Skip local /logos/ paths - they cause 404s. Use CoinGecko images instead.
+  const logoSrc = coinImage || (assetLogoUrl && !assetLogoUrl.startsWith('/logos/') ? assetLogoUrl : null);
 
   return (
     <div className="space-y-6">
@@ -21,11 +24,15 @@ export default function AssetDetailClient({ asset, coinDetails }: AssetDetailCli
         <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 gap-3">
           <div className="flex items-center mb-4 md:mb-0">
             <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center mr-4">
-              {logoSrc ? (
+              {logoSrc && !logoSrc.startsWith('/logos/') ? (
                 <img
                   src={logoSrc}
                   alt={`${asset.name} logo`}
                   className="w-12 h-12 object-contain rounded-full"
+                  onError={(e) => {
+                    // Hide image if it fails to load (e.g., broken CoinGecko URL)
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
               ) : (
                 <span className="text-3xl font-semibold text-slate-700">

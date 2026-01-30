@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { assets, getAssetBySymbol } from '@/data/assets'
 import { Asset } from '@/types/asset'
 import { CryptoPrice } from '@/lib/api'
-import tokenIcons from '@/config/tokenIcons'
 
 interface AssetSelectorProps {
   selectedSymbol: string
@@ -96,10 +95,10 @@ export default function AssetSelector({
             </div>
           ) : (
             <>
-              {selectedCrypto || tokenIcons[selectedSymbol?.toUpperCase()] ? (
+              {selectedCrypto ? (
                 <img
-                  src={tokenIcons[selectedSymbol?.toUpperCase()] || selectedCrypto?.image}
-                  alt={selectedCrypto?.name || selectedSymbol}
+                  src={selectedCrypto.image}
+                  alt={selectedCrypto.name}
                   className="h-6 w-6 rounded-full"
                 />
               ) : (
@@ -157,13 +156,7 @@ export default function AssetSelector({
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      {tokenIcons[asset.symbol.toUpperCase()] ? (
-                        <img
-                          src={tokenIcons[asset.symbol.toUpperCase()]}
-                          alt={asset.name}
-                          className="h-6 w-6 rounded-full"
-                        />
-                      ) : crypto ? (
+                      {crypto ? (
                         <img
                           src={crypto.image}
                           alt={crypto.name}

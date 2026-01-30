@@ -2,11 +2,10 @@
 
 import Image from 'next/image'
 import { CryptoPrice } from '@/lib/api'
-import { ReactNode, useState, useRef, useEffect } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 import { formatCurrency, formatPercentage, formatMarketCap, formatVolume } from '@/lib/utils'
 import { isInWatchlist, toggleWatchlist, type WatchlistItem } from '@/lib/watchlist'
 import { useToast } from '@/lib/useToast'
-import tokenIcons from '@/config/tokenIcons'
 import TokenIcon from '@/components/TokenIcon'
 
 interface CryptoRowProps {
@@ -25,19 +24,10 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
     placement: 'top'
   })
   const [imageError, setImageError] = useState(false)
-  const [fallbackToCoinGecko, setFallbackToCoinGecko] = useState(false)
   const { addToast } = useToast()
 
-  // Get icon source: check tokenIcons mapping first, then fall back to CoinGecko image
-  const localIconSrc = tokenIcons[crypto.symbol.toUpperCase()]
-  const iconSrc = fallbackToCoinGecko || !localIconSrc ? crypto.image : localIconSrc
-
-  // Reset error state when switching to fallback
-  useEffect(() => {
-    if (fallbackToCoinGecko) {
-      setImageError(false)
-    }
-  }, [fallbackToCoinGecko])
+  // Use CoinGecko image directly - no local file lookups
+  const iconSrc = crypto.image
 
   useEffect(() => {
     // Hide tooltip on scroll to avoid stale position
@@ -146,13 +136,8 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
             height={24}
             className="h-6 w-6 rounded-full"
             onError={() => {
-              // If local icon fails and we haven't tried CoinGecko yet, try that
-              if (localIconSrc && !fallbackToCoinGecko) {
-                setFallbackToCoinGecko(true)
-              } else {
-                // Both local and CoinGecko failed, use TokenIcon fallback
-                setImageError(true)
-              }
+              // CoinGecko image failed, use TokenIcon fallback
+              setImageError(true)
             }}
           />
         ) : (

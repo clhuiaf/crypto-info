@@ -3,10 +3,8 @@
 import { formatCurrency } from '@/lib/utils'
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import TokenIcon from '@/components/TokenIcon'
 import StatPill from '@/components/StatPill'
-import tokenIcons from '@/config/tokenIcons'
 
 type NewCoinDemo = {
   id: string
@@ -66,19 +64,7 @@ export default function NewCoinsList({ coins }: NewCoinsListProps) {
               className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-center mb-4">
-                {tokenIcons[coin.symbol.toUpperCase()] ? (
-                  <div style={{ width: 48, height: 48 }} className="rounded-full overflow-hidden mr-4 flex-shrink-0">
-                    <Image
-                      src={tokenIcons[coin.symbol.toUpperCase()]}
-                      alt={coin.name}
-                      width={48}
-                      height={48}
-                      className="object-cover"
-                    />
-                  </div>
-                ) : (
-                  <TokenIcon label={coin.icon || coin.symbol} size={48} className="mr-4" />
-                )}
+                <TokenIcon label={coin.icon || coin.symbol} size={48} className="mr-4" />
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-slate-900 hover:text-blue-600">{coin.name}</h3>
                   <p className="text-sm text-slate-500 uppercase">{coin.symbol}</p>
