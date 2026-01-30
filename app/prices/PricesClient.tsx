@@ -162,6 +162,17 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
     return list
   }, [displayPrices, view, searchQuery])
 
+  const sidebarAd = (
+    <div className="relative w-full overflow-hidden rounded-xl bg-slate-50 border border-slate-200" style={{ aspectRatio: '1/1' }}>
+      <img
+        src="/banners/square-ad-sq-mcm.jpg"
+        alt="Sidebar advertisement"
+        className="w-full h-full object-contain"
+        loading="lazy"
+      />
+    </div>
+  )
+
   const tableSection = loading && !market ? (
     <div className="animate-pulse space-y-4">
       {[...Array(5)].map((_, i) => (
@@ -217,9 +228,17 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
           {toolbar}  {/* existing filters + last-updated; remove its old outer card */}
         </div>
 
-        {/* Card 2: table */}
-        <div className="flex-1 rounded-2xl bg-white shadow-sm p-4">
-          {tableSection}   {/* existing table content without extra outer card */}
+        {/* Card 2 + 3: table + sidebar ad */}
+        <div className="flex flex-col lg:flex-row gap-4 w-full mx-auto">
+          {/* Card 2: table */}
+          <div className="flex-1 rounded-2xl bg-white shadow-sm p-4">
+            {tableSection}   {/* existing table content without extra outer card */}
+          </div>
+
+          {/* Card 3: sidebar ad */}
+          <aside className="w-full lg:w-72 shrink-0 rounded-2xl bg-white shadow-sm p-4">
+            {sidebarAd}      {/* existing ad content */}
+          </aside>
         </div>
         </section>
       </PageShell>
