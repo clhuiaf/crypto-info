@@ -16,7 +16,7 @@ export default async function NewCoinsPage() {
         <header>
           <h1 className="text-3xl font-semibold text-white">New Coins Discovery</h1>
           <p className="mt-1 text-sm text-slate-100 max-w-2xl">
-            Explore recently listed and trending demo cryptocurrencies. (Demo data only)
+            Explore recently listed and trending demo cryptocurrencies.
           </p>
         </header>
 

@@ -81,7 +81,7 @@ export default function ChartsPage() {
         <header>
           <h1 className="text-3xl font-semibold text-white">Chart</h1>
           <p className="mt-1 text-sm text-slate-100">
-            Demo: Live candlesticks powered by Binance exchange data
+            Live candlesticks powered by Binance exchange data
           </p>
         </header>
 

@@ -116,19 +116,6 @@ export default async function AssetPage({ params }: AssetPageProps) {
             Detailed information for this cryptocurrency and its listings.
           </p>
 
-          {!demo && (
-            <p className="mt-1 text-xs text-slate-200">
-              Demo data only for existing tokens – values are illustrative and not live market prices.
-            </p>
-          )}
-
-          {demo && (
-            <p className="mt-2 text-sm text-slate-100">
-              <span className="font-semibold">Coming soon:</span> this is a new coin from the Discovery list (demo).
-              Full verified data cards will appear when available.
-            </p>
-          )}
-
           {lastUpdated && (
             <p className="mt-2 text-sm brand-icon" suppressHydrationWarning>
               Last updated: {new Date(lastUpdated).toLocaleTimeString('en-US', {
