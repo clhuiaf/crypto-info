@@ -112,7 +112,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setAuthOpen(true)}
-              className="hidden sm:inline-flex items-center px-4 py-2 brand-button text-sm font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors shadow-sm hover:shadow-md"
+              className="px-4 py-2 rounded-full bg-[#2157b2] text-white text-sm font-medium whitespace-nowrap ml-auto focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors shadow-sm hover:shadow-md"
             >
               Sign up / Log in
             </button>

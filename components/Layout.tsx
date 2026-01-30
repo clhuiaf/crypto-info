@@ -1,5 +1,6 @@
  'use client'
 import { ReactNode } from 'react'
+import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import FooterDisclaimer from '@/components/FooterDisclaimer'
 import PageShell from '@/components/PageShell'
@@ -17,14 +18,14 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Top Horizontal Ad Banner */}
-      <div className="flex justify-center border-b bg-white">
-        <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-3">
-          <div className="h-24 w-full rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center">
+      <div className="w-full border-b bg-white">
+        <div className="w-full py-3">
+          <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: '970/90' }}>
             <img
               src="/banners/square-ad-rec-mcm.jpg"
               alt="Top advertisement"
-              className="h-full w-full object-cover rounded-md"
-              loading="lazy"
+              className="w-full h-full object-contain"
+              loading="eager"
             />
           </div>
         </div>

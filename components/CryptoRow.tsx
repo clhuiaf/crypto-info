@@ -1,11 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import { CryptoPrice } from '@/lib/api'
-import { ReactNode, useState, useRef, useEffect } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 import { formatCurrency, formatPercentage, formatMarketCap, formatVolume } from '@/lib/utils'
 import { isInWatchlist, toggleWatchlist, type WatchlistItem } from '@/lib/watchlist'
 import { useToast } from '@/lib/useToast'
+import TokenIcon from '@/components/TokenIcon'
 
 interface CryptoRowProps {
   crypto: CryptoPrice
@@ -22,7 +22,11 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
     top: 0,
     placement: 'top'
   })
+  const [imageError, setImageError] = useState(false)
   const { addToast } = useToast()
+
+  // Use CoinGecko image directly - no local file lookups
+  const iconSrc = crypto.image
 
   useEffect(() => {
     // Hide tooltip on scroll to avoid stale position
@@ -123,13 +127,21 @@ export default function CryptoRow({ crypto, index, isLast = false, action }: Cry
       </div>
 
       <div className="flex items-center gap-3 min-w-0 before:content-[''] after:content-['']">
-        <Image
-          src={crypto.image}
-          alt={crypto.name}
-          width={24}
-          height={24}
-          className="h-6 w-6 rounded-full"
-        />
+        {!imageError && iconSrc ? (
+          <img
+            src={iconSrc}
+            alt={crypto.name}
+            width={24}
+            height={24}
+            className="h-6 w-6 rounded-full"
+            onError={() => {
+              // CoinGecko image failed, use TokenIcon fallback
+              setImageError(true)
+            }}
+          />
+        ) : (
+          <TokenIcon label={crypto.symbol} size={24} className="flex-shrink-0" />
+        )}
         <div className="min-w-0 flex items-center justify-between w-full">
           <div>
             <p className="text-sm font-medium text-slate-900 whitespace-normal break-words">

@@ -7,7 +7,6 @@ import TimeframeSelector from '@/components/TimeframeSelector'
 import { Timeframe } from '@/types/chart'
 import { getAssetBySymbol } from '@/data/assets'
 import { usePricesPolling } from '@/lib/usePricesPolling'
-import tokenIcons from '@/config/tokenIcons'
 import PageShell from '@/components/PageShell'
 import TradingChart from '@/components/charts/TradingChart'
 
@@ -124,13 +123,7 @@ export default function ChartsPage() {
             {/* Chart Header */}
             <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                {tokenIcons[validSelectedSymbol.toUpperCase()] ? (
-                  <img
-                    src={tokenIcons[validSelectedSymbol.toUpperCase()]}
-                    alt={selectedAsset?.name || validSelectedSymbol}
-                    className="h-8 w-8 rounded-full"
-                  />
-                ) : selectedCrypto ? (
+                {selectedCrypto ? (
                   <img
                     src={selectedCrypto.image}
                     alt={selectedCrypto.name}

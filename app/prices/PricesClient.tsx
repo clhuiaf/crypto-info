@@ -5,7 +5,6 @@ import { type CryptoPrice } from '@/lib/api'
 import CryptoRow from '@/components/CryptoRow'
 import MarketHeaderRow from '@/components/MarketHeaderRow'
 import PageShell from '@/components/PageShell'
-import PageToolbar from '@/components/PageToolbar'
 import { useMemo } from 'react'
 
 interface MarketData {
@@ -80,36 +79,37 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
   const [searchQuery, setSearchQuery] = useState('')
 
   const toolbar = (
-    <PageToolbar
-      left={
-        <div className="w-full sm:w-auto">
-          <label htmlFor="view" className="sr-only">Filter</label>
-          <select
-            id="view"
-            value={view}
-            onChange={(e) => setView(e.target.value as ViewKey)}
-            className="w-full sm:w-56 px-3 py-2 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value={VIEW.ALL}>All assets</option>
-            <option value={VIEW.GAINERS}>Top gainers (24h)</option>
-            <option value={VIEW.LOSERS}>Top losers (24h)</option>
-          </select>
-        </div>
-      }
-      center={
-        <div className="w-full sm:w-[420px]">
-          <label htmlFor="marketSearch" className="sr-only">Search</label>
-          <input
-            id="marketSearch"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by name or symbol"
-            className="w-full px-3 py-2 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-      }
-      right={
-        <span className="text-xs text-slate-500 sm:text-right" suppressHydrationWarning>
+    <div className="flex flex-col gap-3 md:flex-row md:items-center">
+      {/* Dropdown wrapper */}
+      <div className="w-full md:w-1/3">
+        <label htmlFor="view" className="sr-only">Filter</label>
+        <select
+          id="view"
+          value={view}
+          onChange={(e) => setView(e.target.value as ViewKey)}
+          className="w-full px-3 py-2 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          <option value={VIEW.ALL}>All assets</option>
+          <option value={VIEW.GAINERS}>Top gainers (24h)</option>
+          <option value={VIEW.LOSERS}>Top losers (24h)</option>
+        </select>
+      </div>
+
+      {/* Search input wrapper */}
+      <div className="w-full md:flex-1">
+        <label htmlFor="marketSearch" className="sr-only">Search</label>
+        <input
+          id="marketSearch"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search by name or symbol"
+          className="w-full px-3 py-2 border border-slate-200 rounded-md bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      {/* Last updated timestamp */}
+      <div className="flex items-center md:ml-auto">
+        <span className="text-xs text-slate-500 md:text-right" suppressHydrationWarning>
           {market && market.data.length > 0
             ? `Last updated: ${new Date(market.lastUpdated).toLocaleTimeString('en-US', {
                 hour: '2-digit',
@@ -119,8 +119,8 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
             : 'Loading data...'
           }
         </span>
-      }
-    />
+      </div>
+    </div>
   )
 
   // derive the displayed assets from raw `cryptos`, applying the asset filter first,
@@ -163,11 +163,11 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
   }, [displayPrices, view, searchQuery])
 
   const sidebarAd = (
-    <div className="h-72 w-full rounded-md bg-slate-50 border border-slate-200 flex items-center justify-center overflow-hidden">
+    <div className="relative w-full overflow-hidden rounded-xl bg-slate-50 border border-slate-200" style={{ aspectRatio: '1/1' }}>
       <img
         src="/banners/square-ad-sq-mcm.jpg"
         alt="Sidebar advertisement"
-        className="h-full w-full object-cover"
+        className="w-full h-full object-contain"
         loading="lazy"
       />
     </div>
