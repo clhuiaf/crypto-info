@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image'
 import { type CryptoPrice } from '@/lib/api'
 import CryptoRow from '@/components/CryptoRow'
 import MarketHeaderRow from '@/components/MarketHeaderRow'
@@ -165,12 +164,10 @@ export default function PricesClient({ initialPrices }: PricesClientProps) {
 
   const sidebarAd = (
     <div className="relative w-full overflow-hidden rounded-xl bg-slate-50 border border-slate-200" style={{ aspectRatio: '1/1' }}>
-      <Image
+      <img
         src="/banners/square-ad-sq-mcm.jpg"
         alt="Sidebar advertisement"
-        fill
-        className="object-contain"
-        sizes="(max-width: 1024px) 100vw, 288px"
+        className="w-full h-full object-contain"
         loading="lazy"
       />
     </div>

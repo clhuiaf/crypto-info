@@ -21,13 +21,11 @@ export default function Layout({ children }: LayoutProps) {
       <div className="w-full border-b bg-white">
         <div className="w-full py-3">
           <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: '970/90' }}>
-            <Image
+            <img
               src="/banners/square-ad-rec-mcm.jpg"
               alt="Top advertisement"
-              fill
-              className="object-contain"
-              sizes="100vw"
-              priority
+              className="w-full h-full object-contain"
+              loading="eager"
             />
           </div>
         </div>
