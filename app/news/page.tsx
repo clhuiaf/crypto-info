@@ -2,9 +2,9 @@
 'use client';
 
 import { useState } from 'react';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 import { newsDemo, type NewsItem } from '@/data/newsDemo';
-import NewsCard from '@/components/NewsCard';
+import NewsCard from '@/src/components/market/NewsCard';
 
 const SOURCES: Array<'All' | 'SFC' | 'HKEX' | 'ETFs'> = ['All', 'SFC', 'HKEX', 'ETFs'];
 
