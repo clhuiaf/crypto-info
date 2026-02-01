@@ -1,3 +1,5 @@
+// Navigation configuration
+
 export type NavLink = {
   label: string;
   description?: string;

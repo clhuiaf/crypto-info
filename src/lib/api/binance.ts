@@ -1,3 +1,5 @@
+// Binance API client for klines and market data
+
 export type BinanceInterval =
   | '1m'
   | '3m'
@@ -180,4 +182,3 @@ export function openBinanceKlineSocket(opts: {
     }
   }
 }
-

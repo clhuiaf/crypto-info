@@ -1,3 +1,5 @@
+// Centralized cache helper with TTL support
+
 interface CacheEntry<T> {
   value: T | null;
   updatedAt: number; // Date.now()
