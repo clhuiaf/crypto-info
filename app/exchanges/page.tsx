@@ -2,15 +2,14 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Sidebar from '@/components/Sidebar';
-import ExchangeCard from '@/components/ExchangeCard';
-import ComparisonBar from '@/components/ComparisonBar';
-import PageShell from '@/components/PageShell';
-import PageToolbar from '@/components/PageToolbar';
-// SidebarPlaceholder removed — sponsored sidebar removed per design
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import Sidebar from '@/src/components/common/Sidebar';
+import ExchangeCard from '@/src/components/market/ExchangeCard';
+import ComparisonBar from '@/src/components/market/ComparisonBar';
+import PageShell from '@/src/components/layout/PageShell';
+import PageToolbar from '@/src/components/common/PageToolbar';
+import { ErrorBoundary } from '@/src/components/common/ErrorBoundary';
 import { mockExchanges } from '@/data/mockExchanges';
-import { Exchange, SortType, SidebarFilters } from '@/types/exchange';
+import { Exchange, SortType, SidebarFilters } from '@/src/types/exchange';
 
 type LicenseFilter = 'All exchanges' | 'Licensed' | 'Unlicensed';
 const DEFAULT_LICENSE_FILTER: LicenseFilter = 'All exchanges';

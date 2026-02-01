@@ -2,13 +2,13 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import WalletSidebar from '@/components/WalletSidebar';
-import WalletCard from '@/components/WalletCard';
-import WalletComparisonBar from '@/components/WalletComparisonBar';
-import PageShell from '@/components/PageShell';
-import PageToolbar from '@/components/PageToolbar';
+import WalletSidebar from '@/src/components/common/WalletSidebar';
+import WalletCard from '@/src/components/market/WalletCard';
+import WalletComparisonBar from '@/src/components/market/WalletComparisonBar';
+import PageShell from '@/src/components/layout/PageShell';
+import PageToolbar from '@/src/components/common/PageToolbar';
 import { mockWallets } from '@/data/mockWallets';
-import { WalletFilterType, WalletSortType, WalletSidebarFilters } from '@/types/wallet';
+import { WalletFilterType, WalletSortType, WalletSidebarFilters } from '@/src/types/wallet';
 
 const initialSidebarFilters: WalletSidebarFilters = {
   walletType: {
