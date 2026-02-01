@@ -2,7 +2,7 @@
 // Provides near real-time updates without over-fetching or blocking renders
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { CryptoPrice } from './api'
+import { CryptoPrice } from '@/src/types/market'
 
 interface PricesResponse {
   data: CryptoPrice[]
