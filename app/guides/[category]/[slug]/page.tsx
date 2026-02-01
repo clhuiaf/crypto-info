@@ -101,7 +101,7 @@ export default async function Page({ params }: GuideDetailPageProps) {
                 <div>
                   <h2 className="text-xl font-semibold text-slate-900 mb-3">Pros</h2>
                   <ul className="space-y-2">
-                    {guide.pros.map((pro, index) => (
+                    {guide.pros.map((pro: string, index: number) => (
                       <li key={index} className="flex items-start gap-2 text-slate-700">
                         <span className="text-emerald-600 mt-1">✓</span>
                         <span>{pro}</span>
@@ -112,7 +112,7 @@ export default async function Page({ params }: GuideDetailPageProps) {
                 <div>
                   <h2 className="text-xl font-semibold text-slate-900 mb-3">Cons</h2>
                   <ul className="space-y-2">
-                    {guide.cons.map((con, index) => (
+                    {guide.cons.map((con: string, index: number) => (
                       <li key={index} className="flex items-start gap-2 text-slate-700">
                         <span className="text-rose-600 mt-1">✗</span>
                         <span>{con}</span>
@@ -126,7 +126,7 @@ export default async function Page({ params }: GuideDetailPageProps) {
               <div className="mb-8">
                 <h2 className="text-xl font-semibold text-slate-900 mb-3">Common Mistakes</h2>
                 <ul className="space-y-3">
-                  {guide.commonMistakes.map((mistake, index) => (
+                  {guide.commonMistakes.map((mistake: string, index: number) => (
                     <li key={index} className="flex items-start gap-3 text-slate-700">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-semibold mt-0.5">
                         {index + 1}
