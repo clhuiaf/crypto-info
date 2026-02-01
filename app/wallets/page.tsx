@@ -7,7 +7,7 @@ import WalletComparisonBar from '@/src/components/market/WalletComparisonBar';
 import PageShell from '@/src/components/layout/PageShell';
 import PageToolbar from '@/src/components/common/PageToolbar';
 import { mockWallets } from '@/data/mockWallets';
-import { WalletFilterType, WalletSortType, WalletSidebarFilters } from '@/src/types/wallet';
+import { WalletFilterType, WalletSortType, WalletSidebarFilters, Network, UseCase } from '@/src/types/wallet';
 
 const initialSidebarFilters: WalletSidebarFilters = {
   walletType: {
@@ -86,7 +86,7 @@ export default function WalletsPage() {
 
     if (networkFilters.length > 0) {
       filtered = filtered.filter((w) =>
-        w.networks.some((n) => networkFilters.includes(n))
+        w.networks.some((n: Network) => networkFilters.includes(n))
       );
     }
 
@@ -99,7 +99,7 @@ export default function WalletsPage() {
 
     if (useCaseFilters.length > 0) {
       filtered = filtered.filter((w) =>
-        w.useCases.some((uc) => useCaseFilters.includes(uc))
+        w.useCases.some((uc: UseCase) => useCaseFilters.includes(uc))
       );
     }
 
