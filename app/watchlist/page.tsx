@@ -2,12 +2,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getWatchlist, type WatchlistItem } from '@/lib/watchlist'
-import { fetchCoinById, type CryptoPrice } from '@/lib/api'
-import { usePricesPolling } from '@/lib/usePricesPolling'
-import { formatCurrency, formatPercentage, formatMarketCap } from '@/lib/utils'
-import MarketTable from '@/components/MarketTable'
-import PageShell from '@/components/PageShell'
+import { getWatchlist, type WatchlistItem } from '@/src/lib/watchlist'
+import { fetchCoinById } from '@/src/lib/api/coingecko'
+import { type CryptoPrice } from '@/src/types/market'
+import { usePricesPolling } from '@/src/hooks/usePricesPolling'
+import { formatCurrency, formatPercentage, formatMarketCap } from '@/src/lib/formatting'
+import MarketTable from '@/src/components/market/MarketTable'
+import PageShell from '@/src/components/layout/PageShell'
 
 export default function WatchlistPage() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([])
@@ -59,8 +60,6 @@ export default function WatchlistPage() {
         // Add small delays to avoid rate limiting
         const missingItems = items.filter((item) => !dataMap.has(item.id))
         if (missingItems.length > 0) {
-          console.log(`Fetching ${missingItems.length} missing watchlist items individually`)
-
           // Fetch with delays to avoid rate limiting
           for (let i = 0; i < missingItems.length; i++) {
             const item = missingItems[i]

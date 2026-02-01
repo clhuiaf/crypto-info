@@ -1,11 +1,11 @@
 // Category: Market & portfolio
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { type CryptoPrice } from '@/lib/api';
-import { formatCurrency, formatPercentage } from '@/lib/utils';
-import { getCache, isExpired, setCache } from '@/lib/cache';
-import PageShell from '@/components/PageShell';
-import { fetchMarkets } from '@/lib/coingeckoClient';
+import { type CryptoPrice } from '@/src/types/market';
+import { formatCurrency, formatPercentage } from '@/src/lib/formatting';
+import { getCache, isExpired, setCache } from '@/src/lib/cache';
+import PageShell from '@/src/components/layout/PageShell';
+import { fetchMarkets } from '@/src/lib/api/coingecko';
 
 // Make this page dynamic with ISR - revalidate every 60 seconds
 // This allows it to show fresh data without hitting CoinGecko during build

@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { type CryptoPrice } from '@/lib/api'
-import CryptoRow from '@/components/CryptoRow'
-import MarketHeaderRow from '@/components/MarketHeaderRow'
-import PageShell from '@/components/PageShell'
-import { useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react';
+import { type CryptoPrice } from '@/src/types/market'
+import CryptoRow from '@/src/components/market/CryptoRow'
+import MarketHeaderRow from '@/src/components/market/MarketHeaderRow'
+import PageShell from '@/src/components/layout/PageShell'
 
 interface MarketData {
   data: CryptoPrice[];

@@ -3,6 +3,7 @@
 // TODO: Implement filtering logic to show top gainers/losers from PriceTable data
 
 import Link from 'next/link';
+import PageShell from '@/src/components/layout/PageShell';
 
 export default function TopMoversPage() {
   return (
@@ -37,6 +38,5 @@ export default function TopMoversPage() {
         </Link>
       </div>
     </div>
-  </div>
   );
 }
