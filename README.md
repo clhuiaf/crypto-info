@@ -76,13 +76,51 @@ npm run build
 npm run start
 ```
 
-## Architecture overview
+## Architecture
 
-- **Next.js app structure**: This is a Next.js **App Router** project. Routes live under `app/`, with shared UI in `app/layout.tsx` and reusable UI in `components/`. Pages frequently compose a shared shell (e.g., `PageShell`) and “coming soon” placeholders (e.g., `ComingSoonSection`) for unfinished areas.
+### Project Structure
 
-- **Data layer & caching**: Market data is sourced from CoinGecko through server-side API routes under `app/api/`. Requests are cached to reduce latency and limit upstream calls. Caching is designed to keep “fast-moving” endpoints fresh while avoiding unnecessary refetches.
+The codebase follows a clear, scalable structure:
 
-- **Deployment (AWS Lightsail)**: The app is deployed as a standard Next.js Node process on a Lightsail instance. Today it runs as a single instance; the code is structured to allow later scaling (e.g., external cache, CDN, multiple instances behind a load balancer).
+```
+app/                    # Next.js App Router routes (pages only)
+  api/                  # API route handlers
+  [routes]/            # Page components
+src/
+  components/
+    layout/            # PageShell, Navbar, Footer, AuthSheet
+    market/            # MarketTable, CryptoRow, ExchangeCard, WalletCard, etc.
+    assets/            # AssetDetailClient, AssetSelector, PriceChart
+    charts/            # TradingChart, TimeframeSelector
+    ads/               # SidebarSponsoredCard, SponsoredPlacementNotice
+    common/            # Shared UI: Button, Card, Badge, SectionHeader, LoadingSkeleton
+  lib/
+    api/               # coingecko.ts, binance.ts
+    cache/             # Cache helpers (index.ts)
+    formatting/        # Number/price/percent/date formatting utilities
+    constants/         # Navigation config, routes, brand colors
+  hooks/               # usePricesPolling, useToast
+  types/               # TypeScript type definitions (market, asset, chart, etc.)
+```
+
+### Key Design Decisions
+
+- **Separation of concerns**: Routes (`app/`) are separate from business logic (`src/lib/`) and UI components (`src/components/`)
+- **Centralized API layer**: All external API calls (CoinGecko, Binance) are abstracted in `src/lib/api/`
+- **Unified caching**: Single cache helper (`src/lib/cache/`) used across the application
+- **Shared UI components**: Common UI patterns (buttons, cards, badges) are centralized in `src/components/common/`
+- **Type safety**: All types are defined in `src/types/` and imported consistently
+
+### Data Flow
+
+1. **Server-side**: Pages fetch initial data using API helpers from `src/lib/api/`
+2. **Caching**: All API responses are cached with TTL via `src/lib/cache/`
+3. **Client-side**: Components use hooks (`usePricesPolling`) for real-time updates
+4. **Formatting**: All display formatting is handled by utilities in `src/lib/formatting/`
+
+### Deployment (AWS Lightsail)
+
+The app is deployed as a standard Next.js Node process on a Lightsail instance. Today it runs as a single instance; the code is structured to allow later scaling (e.g., external cache, CDN, multiple instances behind a load balancer).
 
 ## Development & coding conventions
 

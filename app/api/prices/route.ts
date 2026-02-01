@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCache, isExpired, setCache } from '@/lib/cache';
-import { fetchMarkets } from '@/lib/coingeckoClient';
+import { getCache, isExpired, setCache } from '@/src/lib/cache';
+import { fetchMarkets } from '@/src/lib/api/coingecko';
 
 export async function GET(request: NextRequest) {
   let entry = getCache('markets');

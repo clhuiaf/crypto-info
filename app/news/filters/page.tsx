@@ -1,9 +1,5 @@
-// Category: News
-// Placeholder page for News Filters and Saved Filters
-// TODO: Implement news filtering and saved filter functionality
-
 import Link from 'next/link';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 
 export default function NewsFiltersPage() {
   return (

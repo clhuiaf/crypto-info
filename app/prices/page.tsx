@@ -1,9 +1,7 @@
-// Category: Market & portfolio
-
 import PricesClient from './PricesClient'
-import { getCache, isExpired, setCache } from '@/lib/cache';
-import { fetchMarkets } from '@/lib/coingeckoClient';
-import { type CryptoPrice } from '@/lib/api';
+import { getCache, isExpired, setCache } from '@/src/lib/cache';
+import { fetchMarkets } from '@/src/lib/api/coingecko';
+import { type CryptoPrice } from '@/src/types/market';
 
 // Server component that passes initial data
 export default async function PricesPage() {

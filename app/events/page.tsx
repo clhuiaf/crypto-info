@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import EventCard from '@/components/EventCard';
-import PageShell from '@/components/PageShell';
-import PageToolbar from '@/components/PageToolbar';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import EventCard from '@/src/components/market/EventCard';
+import PageShell from '@/src/components/layout/PageShell';
+import PageToolbar from '@/src/components/common/PageToolbar';
+import { ErrorBoundary } from '@/src/components/common/ErrorBoundary';
 import { mockEvents } from '@/data/mockEvents';
-import { Event, EventType } from '@/types/event';
+import { Event, EventType } from '@/src/types/event';
 
 export default function EventsPage() {
   const [selectedExchange, setSelectedExchange] = useState<string>('All exchanges');

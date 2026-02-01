@@ -1,6 +1,5 @@
-// Category: Market & portfolio
-import NewCoinsList from '@/components/NewCoinsList'
-import PageShell from '@/components/PageShell';
+import NewCoinsList from '@/src/components/market/NewCoinsList'
+import PageShell from '@/src/components/layout/PageShell';
 import newCoinsDemo from '@/data/newCoinsDemo'
 
 export const revalidate = 600 // Demo data; revalidate kept for parity with other pages

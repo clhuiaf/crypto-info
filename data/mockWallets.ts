@@ -1,4 +1,4 @@
-import { Wallet } from '../types/wallet';
+import { Wallet } from '@/src/types/wallet';
 
 export const mockWallets: Wallet[] = [
   {

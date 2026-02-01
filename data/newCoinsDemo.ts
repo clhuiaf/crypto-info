@@ -1,6 +1,6 @@
 // Mock/demo data for New Coins Discovery page
 // All numbers are fictional and for demo purposes only.
-import { NewCoin } from '@/lib/api'
+import { NewCoin } from '@/src/types/market'
 
 export interface NewCoinDemo extends NewCoin {
   icon?: string // key for icon; can be an URL or asset name

@@ -1,8 +1,7 @@
-// Category: Learning
 'use client';
 
 import Link from 'next/link';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 import { guideCategories } from '@/data/guideCategories';
 import { getGuidesByCategory } from '@/data/guides';
 

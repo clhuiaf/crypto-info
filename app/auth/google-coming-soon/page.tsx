@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import PageShell from '@/components/PageShell';
-import ComingSoonSection from '@/components/ComingSoonSection';
+import PageShell from '@/src/components/layout/PageShell';
+import ComingSoonSection from '@/src/components/common/ComingSoonSection';
 
 export default function GoogleComingSoonPage() {
   return (

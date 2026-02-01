@@ -1,12 +1,11 @@
-// Category: Market & portfolio
 import { Metadata } from 'next';
 import { getAssetBySymbol } from '@/data/assets';
-import AssetDetailClient from '@/components/AssetDetailClient';
-import { CoinDetails } from '@/lib/api';
-import AssetNotFound from '@/components/AssetNotFound';
-import PageShell from '@/components/PageShell';
+import AssetDetailClient from '@/src/components/assets/AssetDetailClient';
+import { CoinDetails } from '@/src/types/market';
+import AssetNotFound from '@/src/components/assets/AssetNotFound';
+import PageShell from '@/src/components/layout/PageShell';
 import newCoinsDemo from '@/data/newCoinsDemo';
-import { Asset } from '@/types/asset';
+import { Asset } from '@/src/types/asset';
 
 interface AssetPageProps {
   params: {
