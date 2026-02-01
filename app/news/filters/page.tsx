@@ -1,7 +1,3 @@
-// Category: News
-// Placeholder page for News Filters and Saved Filters
-// TODO: Implement news filtering and saved filter functionality
-
 import Link from 'next/link';
 import PageShell from '@/src/components/layout/PageShell';
 

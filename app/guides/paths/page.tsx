@@ -1,7 +1,3 @@
-// Category: Learning
-// Placeholder page for Learning Paths
-// TODO: Implement curated collections of guides
-
 import Link from 'next/link';
 import PageShell from '@/src/components/layout/PageShell';
 

@@ -1,7 +1,3 @@
-// Category: Platforms & opportunities
-// Placeholder page for Exchange Comparison Tool
-// TODO: Implement advanced exchange comparison using exchange data
-
 import Link from 'next/link';
 
 export default function ExchangeComparePage() {

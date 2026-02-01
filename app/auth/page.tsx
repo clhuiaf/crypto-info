@@ -1,4 +1,3 @@
-// Category: Auth
 import { Metadata } from 'next';
 import Link from 'next/link';
 import PageShell from '@/src/components/layout/PageShell';

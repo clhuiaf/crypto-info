@@ -1,7 +1,3 @@
-// Category: Learning
-// Placeholder page for Most Viewed Guides
-// TODO: Implement analytics tracking and popular guides display
-
 import Link from 'next/link';
 import PageShell from '@/src/components/layout/PageShell';
 

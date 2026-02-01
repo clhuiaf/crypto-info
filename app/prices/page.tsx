@@ -1,5 +1,3 @@
-// Category: Market & portfolio
-
 import PricesClient from './PricesClient'
 import { getCache, isExpired, setCache } from '@/src/lib/cache';
 import { fetchMarkets } from '@/src/lib/api/coingecko';

@@ -1,4 +1,3 @@
-// Category: Market & portfolio
 import NewCoinsList from '@/src/components/market/NewCoinsList'
 import PageShell from '@/src/components/layout/PageShell';
 import newCoinsDemo from '@/data/newCoinsDemo'

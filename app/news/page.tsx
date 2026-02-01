@@ -1,4 +1,3 @@
-// Category: News
 'use client';
 
 import { useState } from 'react';

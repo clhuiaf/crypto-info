@@ -1,6 +1,3 @@
-// Category: Market & portfolio
-// Global Market Chart - shows overall market trends
-
 import Link from 'next/link';
 import { formatCurrency } from '@/src/lib/formatting';
 import { type CryptoPrice } from '@/src/types/market';

@@ -1,4 +1,3 @@
-// Category: About
 import { Metadata } from 'next';
 import PageShell from '@/src/components/layout/PageShell';
 

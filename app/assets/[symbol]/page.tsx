@@ -1,4 +1,3 @@
-// Category: Market & portfolio
 import { Metadata } from 'next';
 import { getAssetBySymbol } from '@/data/assets';
 import AssetDetailClient from '@/src/components/assets/AssetDetailClient';

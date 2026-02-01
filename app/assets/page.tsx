@@ -1,4 +1,3 @@
-// Category: Market & portfolio
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { type CryptoPrice } from '@/src/types/market';

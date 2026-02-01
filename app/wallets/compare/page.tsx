@@ -1,7 +1,3 @@
-// Category: Platforms & opportunities
-// Placeholder page for Wallet Comparison Tool
-// TODO: Implement advanced wallet comparison using wallet data
-
 import Link from 'next/link';
 
 export default function WalletComparePage() {
