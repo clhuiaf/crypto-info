@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCache, isExpired, setCache } from '@/lib/cache';
-import { fetchAssetDetails } from '@/lib/coingeckoClient';
+import { getCache, isExpired, setCache } from '@/src/lib/cache';
+import { fetchAssetDetails } from '@/src/lib/api/coingecko';
 
 // Symbol to CoinGecko ID mapping
 const SYMBOL_TO_COINGECKO_ID: Record<string, string> = {

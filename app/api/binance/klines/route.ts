@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { BinanceInterval } from '@/lib/binanceMarketData'
+import { BinanceInterval } from '@/src/lib/api/binance'
 
 export const runtime = 'nodejs'
 
