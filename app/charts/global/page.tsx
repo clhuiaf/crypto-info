@@ -2,10 +2,10 @@
 // Global Market Chart - shows overall market trends
 
 import Link from 'next/link';
-import { formatCurrency } from '@/lib/utils';
-import { type CryptoPrice } from '@/lib/api';
-import { getCache, isExpired, setCache } from '@/lib/cache';
-import { fetchMarkets } from '@/lib/coingeckoClient';
+import { formatCurrency } from '@/src/lib/formatting';
+import { type CryptoPrice } from '@/src/types/market';
+import { getCache, isExpired, setCache } from '@/src/lib/cache';
+import { fetchMarkets } from '@/src/lib/api/coingecko';
 
 // Make this page dynamic with ISR
 export const revalidate = 60; // Revalidate every 60 seconds

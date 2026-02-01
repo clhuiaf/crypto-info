@@ -2,13 +2,13 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
-import AssetSelector from '@/components/AssetSelector'
-import TimeframeSelector from '@/components/TimeframeSelector'
-import { Timeframe } from '@/types/chart'
+import AssetSelector from '@/src/components/assets/AssetSelector'
+import TimeframeSelector from '@/src/components/charts/TimeframeSelector'
+import { Timeframe } from '@/src/types/chart'
 import { getAssetBySymbol } from '@/data/assets'
-import { usePricesPolling } from '@/lib/usePricesPolling'
-import PageShell from '@/components/PageShell'
-import TradingChart from '@/components/charts/TradingChart'
+import { usePricesPolling } from '@/src/hooks/usePricesPolling'
+import PageShell from '@/src/components/layout/PageShell'
+import TradingChart from '@/src/components/charts/TradingChart'
 
 // Whitelist of tokens that have USDT trading pairs on Binance
 // These are verified to work with Binance klines API

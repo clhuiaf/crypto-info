@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 import { getCategoryBySlug, guideCategories } from '@/data/guideCategories';
 import { getGuidesByCategory } from '@/data/guides';
 

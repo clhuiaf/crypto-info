@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import ClientProviders from '@/components/ClientProviders'
+import ClientProviders from '@/src/components/common/ClientProviders'
 
 export const metadata: Metadata = {
   title: 'Cryptopedia - Crypto Research Hub for Hong Kong Traders',

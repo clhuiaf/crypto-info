@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { fetchCoinDetails } from '@/lib/api';
+import { fetchCoinDetails } from '@/src/lib/api/coingecko';
 
 interface ListingInfoDetailRedirectProps {
   params: {

@@ -1,6 +1,6 @@
 // Category: About
 import { Metadata } from 'next';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 
 export const metadata: Metadata = {
   title: 'About Cryptopedia | Hong Kong Crypto Hub',
@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="py-8">
-      <PageShell>
+    <PageShell>
+      <div className="py-8">
         <section className="brand-frame space-y-4">
           <header className="text-center">
             <h1 className="text-3xl font-bold text-white tracking-tight">About Cryptopedia</h1>
@@ -36,7 +36,7 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
-      </PageShell>
-    </div>
+      </div>
+    </PageShell>
   );
 }

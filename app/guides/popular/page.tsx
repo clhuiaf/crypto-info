@@ -3,7 +3,7 @@
 // TODO: Implement analytics tracking and popular guides display
 
 import Link from 'next/link';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 
 export default function PopularGuidesPage() {
   return (

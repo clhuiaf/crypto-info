@@ -3,7 +3,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 import { getGuideBySlug, guides } from '@/data/guides';
 import { getCategoryBySlug } from '@/data/guideCategories';
 

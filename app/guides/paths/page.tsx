@@ -3,7 +3,7 @@
 // TODO: Implement curated collections of guides
 
 import Link from 'next/link';
-import PageShell from '@/components/PageShell';
+import PageShell from '@/src/components/layout/PageShell';
 
 export default function LearningPathsPage() {
   return (
