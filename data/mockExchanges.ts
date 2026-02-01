@@ -1,4 +1,4 @@
-import { Exchange } from '../types/exchange';
+import { Exchange } from '@/src/types/exchange';
 
 export const mockExchanges: Exchange[] = [
   // --- HK-focused / commonly usable from HK ---

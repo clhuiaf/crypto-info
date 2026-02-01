@@ -1,4 +1,4 @@
-import { GuideCategory } from '../types/guide';
+import { GuideCategory } from '@/src/types/guide';
 
 export const guideCategories: GuideCategory[] = [
   {
